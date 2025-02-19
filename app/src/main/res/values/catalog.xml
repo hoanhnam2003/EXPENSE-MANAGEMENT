@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_values_catalog">
+        <item>Mục khác</item>
+        <item>Mua sắm</item>
+        <item>Đồ uống</item>
+        <item>Đổ xăng</item>
+        <item>Tiền nhà</item>
+    </string-array>
+</resources>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:id="@+id/frHistory"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_160dp"
+        android:background="#F7FD3665"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Layout tìm kiếm (popupSearchLayout) -->
+        <LinearLayout
+            android:id="@+id/popupSearchLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_thong_tin"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/_16dp"
+            android:layout_marginEnd="@dimen/_16dp">
+
+            <EditText
+                android:id="@+id/etDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_thong_tin"
+                android:hint="@string/nhap_tim_kiem"
+                android:paddingVertical="@dimen/_16dp"
+                android:paddingStart="@dimen/_20dp"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvHistory1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp16"
+        android:text="@string/history1"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_8dp"
+        android:text="@string/add_title"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/tvHistory1"
+        app:layout_constraintEnd_toStartOf="@id/imSearch"
+        app:layout_constraintTop_toTopOf="@id/tvHistory1" />
+
+    <ImageView
+        android:id="@+id/imSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp16"
+        android:contentDescription="@string/add_title"
+        android:scaleType="fitXY"
+        android:src="@drawable/search_icon"
+        app:layout_constraintBottom_toBottomOf="@id/tvAdd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvAdd" />
+
+    <FrameLayout
+        android:id="@+id/history"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/frHistory"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/shape_group_expenses"
+        android:layout_marginTop="-100dp"/>
+
+    <FrameLayout
+        android:id="@+id/popupContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:background="#80000000"
+        />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvHistory"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="-110dp"
+        app:layout_constraintTop_toBottomOf="@+id/frHistory"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_history"
+        android:padding="@dimen/_16dp"
+        tools:itemCount="100"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:id="@+id/frTrackExpenses"
+        android:layout_width="match_parent"
+        android:layout_height="240dp"
+        android:background="#F7FD3665"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tvTrackExpenses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp16"
+        android:layout_marginTop="@dimen/dp16"
+        android:text="@string/expense_management"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_16dp"
+        android:text="@string/add_title"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/tvTrackExpenses"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvTrackExpenses" />
+
+    <ImageView
+        android:id="@+id/imAnimal"
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/add_title"
+        android:scaleType="centerCrop"
+        android:src="@drawable/logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvTrackExpenses" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="199dp"
+        android:layout_height="81dp"
+        android:layout_marginEnd="@dimen/dp16"
+        android:background="@drawable/shape_account"
+        android:padding="@dimen/_12dp"
+        app:layout_constraintBottom_toBottomOf="@id/imAnimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/imAnimal">
+
+        <TextView
+            android:id="@+id/tvBalanceTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="@dimen/_4dp"
+            android:gravity="center_vertical"
+            android:text="@string/balance_total_title"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_16sp"
+            app:drawableRightCompat="@drawable/arrow_forward_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12dp"
+            android:text="*** *** *** VND"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvBalanceTotal" />
+
+        <ImageView
+            android:id="@+id/imEye"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_48dp"
+            android:contentDescription="ẩn hiện số dư"
+            android:scaleType="fitXY"
+            android:src="@drawable/eye"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvBalanceTotal"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="-50dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/frTrackExpenses">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_group_expenses"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/dp16">
+
+            <!-- Nội dung có thể cuộn -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ctExpensesInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp16"
+                android:background="@drawable/shape_account_not_stroke"
+                android:padding="@dimen/_16dp">
+
+                <ImageView
+                    android:id="@+id/icdong"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/coins"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tvExpensesInfoTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_thong_tin"
+                    android:gravity="center"
+                    android:padding="@dimen/_4dp"
+                    android:text="@string/thong_tin"
+                    android:textColor="@color/xam"
+                    android:textSize="@dimen/_16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/icdong"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/icdong" />
+
+                <TextView
+                    android:id="@+id/tvIncome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_14dp"
+                    android:text="@string/thu_nhap"
+                    android:textColor="@color/xam"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/icdong" />
+
+                <TextView
+                    android:id="@+id/tv0d"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16dp"
+                    android:gravity="end"
+                    android:text="0đ"
+                    android:textColor="@color/xanhla"
+                    android:textSize="@dimen/_16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvExpenses"
+                    app:layout_constraintTop_toTopOf="@id/tvIncome" />
+
+                <TextView
+                    android:id="@+id/tvExpenses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_20dp"
+                    android:text="@string/chi_tieu"
+                    android:textColor="@color/xam"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv0d" />
+
+                <TextView
+                    android:id="@+id/tv0d1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16dp"
+                    android:gravity="end"
+                    android:text="0đ"
+                    android:textColor="@color/xanhtroi"
+                    android:textSize="@dimen/_16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvExpenses"
+                    app:layout_constraintTop_toTopOf="@id/tvExpenses" />
+
+                <TextView
+                    android:id="@+id/ngang"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/_20dp"
+                    android:background="@drawable/horizontal_line"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv0d1" />
+
+                <TextView
+                    android:id="@+id/tieu_trong_ngay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/so_tien_da_tieu"
+                    android:textColor="@color/xam"
+                    android:textSize="@dimen/_16sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ngang" />
+
+                <TextView
+                    android:id="@+id/tien"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16dp"
+                    android:textColor="@color/red"
+                    android:text="0 VND"
+                    android:textSize="@dimen/_16sp"
+                    app:layout_constraintStart_toStartOf="@id/tieu_trong_ngay"
+                    app:layout_constraintTop_toBottomOf="@id/tieu_trong_ngay" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ctExpensesEstablish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp16"
+                android:layout_marginTop="@dimen/dp32"
+                android:background="@drawable/shape_account_not_stroke"
+                android:padding="@dimen/_16dp">
+
+                <TextView
+                    android:id="@+id/tvThiet_lap_chi_tieu_trong_ngay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_thong_tin"
+                    android:gravity="center"
+                    android:padding="@dimen/_8dp"
+                    android:text="@string/thiet_lap_chi_tieu_trong_ngay"
+                    android:textColor="@color/xam"
+                    android:textSize="@dimen/_16sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/icsetting"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/icsetting" />
+
+                <TextView
+                    android:id="@+id/icsetting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    app:drawableTopCompat="@drawable/setting"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="@dimen/_16dp" />
+
+
+                <androidx.appcompat.widget.AppCompatSeekBar
+                    android:id="@+id/sbExpenses"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:progress="0"
+                    android:progressTint="@color/color_fd3665"
+                    android:thumbTint="@color/color_fd3665"
+                    app:layout_constraintTop_toBottomOf="@+id/icsetting"
+                    tools:layout_editor_absoluteX="36dp" />
+
+                <LinearLayout
+                    android:id="@+id/lnnhap_so_tien_thiet_lap"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16dp"
+                    android:background="@drawable/shape_thong_tin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvMoney">
+
+                    <EditText
+                        android:id="@+id/etInputMoney"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/shape_thong_tin"
+                        android:hint="Nhập số tiền thiết lập"
+                        android:paddingVertical="@dimen/_16dp"
+                        android:paddingStart="@dimen/_20dp"
+                        android:justificationMode="inter_word"
+                        />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvMoney"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16dp"
+                    android:text="0 VND"
+                    android:textColor="@color/color_fd3665"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/sbExpenses" />
+
+                <Button
+                    android:id="@+id/btnSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_16dp"
+                    android:backgroundTint="@color/color_fd3665"
+                    android:text="@string/save"
+                    android:textSize="@dimen/_14sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/lnnhap_so_tien_thiet_lap" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp">
+
+<!--        <ImageView-->
+<!--            android:id="@+id/btnClose"-->
+<!--            android:layout_width="20dp"-->
+<!--            android:layout_height="20dp"-->
+<!--            android:src="@drawable/baseline_close_24"-->
+<!--            android:contentDescription="Đóng chatbot"-->
+<!--            android:layout_gravity="end|top"-->
+<!--            android:layout_marginEnd="6dp"-->
+<!--            android:layout_marginTop="6dp"/>-->
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabChatbot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/chatbot"
+            android:contentDescription="Mở chatbot"
+            android:backgroundTint="@color/white"
+            app:tint="@null"/>
+
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

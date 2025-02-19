@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="color_fd3665">#FD3665</color>
+    <color name="fba9b2">#FBA9B2</color>
+    <color name="xam">#565252</color>
+    <color name="xanhla">#107231</color>
+    <color name="xanhtroi">#5D51E3</color>
+    <color name="red">#F80B0B</color>
+    <color name="mauxam">#F8F6F7</color>
+    <color name="color_009CDF">#009CDF</color>
+    <color name="green">#00FF00</color>
+    <color name="pink">#FF007F</color>
+    <color name="light_blue">#00FFFF</color>
+    <color name="orange">#FFA500</color>
+    <color name="camdam">#FE862F</color>
+    <color name="hongthongke">#FA3D6A</color>
+</resources>
