@@ -39,7 +39,7 @@
     <string name="_100_000">100.000đ</string>
     <string name="tong_chi">Tổng chi:</string>
     <string name="tong_thu">Tổng thu:</string>
-    <string name="bao_cao_hom_nay">Báo cáo hôm nay (15/08/2024)</string>
+    <string name="bao_cao_hom_nay">Báo cáo hôm nay (19/02/2025)</string>
     <string name="so_tien_con_lai">Số tiền còn lại:</string>
     <string name="thong_ke">Thống kê</string>
     <string name="cai_dat">Cài đặt</string>
@@ -60,4 +60,5 @@
     <string name="xoa_ban_ghi">Xóa bản ghi</string>
     <string name="dong_lai">Đóng lại</string>
     <string name="nhap_tim_kiem">Nhập tìm kiếm theo ngày</string>
+    <string name="baocaothang">Báo cáo tháng này (20/02/2025)</string>
 </resources>

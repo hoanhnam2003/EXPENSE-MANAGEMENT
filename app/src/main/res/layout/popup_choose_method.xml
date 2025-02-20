@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/popup_choose_method"
+    android:orientation="vertical"
+    android:background="@drawable/popup_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/danh_muc_1"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/dp10"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/chon_tac_vu_thuc_hien"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16sp"
+            android:layout_marginBottom="@dimen/dp10"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/xam"
+            />
+
+        <Button
+            android:id="@+id/btnDeleteRecord"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/xoa_ban_ghi"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/color_009CDF"
+            android:textSize="@dimen/_16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/xam"
+            />
+
+        <Button
+            android:id="@+id/btnClose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:gravity="center"
+            android:text="@string/dong_lai"
+            android:textColor="@color/color_009CDF"
+            android:textSize="@dimen/_16sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
