@@ -59,12 +59,6 @@ public class ReportFragment extends Fragment {
             return;
         }
 
-        binding.tvAdd.setOnClickListener(v -> {
-            if (addClickListener != null) {
-                addClickListener.onClick(v);
-            }
-        });
-
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         monthlyLimitViewModel = new ViewModelProvider(this).get(MonthlyLimitViewModel.class);
         dailyLimitViewModel = new ViewModelProvider(this).get(DailyLimitViewModel.class);

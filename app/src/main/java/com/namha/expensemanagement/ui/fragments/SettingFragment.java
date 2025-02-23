@@ -57,12 +57,6 @@ public class SettingFragment extends Fragment {
 
         setupUI();
 
-        binding.tvAdd.setOnClickListener(v -> {
-            if (addClickListener != null) {
-                addClickListener.onClick(v);
-            }
-        });
-
         // Xử lý sự kiện khi nhấn vào TextView gmailsupport
         binding.gmailsupport.setOnClickListener(v -> openEmailSupport());
     }

@@ -61,12 +61,6 @@ public class HistoryFragment extends Fragment {
         ViewGroup.MarginLayoutParams rvParams = (ViewGroup.MarginLayoutParams) binding.rvHistory.getLayoutParams();
         originalRvTopMargin = rvParams.topMargin;
 
-        // Set the click listener for tvAdd
-        binding.tvAdd.setOnClickListener(v -> {
-            if (addClickListener != null) {
-                addClickListener.onClick(v);
-            }
-        });
 
         // Set the click listener for imSearch
         binding.imSearch.setOnClickListener(v -> {

@@ -211,11 +211,6 @@ public class HomeFragment extends Fragment {
         // Gọi hàm cảnh báo khi vượt quá ngân sách
         warningMoney();
 
-        binding.tvAdd.setOnClickListener(v -> {
-            if (addClickListener != null) {
-                addClickListener.onClick(v);
-            }
-        });
     }
 
     // update đẩy thông báo ra ngoài

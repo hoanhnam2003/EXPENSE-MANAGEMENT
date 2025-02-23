@@ -1,11 +1,20 @@
 package com.namha.expensemanagement.ui.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +46,14 @@ public class MainActivity extends AppCompatActivity {
     private MonthlyLimitViewModel mMonthlyLimit;
     private SettingViewModel mSettingViewModel;
     private ColorViewModel mColorViewModel;
+
+    private ProgressBar networkProgressBar;
+
+    private TextView networkStatusTextView;
+    private NetworkChangeReceiver networkChangeReceiver;
+
+    private boolean isConnected = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,10 +115,8 @@ public class MainActivity extends AppCompatActivity {
                 binding.icMenuBottom.tvHome.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        HomeFragment homeFragment = new HomeFragment();
-                        if (homeFragment != null) {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, homeFragment).commit();
-                            setUpFragmentListener(homeFragment);
+                        if (isNetworkConnected()) {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, new HomeFragment()).commit();
                             updateSelectedItem(binding.icMenuBottom.tvHome);
                         }
                     }
@@ -110,10 +125,8 @@ public class MainActivity extends AppCompatActivity {
                 binding.icMenuBottom.tvHistory.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        HistoryFragment historyFragment = new HistoryFragment();
-                        if (historyFragment != null) {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, historyFragment).commit();
-                            setUpFragmentListener(historyFragment);
+                        if (isNetworkConnected()) {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, new HistoryFragment()).commit();
                             updateSelectedItem(binding.icMenuBottom.tvHistory);
                         }
                     }
@@ -122,18 +135,18 @@ public class MainActivity extends AppCompatActivity {
                 binding.icMenuBottom.tvUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, new AddFragment()).commit();
-                        updateSelectedItem(binding.icMenuBottom.tvUpdate);
+                        if (isNetworkConnected()) {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, new AddFragment()).commit();
+                            updateSelectedItem(binding.icMenuBottom.tvUpdate);
+                        }
                     }
                 });
 
                 binding.icMenuBottom.tvReport.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ReportFragment reportFragment = new ReportFragment();
-                        if (reportFragment != null) {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, reportFragment).commit();
-                            setUpFragmentListener(reportFragment);
+                        if (isNetworkConnected()) {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, new ReportFragment()).commit();
                             updateSelectedItem(binding.icMenuBottom.tvReport);
                         }
                     }
@@ -142,16 +155,33 @@ public class MainActivity extends AppCompatActivity {
                 binding.icMenuBottom.tvSetting.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        SettingFragment settingFragment = new SettingFragment();
-                        if (settingFragment != null) {
-                            getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, settingFragment).commit();
-                            setUpFragmentListener(settingFragment);
+                        if (isNetworkConnected()) {
+                            getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, new SettingFragment()).commit();
                             updateSelectedItem(binding.icMenuBottom.tvSetting);
                         }
                     }
                 });
             }
+
         }
+        if (binding != null) {
+            setContentView(binding.getRoot());
+        }
+
+        networkStatusTextView = findViewById(R.id.tvNoInternet);
+        networkProgressBar = findViewById(R.id.progressBar); // Tìm ProgressBar
+
+        if (networkStatusTextView != null) {
+            networkStatusTextView.setVisibility(View.GONE);
+        }
+
+        if (networkProgressBar != null) {
+            networkProgressBar.setVisibility(View.GONE);
+        }
+
+        networkChangeReceiver = new NetworkChangeReceiver();
+        registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
     }
 
     public void onAddNewClicked() {
@@ -197,6 +227,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }
+
     }
 
     private void updateSelectedItem(View selectedView) {
@@ -229,5 +260,59 @@ public class MainActivity extends AppCompatActivity {
                 selectedView.setBackgroundColor(selectedBackgroundColor);
             }
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(networkChangeReceiver);
+    }
+
+    // Lớp BroadcastReceiver để theo dõi kết nối mạng
+    private class NetworkChangeReceiver extends BroadcastReceiver {
+        private boolean wasDisconnected = false; // Biến để theo dõi trạng thái mạng trước đó
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            boolean isConnected = activeNetwork != null && activeNetwork.isConnected();
+
+            if (!isConnected) {
+                if (networkStatusTextView != null) {
+                    networkStatusTextView.setVisibility(View.VISIBLE);
+                    Toast.makeText(context, "Không có kết nối Internet!", Toast.LENGTH_SHORT).show();
+                }
+
+                if (networkProgressBar != null) {
+                    networkProgressBar.setVisibility(View.VISIBLE);
+                }
+
+                wasDisconnected = true; // Đánh dấu là đã mất kết nối
+            } else {
+                if (networkStatusTextView != null) {
+                    networkStatusTextView.setVisibility(View.GONE);
+                }
+
+                if (networkProgressBar != null) {
+                    networkProgressBar.setVisibility(View.GONE);
+                }
+
+                // Nếu trước đó mất kết nối, bây giờ có mạng thì hiển thị thông báo
+                if (wasDisconnected) {
+                    Toast.makeText(context, "Đã kết nối Internet!", Toast.LENGTH_SHORT).show();
+                    wasDisconnected = false; // Reset trạng thái
+                }
+            }
+        }
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
+            return activeNetwork != null && activeNetwork.isConnected();
+        }
+        return false;
     }
 }
