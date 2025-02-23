@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Track Expenses</string>
+    <string name="app_name">Expense Management</string>
     <string name="home_title">Trang chủ</string>
     <string name="expense_management">EXPENSE MANAGEMENT</string>
     <string name="add_title">Thêm mới</string>

@@ -4,23 +4,31 @@ plugins {
 
 android {
     namespace 'com.namha.expensemanagement'
-    compileSdk 35
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.namha.expensemanagement"
         minSdk 24
-        targetSdk 35
-        versionCode 1
+        targetSdk 34
+        versionCode 11
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
         release {
+            // Kích hoạt R8/Proguard để tối ưu mã nguồn và giảm kích thước ứng dụng
             minifyEnabled true
             shrinkResources true
 
+            // Sử dụng tệp cấu hình Proguard mặc định và tệp proguard-rules.pro để định nghĩa các quy tắc bổ sung
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -28,21 +36,32 @@ android {
             shrinkResources false
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation libs.appcompat
     implementation libs.material
     implementation libs.activity
     implementation libs.constraintlayout
-    testImplementation libs.junit
-    androidTestImplementation libs.ext.junit
-    androidTestImplementation libs.espresso.core
-    implementation(libs.room.runtime)
-    annotationProcessor(libs.room.compiler) // Thay thế kapt bằng annotationProcessor
-    implementation(libs.room.ktx) // Không bắt buộc, nhưng hữu ích nếu bạn dùng LiveData
+    implementation libs.room.common
+    implementation libs.room.runtime
+    annotationProcessor libs.room.compiler
+
+    // Thư viện kiểm tra đơn vị
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // Thư viện kiểm thử Room
+    testImplementation 'androidx.room:room-testing:2.5.2'
 }

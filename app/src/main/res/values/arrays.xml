@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_values">
+        <item>Chi tiền</item>
+        <item>Vay tiền</item>
+        <item>Thu nhập</item>
+    </string-array>
+</resources>

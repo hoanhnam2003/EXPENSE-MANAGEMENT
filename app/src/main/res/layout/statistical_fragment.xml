@@ -108,11 +108,11 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
-<!--                    <com.github.mikephil.charting.charts.PieChart-->
-<!--                        android:id="@+id/chart"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="@dimen/_300dp"-->
-<!--                        android:layout_centerInParent="true"/>-->
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_300dp"
+                        android:layout_centerInParent="true"/>
 
                 </RelativeLayout>
 
@@ -224,11 +224,11 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent">
 
-<!--                    <com.github.mikephil.charting.charts.PieChart-->
-<!--                        android:id="@+id/chartthismonth"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="@dimen/_300dp"-->
-<!--                        android:layout_centerInParent="true"/>-->
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/chartthismonth"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_300dp"
+                        android:layout_centerInParent="true"/>
                 </RelativeLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
