@@ -46,4 +46,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@id/icMenuBottom"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Nút mở Chatbot -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabChatbot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:contentDescription="Mở chatbot"
+            android:src="@drawable/chatbot"
+            app:tint="@null"/>
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

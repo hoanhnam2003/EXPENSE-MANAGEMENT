@@ -29,6 +29,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.namha.expensemanagement.R;
 import com.namha.expensemanagement.database.entities.Transaction;
 import com.namha.expensemanagement.databinding.HomeFragmentBinding;
@@ -237,7 +238,7 @@ public class HomeFragment extends Fragment {
 
 
     //    cảnh báo khi số tiền chi tiêu vượt quá
-//    thông báo ra toast và đẩy thông báo ra ngoài app
+    //    thông báo ra toast và đẩy thông báo ra ngoài app
     private void warningMoney() {
         DecimalFormat decimalFormat = new DecimalFormat("#,###");
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -637,5 +638,11 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity) requireActivity()).showFabChatbot();
     }
 }

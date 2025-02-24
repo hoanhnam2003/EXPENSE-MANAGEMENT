@@ -61,4 +61,5 @@
     <string name="dong_lai">Đóng lại</string>
     <string name="nhap_tim_kiem">Nhập tìm kiếm theo ngày</string>
     <string name="baocaothang">Báo cáo tháng này (20/02/2025)</string>
+    <string name="chatbot">ChatBot</string>
 </resources>

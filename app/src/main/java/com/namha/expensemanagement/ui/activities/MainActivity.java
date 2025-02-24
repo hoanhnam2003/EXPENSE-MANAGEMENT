@@ -21,9 +21,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.namha.expensemanagement.R;
 import com.namha.expensemanagement.databinding.ActivityMainBinding;
 import com.namha.expensemanagement.ui.fragments.AddFragment;
+import com.namha.expensemanagement.ui.fragments.ChatbotFragment;
 import com.namha.expensemanagement.ui.fragments.HistoryFragment;
 import com.namha.expensemanagement.ui.fragments.HomeFragment;
 import com.namha.expensemanagement.ui.fragments.ReportFragment;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView networkStatusTextView;
     private NetworkChangeReceiver networkChangeReceiver;
 
-    private boolean isConnected = true;
+    FloatingActionButton fabChatbot;
 
 
     @Override
@@ -64,6 +66,35 @@ public class MainActivity extends AppCompatActivity {
         // Check if binding is not null before setting the content view
         if (binding != null) {
             setContentView(binding.getRoot());
+        }
+        FloatingActionButton fabChatbot = findViewById(R.id.fabChatbot);
+
+        if (fabChatbot != null) {
+            // Mở ChatbotFragment khi click FAB
+            fabChatbot.setOnClickListener(v -> {
+                ChatbotFragment chatbotFragment = new ChatbotFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.flHomeContainer, chatbotFragment)
+                        .addToBackStack("ChatbotFragment") // Thêm vào BackStack để quay lại được
+                        .commit();
+            });
+
+            // Lắng nghe thay đổi Fragment để ẩn/hiện fabChatbot
+            getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flHomeContainer);
+                if (currentFragment instanceof ChatbotFragment) {
+                    fabChatbot.hide(); // Dùng hide() để ẩn mượt hơn
+                } else {
+                    fabChatbot.show(); // Dùng show() để hiện lại
+                }
+            });
+        }
+
+        // Hiển thị Fragment mặc định
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.flHomeContainer, new HomeFragment())
+                    .commit();
         }
 
         // Initialize ViewModels with null checks
@@ -314,5 +345,29 @@ public class MainActivity extends AppCompatActivity {
             return activeNetwork != null && activeNetwork.isConnected();
         }
         return false;
+    }
+
+    private void openChatbotFragment() {
+        ChatbotFragment chatbotFragment = new ChatbotFragment();
+
+        // Chuyển đổi sang ChatbotFragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frameLayout, chatbotFragment)
+                .addToBackStack(null) // Để quay lại Fragment trước đó khi nhấn nút back
+                .commit();
+    }
+
+    public void showFabChatbot() {
+        FloatingActionButton fabChatbot = findViewById(R.id.fabChatbot);
+        if (fabChatbot != null) {
+            fabChatbot.show();
+        }
+    }
+
+    public void hideFabChatbot() {
+        FloatingActionButton fabChatbot = findViewById(R.id.fabChatbot);
+        if (fabChatbot != null) {
+            fabChatbot.hide();
+        }
     }
 }

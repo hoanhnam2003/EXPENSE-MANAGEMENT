@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout
+        <FrameLayout
         android:id="@+id/frStatistical"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_84dp"
@@ -123,14 +123,23 @@
                     android:id="@+id/setcolor"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/thiet_lap_mau_sac"
+                    android:text="Thiết lập màu sắc"
                     android:textStyle="bold"
                     android:textColor="@color/xam"
                     android:layout_marginTop="@dimen/_25dp"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/btnSave4"
-                    />
+                    app:layout_constraintTop_toBottomOf="@id/btnSave4" />
+
+                <androidx.appcompat.widget.AppCompatSeekBar
+                    android:id="@+id/sbColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:progressTint="@color/color_fd3665"
+                    android:thumbTint="@color/color_fd3665"
+                    android:max="255"
+                    app:layout_constraintTop_toBottomOf="@id/setcolor" />
 
                 <TextView
                     android:id="@+id/setfontsize"
