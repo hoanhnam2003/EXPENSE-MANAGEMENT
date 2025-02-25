@@ -70,31 +70,24 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fabChatbot = findViewById(R.id.fabChatbot);
 
         if (fabChatbot != null) {
-            // Mở ChatbotFragment khi click FAB
             fabChatbot.setOnClickListener(v -> {
-                ChatbotFragment chatbotFragment = new ChatbotFragment();
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.flHomeContainer, chatbotFragment)
-                        .addToBackStack("ChatbotFragment") // Thêm vào BackStack để quay lại được
-                        .commit();
+                if (isNetworkConnected()) {
+                    ChatbotFragment chatbotFragment = new ChatbotFragment();
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.flHomeContainer, chatbotFragment)
+                            .addToBackStack("ChatbotFragment")
+                            .commit();
+                }
             });
 
-            // Lắng nghe thay đổi Fragment để ẩn/hiện fabChatbot
             getSupportFragmentManager().addOnBackStackChangedListener(() -> {
                 Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flHomeContainer);
                 if (currentFragment instanceof ChatbotFragment) {
-                    fabChatbot.hide(); // Dùng hide() để ẩn mượt hơn
+                    fabChatbot.hide();
                 } else {
-                    fabChatbot.show(); // Dùng show() để hiện lại
+                    fabChatbot.show();
                 }
             });
-        }
-
-        // Hiển thị Fragment mặc định
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.flHomeContainer, new HomeFragment())
-                    .commit();
         }
 
         // Initialize ViewModels with null checks
@@ -347,16 +340,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    private void openChatbotFragment() {
-        ChatbotFragment chatbotFragment = new ChatbotFragment();
-
-        // Chuyển đổi sang ChatbotFragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frameLayout, chatbotFragment)
-                .addToBackStack(null) // Để quay lại Fragment trước đó khi nhấn nút back
-                .commit();
-    }
-
     public void showFabChatbot() {
         FloatingActionButton fabChatbot = findViewById(R.id.fabChatbot);
         if (fabChatbot != null) {
@@ -364,10 +347,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void hideFabChatbot() {
-        FloatingActionButton fabChatbot = findViewById(R.id.fabChatbot);
-        if (fabChatbot != null) {
-            fabChatbot.hide();
-        }
-    }
 }

@@ -209,8 +209,8 @@ public class HomeFragment extends Fragment {
 
         calculateAndDisplayMonthlyTotal();
 
-        // Gọi hàm cảnh báo khi vượt quá ngân sách
-        warningMoney();
+//        // Gọi hàm cảnh báo khi vượt quá ngân sách
+//        warningMoney();
 
     }
 
@@ -237,248 +237,248 @@ public class HomeFragment extends Fragment {
     };
 
 
-    //    cảnh báo khi số tiền chi tiêu vượt quá
-    //    thông báo ra toast và đẩy thông báo ra ngoài app
-    private void warningMoney() {
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
-        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        String channelId = "2";
-        String channelName = "Track Expenses";
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    channelId,
-                    channelName,
-                    NotificationManager.IMPORTANCE_HIGH
-            );
-            channel.setDescription("This is your channel description");
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        if (!dayWarningShown) {
-            dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), lastDailyLimit -> {
-                if (lastDailyLimit != null) {
-                    double moneyDaySetting = lastDailyLimit;
-                    double sumAmountForToday = totalExpenseToday;
-                    if (sumAmountForToday > moneyDaySetting) {
-                        double warningMoney = sumAmountForToday - moneyDaySetting;
-                        String formattedWarningMoney = decimalFormat.format(warningMoney);
-
-                        // Tạo một Intent để mở MainActivity
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                        PendingIntent pendingIntent;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                            // Đối với Android 12 (API 31) hoặc cao hơn
-                            pendingIntent = PendingIntent.getActivity(
-                                    getContext(),
-                                    0,
-                                    intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE // Sử dụng FLAG_IMMUTABLE
-                            );
-                        } else {
-                            // Đối với các phiên bản Android thấp hơn
-                            pendingIntent = PendingIntent.getActivity(
-                                    getContext(),
-                                    0,
-                                    intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT // Không sử dụng FLAG_IMMUTABLE cho Android dưới API 31
-                            );
-                        }
-
-                        // Chọn ngẫu nhiên một gợi ý từ mảng negativeFinances
-                        Random random = new Random();
-                        String randomSuggestion = negativeFinances[random.nextInt(negativeFinances.length)];
-
-                        // Tạo thông báo
-                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
-                                .setSmallIcon(R.drawable.logo)
-                                .setContentTitle("Ngân sách ngày")
-                                .setContentText("Bạn đã vượt quá ngân sách ngày: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion)
-                                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                .setAutoCancel(true)
-                                .setContentIntent(pendingIntent)
-                                // Thêm BigTextStyle để hiển thị đầy đủ nội dung
-                                .setStyle(new NotificationCompat.BigTextStyle()
-                                        .bigText("Bạn đã vượt quá ngân sách ngày: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion));
-
-                        notificationManager.notify(1, builder.build());
-                        dayWarningShown = true;
-                        Toast toast = Toast.makeText(getContext(), "Bạn đã vượt quá ngân sách ngày: " + formattedWarningMoney + " VND", Toast.LENGTH_SHORT);
-                        View toastView = toast.getView();
-                        if (toastView != null) {
-                            TextView toastMessage = toastView.findViewById(android.R.id.message);
-                            if (toastMessage != null) {
-                                toastMessage.setTextColor(Color.RED);
-                            }
-                        }
-                        toast.show();
-                    }else{
-                        double warningMoney = moneyDaySetting - sumAmountForToday;
-                        String formattedWarningMoney = decimalFormat.format(warningMoney);
-
-                        // Tạo một Intent để mở MainActivity
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                        PendingIntent pendingIntent;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                            // Đối với Android 12 (API 31) hoặc cao hơn
-                            pendingIntent = PendingIntent.getActivity(
-                                    getContext(),
-                                    0,
-                                    intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE // Sử dụng FLAG_IMMUTABLE
-                            );
-                        } else {
-                            // Đối với các phiên bản Android thấp hơn
-                            pendingIntent = PendingIntent.getActivity(
-                                    getContext(),
-                                    0,
-                                    intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT // Không sử dụng FLAG_IMMUTABLE cho Android dưới API 31
-                            );
-                        }
-
-                        // Chọn ngẫu nhiên một gợi ý từ mảng negativeFinances
-                        Random random = new Random();
-                        String randomSuggestion = positiveFinances[random.nextInt(negativeFinances.length)];
-
-                        // Tạo thông báo
-                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
-                                .setSmallIcon(R.drawable.logo)
-                                .setContentTitle("Ngân sách ngày")
-                                .setContentText("Ngân sách hiện tại của bạn còn: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion)
-                                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                .setAutoCancel(true)
-                                .setContentIntent(pendingIntent)
-                                // Thêm BigTextStyle để hiển thị đầy đủ nội dung
-                                .setStyle(new NotificationCompat.BigTextStyle()
-                                        .bigText("Ngân sách hiện tại của bạn còn: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion));
-
-                        notificationManager.notify(1, builder.build());
-                        dayWarningShown = true;
-                    }
-                } else {
-                    Log.e("HomeFragment", "Last daily limit setting is null");
-                }
-            });
-        }
-
-        if (!monthWarningShown) {
-            monthlyLimitViewModel.getLastMonthLimitSetting().observe(getViewLifecycleOwner(), lastMonthLimitSetting -> {
-                if (lastMonthLimitSetting != null) {
-                    double moneyMonthSetting = lastMonthLimitSetting;
-                    double sumAmountForCurrentMonth = totalExpense;
-
-                    if (sumAmountForCurrentMonth > moneyMonthSetting) {
-                        double warningMoney = sumAmountForCurrentMonth - moneyMonthSetting;
-                        String formattedWarningMoney = decimalFormat.format(warningMoney);
-
-                        // Tạo một Intent để mở MainActivity
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                        PendingIntent pendingIntent;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                            // Đối với Android 12 (API 31) hoặc cao hơn
-                            pendingIntent = PendingIntent.getActivity(
-                                    getContext(),
-                                    0,
-                                    intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE // Sử dụng FLAG_IMMUTABLE
-                            );
-                        } else {
-                            // Đối với các phiên bản Android thấp hơn
-                            pendingIntent = PendingIntent.getActivity(
-                                    getContext(),
-                                    0,
-                                    intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT // Không sử dụng FLAG_IMMUTABLE cho Android dưới API 31
-                            );
-                        }
-
-
-                        // Chọn ngẫu nhiên một gợi ý từ mảng negativeFinances
-                        Random random = new Random();
-                        String randomSuggestion = negativeFinances[random.nextInt(negativeFinances.length)];
-
-                        // Tạo thông báo
-                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
-                                .setSmallIcon(R.drawable.logo)
-                                .setContentTitle("Ngân sách tháng")
-                                .setContentText("Bạn đã vượt quá ngân sách tháng: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion)
-                                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                .setAutoCancel(true)
-                                .setContentIntent(pendingIntent)
-                                // Thêm BigTextStyle để hiển thị đầy đủ nội dung
-                                .setStyle(new NotificationCompat.BigTextStyle()
-                                        .bigText("Bạn đã vượt quá ngân sách tháng: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion));
-
-
-                        notificationManager.notify(2, builder.build());
-                        monthWarningShown = true;
-                        Toast toast = Toast.makeText(getContext(), "Bạn đã vượt quá ngân sách tháng: " + formattedWarningMoney + " VND", Toast.LENGTH_SHORT);
-                        View toastView = toast.getView();
-                        if (toastView != null) {
-                            TextView toastMessage = toastView.findViewById(android.R.id.message);
-                            if (toastMessage != null) {
-                                toastMessage.setTextColor(Color.RED);
-                            }
-                        }
-                        toast.show();
-                    }else{
-                        double warningMoney = moneyMonthSetting - sumAmountForCurrentMonth;
-                        String formattedWarningMoney = decimalFormat.format(warningMoney);
-
-                        // Tạo một Intent để mở MainActivity
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                        PendingIntent pendingIntent;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                            // Đối với Android 12 (API 31) hoặc cao hơn
-                            pendingIntent = PendingIntent.getActivity(
-                                    getContext(),
-                                    0,
-                                    intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE // Sử dụng FLAG_IMMUTABLE
-                            );
-                        } else {
-                            // Đối với các phiên bản Android thấp hơn
-                            pendingIntent = PendingIntent.getActivity(
-                                    getContext(),
-                                    0,
-                                    intent,
-                                    PendingIntent.FLAG_UPDATE_CURRENT // Không sử dụng FLAG_IMMUTABLE cho Android dưới API 31
-                            );
-                        }
-                        // Chọn ngẫu nhiên một gợi ý từ mảng negativeFinances
-                        Random random = new Random();
-                        String randomSuggestion = negativeFinances[random.nextInt(negativeFinances.length)];
-
-                        // Tạo thông báo
-                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
-                                .setSmallIcon(R.drawable.logo)
-                                .setContentTitle("Ngân sách tháng")
-                                .setContentText("Ngân sách hiện tại của bạn còn: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion)
-                                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                                .setAutoCancel(true)
-                                .setContentIntent(pendingIntent)
-                                // Thêm BigTextStyle để hiển thị đầy đủ nội dung
-                                .setStyle(new NotificationCompat.BigTextStyle()
-                                        .bigText("Ngân sách hiện tại của bạn còn: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion));
-
-                        notificationManager.notify(2, builder.build());
-                        monthWarningShown = true;
-                    }
-                } else {
-                    Log.e("HomeFragment", "Last monthly limit setting is null");
-                }
-            });
-        }
-    }
+//    //    cảnh báo khi số tiền chi tiêu vượt quá
+//    //    thông báo ra toast và đẩy thông báo ra ngoài app
+//    private void warningMoney() {
+//        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+//        NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+//        String channelId = "2";
+//        String channelName = "Expense Management";
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel channel = new NotificationChannel(
+//                    channelId,
+//                    channelName,
+//                    NotificationManager.IMPORTANCE_HIGH
+//            );
+//            channel.setDescription("This is your channel description");
+//            notificationManager.createNotificationChannel(channel);
+//        }
+//
+//        if (!dayWarningShown) {
+//            dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), lastDailyLimit -> {
+//                if (lastDailyLimit != null) {
+//                    double moneyDaySetting = lastDailyLimit;
+//                    double sumAmountForToday = totalExpenseToday;
+//                    if (sumAmountForToday > moneyDaySetting) {
+//                        double warningMoney = sumAmountForToday - moneyDaySetting;
+//                        String formattedWarningMoney = decimalFormat.format(warningMoney);
+//
+//                        // Tạo một Intent để mở MainActivity
+//                        Intent intent = new Intent(getContext(), MainActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//
+//                        PendingIntent pendingIntent;
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//                            // Đối với Android 12 (API 31) hoặc cao hơn
+//                            pendingIntent = PendingIntent.getActivity(
+//                                    getContext(),
+//                                    0,
+//                                    intent,
+//                                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE // Sử dụng FLAG_IMMUTABLE
+//                            );
+//                        } else {
+//                            // Đối với các phiên bản Android thấp hơn
+//                            pendingIntent = PendingIntent.getActivity(
+//                                    getContext(),
+//                                    0,
+//                                    intent,
+//                                    PendingIntent.FLAG_UPDATE_CURRENT // Không sử dụng FLAG_IMMUTABLE cho Android dưới API 31
+//                            );
+//                        }
+//
+//                        // Chọn ngẫu nhiên một gợi ý từ mảng negativeFinances
+//                        Random random = new Random();
+//                        String randomSuggestion = negativeFinances[random.nextInt(negativeFinances.length)];
+//
+//                        // Tạo thông báo
+//                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
+//                                .setSmallIcon(R.drawable.logo)
+//                                .setContentTitle("Ngân sách ngày")
+//                                .setContentText("Bạn đã vượt quá ngân sách ngày: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion)
+//                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                                .setAutoCancel(true)
+//                                .setContentIntent(pendingIntent)
+//                                // Thêm BigTextStyle để hiển thị đầy đủ nội dung
+//                                .setStyle(new NotificationCompat.BigTextStyle()
+//                                        .bigText("Bạn đã vượt quá ngân sách ngày: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion));
+//
+//                        notificationManager.notify(1, builder.build());
+//                        dayWarningShown = true;
+//                        Toast toast = Toast.makeText(getContext(), "Bạn đã vượt quá ngân sách ngày: " + formattedWarningMoney + " VND", Toast.LENGTH_SHORT);
+//                        View toastView = toast.getView();
+//                        if (toastView != null) {
+//                            TextView toastMessage = toastView.findViewById(android.R.id.message);
+//                            if (toastMessage != null) {
+//                                toastMessage.setTextColor(Color.RED);
+//                            }
+//                        }
+//                        toast.show();
+//                    }else{
+//                        double warningMoney = moneyDaySetting - sumAmountForToday;
+//                        String formattedWarningMoney = decimalFormat.format(warningMoney);
+//
+//                        // Tạo một Intent để mở MainActivity
+//                        Intent intent = new Intent(getContext(), MainActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//
+//                        PendingIntent pendingIntent;
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//                            // Đối với Android 12 (API 31) hoặc cao hơn
+//                            pendingIntent = PendingIntent.getActivity(
+//                                    getContext(),
+//                                    0,
+//                                    intent,
+//                                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE // Sử dụng FLAG_IMMUTABLE
+//                            );
+//                        } else {
+//                            // Đối với các phiên bản Android thấp hơn
+//                            pendingIntent = PendingIntent.getActivity(
+//                                    getContext(),
+//                                    0,
+//                                    intent,
+//                                    PendingIntent.FLAG_UPDATE_CURRENT // Không sử dụng FLAG_IMMUTABLE cho Android dưới API 31
+//                            );
+//                        }
+//
+//                        // Chọn ngẫu nhiên một gợi ý từ mảng negativeFinances
+//                        Random random = new Random();
+//                        String randomSuggestion = positiveFinances[random.nextInt(negativeFinances.length)];
+//
+//                        // Tạo thông báo
+//                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
+//                                .setSmallIcon(R.drawable.logo)
+//                                .setContentTitle("Ngân sách ngày")
+//                                .setContentText("Ngân sách hiện tại của bạn còn: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion)
+//                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                                .setAutoCancel(true)
+//                                .setContentIntent(pendingIntent)
+//                                // Thêm BigTextStyle để hiển thị đầy đủ nội dung
+//                                .setStyle(new NotificationCompat.BigTextStyle()
+//                                        .bigText("Ngân sách hiện tại của bạn còn: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion));
+//
+//                        notificationManager.notify(1, builder.build());
+//                        dayWarningShown = true;
+//                    }
+//                } else {
+//                    Log.e("HomeFragment", "Last daily limit setting is null");
+//                }
+//            });
+//        }
+//
+//        if (!monthWarningShown) {
+//            monthlyLimitViewModel.getLastMonthLimitSetting().observe(getViewLifecycleOwner(), lastMonthLimitSetting -> {
+//                if (lastMonthLimitSetting != null) {
+//                    double moneyMonthSetting = lastMonthLimitSetting;
+//                    double sumAmountForCurrentMonth = totalExpense;
+//
+//                    if (sumAmountForCurrentMonth > moneyMonthSetting) {
+//                        double warningMoney = sumAmountForCurrentMonth - moneyMonthSetting;
+//                        String formattedWarningMoney = decimalFormat.format(warningMoney);
+//
+//                        // Tạo một Intent để mở MainActivity
+//                        Intent intent = new Intent(getContext(), MainActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//
+//                        PendingIntent pendingIntent;
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//                            // Đối với Android 12 (API 31) hoặc cao hơn
+//                            pendingIntent = PendingIntent.getActivity(
+//                                    getContext(),
+//                                    0,
+//                                    intent,
+//                                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE // Sử dụng FLAG_IMMUTABLE
+//                            );
+//                        } else {
+//                            // Đối với các phiên bản Android thấp hơn
+//                            pendingIntent = PendingIntent.getActivity(
+//                                    getContext(),
+//                                    0,
+//                                    intent,
+//                                    PendingIntent.FLAG_UPDATE_CURRENT // Không sử dụng FLAG_IMMUTABLE cho Android dưới API 31
+//                            );
+//                        }
+//
+//
+//                        // Chọn ngẫu nhiên một gợi ý từ mảng negativeFinances
+//                        Random random = new Random();
+//                        String randomSuggestion = negativeFinances[random.nextInt(negativeFinances.length)];
+//
+//                        // Tạo thông báo
+//                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
+//                                .setSmallIcon(R.drawable.logo)
+//                                .setContentTitle("Ngân sách tháng")
+//                                .setContentText("Bạn đã vượt quá ngân sách tháng: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion)
+//                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                                .setAutoCancel(true)
+//                                .setContentIntent(pendingIntent)
+//                                // Thêm BigTextStyle để hiển thị đầy đủ nội dung
+//                                .setStyle(new NotificationCompat.BigTextStyle()
+//                                        .bigText("Bạn đã vượt quá ngân sách tháng: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion));
+//
+//
+//                        notificationManager.notify(2, builder.build());
+//                        monthWarningShown = true;
+//                        Toast toast = Toast.makeText(getContext(), "Bạn đã vượt quá ngân sách tháng: " + formattedWarningMoney + " VND", Toast.LENGTH_SHORT);
+//                        View toastView = toast.getView();
+//                        if (toastView != null) {
+//                            TextView toastMessage = toastView.findViewById(android.R.id.message);
+//                            if (toastMessage != null) {
+//                                toastMessage.setTextColor(Color.RED);
+//                            }
+//                        }
+//                        toast.show();
+//                    }else{
+//                        double warningMoney = moneyMonthSetting - sumAmountForCurrentMonth;
+//                        String formattedWarningMoney = decimalFormat.format(warningMoney);
+//
+//                        // Tạo một Intent để mở MainActivity
+//                        Intent intent = new Intent(getContext(), MainActivity.class);
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//
+//                        PendingIntent pendingIntent;
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//                            // Đối với Android 12 (API 31) hoặc cao hơn
+//                            pendingIntent = PendingIntent.getActivity(
+//                                    getContext(),
+//                                    0,
+//                                    intent,
+//                                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE // Sử dụng FLAG_IMMUTABLE
+//                            );
+//                        } else {
+//                            // Đối với các phiên bản Android thấp hơn
+//                            pendingIntent = PendingIntent.getActivity(
+//                                    getContext(),
+//                                    0,
+//                                    intent,
+//                                    PendingIntent.FLAG_UPDATE_CURRENT // Không sử dụng FLAG_IMMUTABLE cho Android dưới API 31
+//                            );
+//                        }
+//                        // Chọn ngẫu nhiên một gợi ý từ mảng negativeFinances
+//                        Random random = new Random();
+//                        String randomSuggestion = negativeFinances[random.nextInt(negativeFinances.length)];
+//
+//                        // Tạo thông báo
+//                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
+//                                .setSmallIcon(R.drawable.logo)
+//                                .setContentTitle("Ngân sách tháng")
+//                                .setContentText("Ngân sách hiện tại của bạn còn: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion)
+//                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+//                                .setAutoCancel(true)
+//                                .setContentIntent(pendingIntent)
+//                                // Thêm BigTextStyle để hiển thị đầy đủ nội dung
+//                                .setStyle(new NotificationCompat.BigTextStyle()
+//                                        .bigText("Ngân sách hiện tại của bạn còn: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion));
+//
+//                        notificationManager.notify(2, builder.build());
+//                        monthWarningShown = true;
+//                    }
+//                } else {
+//                    Log.e("HomeFragment", "Last monthly limit setting is null");
+//                }
+//            });
+//        }
+//    }
 
     // Lấy tháng hiện tại
     private int getCurrentMonth() {

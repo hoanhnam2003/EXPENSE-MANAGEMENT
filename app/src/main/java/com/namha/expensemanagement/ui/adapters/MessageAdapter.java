@@ -1,10 +1,14 @@
 package com.namha.expensemanagement.ui.adapters;
 
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -32,20 +36,34 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.viewHold
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
-
         MessageModel model = modelList.get(position);
-        if (model.getSentBy().equals(MessageModel.SENT_BY_ME)){
 
+        if (model.getSentBy().equals(MessageModel.SENT_BY_ME)) {
+            // Người dùng gửi tin nhắn
             holder.leftChat.setVisibility(View.GONE);
             holder.rightChat.setVisibility(View.VISIBLE);
             holder.rightText.setText(model.getMessage());
-            }
-        else {
+
+            // Sao chép khi nhấn giữ tin nhắn của người dùng
+            holder.rightText.setOnLongClickListener(v -> {
+                copyToClipboard(v, model.getMessage());
+                return true;
+            });
+
+        } else {
+            // Chatbot trả lời
             holder.rightChat.setVisibility(View.GONE);
             holder.leftChat.setVisibility(View.VISIBLE);
             holder.leftText.setText(model.getMessage());
+
+            // Sao chép khi nhấn giữ tin nhắn của chatbot
+            holder.leftText.setOnLongClickListener(v -> {
+                copyToClipboard(v, model.getMessage());
+                return true;
+            });
         }
     }
+
 
     @Override
     public int getItemCount() {
@@ -63,5 +81,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.viewHold
             leftText = itemView.findViewById(R.id.left_text);
             rightText = itemView.findViewById(R.id.right_text);
         }
+    }
+    // sao chép câu trả lời và câu hỏi
+    private void copyToClipboard(View v, String text) {
+        ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("message", text);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(v.getContext(), "Đã sao chép tin nhắn", Toast.LENGTH_SHORT).show();
     }
 }

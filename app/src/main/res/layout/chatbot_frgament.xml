@@ -62,9 +62,22 @@
                     android:layout_height="0dp"
                     android:layout_marginBottom="10dp"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/message"
+                    app:layout_constraintBottom_toTopOf="@id/recyclerViewSuggestions"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent" />
+
+
+                // danh sách gợi ý
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewSuggestions"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    android:padding="8dp"
+                    android:layout_marginBottom="5dp"
+                    app:layout_constraintBottom_toTopOf="@id/message"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
                 <!-- Ô nhập tin nhắn -->
                 <View
@@ -84,10 +97,10 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="10dp"
                     android:ems="10"
                     android:inputType="text"
-                    android:hint="write your message"
+                    android:hint="Write your message"
                     android:background="@android:color/transparent"
                     android:padding="10dp"
                     app:layout_constraintBottom_toBottomOf="parent"
