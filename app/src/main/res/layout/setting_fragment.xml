@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -131,15 +132,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnSave4" />
 
-                <androidx.appcompat.widget.AppCompatSeekBar
-                    android:id="@+id/sbColor"
+                <SeekBar
+                    android:id="@+id/seekBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:progressTint="@color/color_fd3665"
-                    android:thumbTint="@color/color_fd3665"
-                    android:max="255"
-                    app:layout_constraintTop_toBottomOf="@id/setcolor" />
+                    android:max="3"
+                    android:progressDrawable="@drawable/seekbar_color_gradient"
+                    android:thumb="@drawable/seekbar_thumb"
+                    app:layout_constraintBottom_toTopOf="@+id/setfontsize"
+                    app:layout_constraintTop_toBottomOf="@+id/setcolor"
+                    tools:layout_editor_absoluteX="16dp" />
 
                 <TextView
                     android:id="@+id/setfontsize"

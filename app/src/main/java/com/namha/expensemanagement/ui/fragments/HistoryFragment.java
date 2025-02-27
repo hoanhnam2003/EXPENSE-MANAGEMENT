@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.namha.expensemanagement.R;
 import com.namha.expensemanagement.databinding.HistoryFragmentBinding;
 import com.namha.expensemanagement.dto.History;
 import com.namha.expensemanagement.ui.adapters.HistoryAdapter;
+import com.namha.expensemanagement.viewmodels.SharedViewModel;
 import com.namha.expensemanagement.viewmodels.TransactionViewModel;
 
 import java.text.ParseException;
@@ -36,6 +38,9 @@ public class HistoryFragment extends Fragment {
 
     private int originalHistoryTopMargin;
     private int originalRvTopMargin;
+
+    private SharedViewModel sharedViewModel;
+    private FrameLayout frameLayout;
 
     @Nullable
     @Override
@@ -81,6 +86,16 @@ public class HistoryFragment extends Fragment {
         if (getViewLifecycleOwner() != null) {
             transactionViewModel.getHistoryList().observe(getViewLifecycleOwner(), this::updateHistoryList);
         }
+
+        // thay đổi màu nền
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        frameLayout = view.findViewById(R.id.frHistory);
+
+        sharedViewModel.getSelectedColor().observe(getViewLifecycleOwner(), newColor -> {
+            if (newColor != null) {
+                frameLayout.setBackgroundColor(newColor);
+            }
+        });
     }
 
     private void setupRecyclerView() {

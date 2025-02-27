@@ -3,24 +3,29 @@ package com.namha.expensemanagement.ui.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.namha.expensemanagement.R;
 import com.namha.expensemanagement.database.AppDatabase;
 import com.namha.expensemanagement.databinding.SettingFragmentBinding;
 import com.namha.expensemanagement.viewmodels.DailyLimitViewModel;
 import com.namha.expensemanagement.viewmodels.MonthlyLimitViewModel;
+import com.namha.expensemanagement.viewmodels.SharedViewModel;
 
 
 public class SettingFragment extends Fragment {
@@ -34,6 +39,10 @@ public class SettingFragment extends Fragment {
     private SharedPreferences sharedPreferences;
     private View.OnClickListener addClickListener;
     private AppDatabase appDatabase;
+    private SeekBar seekBar;
+    private FrameLayout frameLayout;
+    private SharedViewModel sharedViewModel;
+
 
     @Nullable
     @Override
@@ -51,14 +60,64 @@ public class SettingFragment extends Fragment {
         }
 
         monthlyLimitViewModel = new ViewModelProvider(this).get(MonthlyLimitViewModel.class);
-        dailyLimitViewModel = new  ViewModelProvider(this).get(DailyLimitViewModel.class);
+        dailyLimitViewModel = new ViewModelProvider(this).get(DailyLimitViewModel.class);
         sharedPreferences = requireActivity().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         appDatabase = AppDatabase.getInstance(requireContext());
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        seekBar = view.findViewById(R.id.seekBar);
+        frameLayout = view.findViewById(R.id.frStatistical);
 
         setupUI();
 
-        // Xử lý sự kiện khi nhấn vào TextView gmailsupport
-        binding.gmailsupport.setOnClickListener(v -> openEmailSupport());
+        // Đọc giá trị đã lưu trước đó
+        int savedColor = sharedPreferences.getInt("SelectedColor", ContextCompat.getColor(requireContext(), R.color.hongthongke));
+        int savedProgress = sharedPreferences.getInt("SeekBarProgress", 0);
+
+        // Cập nhật SeekBar và màu của FrameLayout với giá trị đã lưu
+        seekBar.setProgress(savedProgress);
+        frameLayout.setBackgroundColor(savedColor);
+        sharedViewModel.setSelectedColor(savedColor); // Cập nhật ViewModel
+
+        // Xử lý sự kiện SeekBar
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int selectedColor;
+                Context context = seekBar.getContext();
+
+                switch (progress) {
+                    case 0:
+                        selectedColor = ContextCompat.getColor(context, R.color.hongthongke);
+                        break;
+                    case 1:
+                        selectedColor = ContextCompat.getColor(context, R.color.color_red);
+                        break;
+                    case 2:
+                        selectedColor = ContextCompat.getColor(context, R.color.color_green);
+                        break;
+                    case 3:
+                        selectedColor = ContextCompat.getColor(context, R.color.color_blue);
+                        break;
+                    default:
+                        selectedColor = ContextCompat.getColor(context, R.color.hongthongke); // Mặc định
+                }
+
+                frameLayout.setBackgroundColor(selectedColor);
+                sharedViewModel.setSelectedColor(selectedColor); // Cập nhật vào ViewModel
+
+                // Lưu trạng thái màu vào SharedPreferences ngay lập tức
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putInt("SelectedColor", selectedColor);
+                editor.putInt("SeekBarProgress", progress);
+                editor.apply();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
     }
 
     private void openEmailSupport() {

@@ -16,4 +16,9 @@
     <color name="orange">#FFA500</color>
     <color name="camdam">#FE862F</color>
     <color name="hongthongke">#FA3D6A</color>
+    <color name="color_red">#FF0000</color>
+    <color name="color_yellow">#FFFF00</color>
+    <color name="color_green">#00FF00</color>
+    <color name="color_blue">#0000FF</color>
+
 </resources>

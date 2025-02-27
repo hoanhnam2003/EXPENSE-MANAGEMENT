@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,7 +21,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-
+import com.namha.expensemanagement.R;
 import com.namha.expensemanagement.database.entities.Category;
 import com.namha.expensemanagement.database.entities.Transaction;
 import com.namha.expensemanagement.database.entities.Type;
@@ -28,6 +29,7 @@ import com.namha.expensemanagement.databinding.AddFragmentBinding;
 import com.namha.expensemanagement.viewmodels.CategoryViewModel;
 import com.namha.expensemanagement.viewmodels.DailyLimitViewModel;
 import com.namha.expensemanagement.viewmodels.MonthlyLimitViewModel;
+import com.namha.expensemanagement.viewmodels.SharedViewModel;
 import com.namha.expensemanagement.viewmodels.TransactionViewModel;
 import com.namha.expensemanagement.viewmodels.TypeViewModel;
 
@@ -49,6 +51,8 @@ public class AddFragment extends Fragment {
     private List<Type> typesList = new ArrayList<>();
     private DailyLimitViewModel dailyLimitViewModel;
     private MonthlyLimitViewModel monthlyLimitViewModel;
+    private SharedViewModel sharedViewModel;
+    private FrameLayout frameLayout;
 
     @Nullable
     @Override
@@ -80,6 +84,16 @@ public class AddFragment extends Fragment {
                 spinnerCategoryAdapter.notifyDataSetChanged();
             } else {
                 Log.e("AddFragment", "categories is null");
+            }
+        });
+
+        // thay đổi màu nền
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        frameLayout = view.findViewById(R.id.frAdd);
+
+        sharedViewModel.getSelectedColor().observe(getViewLifecycleOwner(), newColor -> {
+            if (newColor != null) {
+                frameLayout.setBackgroundColor(newColor);
             }
         });
 

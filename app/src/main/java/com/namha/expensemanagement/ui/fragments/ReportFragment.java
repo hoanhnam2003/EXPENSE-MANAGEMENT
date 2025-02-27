@@ -8,6 +8,7 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,10 +22,12 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.namha.expensemanagement.R;
 import com.namha.expensemanagement.database.entities.Transaction;
 import com.namha.expensemanagement.databinding.StatisticalFragmentBinding;
 import com.namha.expensemanagement.viewmodels.DailyLimitViewModel;
 import com.namha.expensemanagement.viewmodels.MonthlyLimitViewModel;
+import com.namha.expensemanagement.viewmodels.SharedViewModel;
 import com.namha.expensemanagement.viewmodels.TransactionViewModel;
 
 import java.text.DecimalFormat;
@@ -41,6 +44,9 @@ public class ReportFragment extends Fragment {
     private TransactionViewModel transactionViewModel;
     private MonthlyLimitViewModel monthlyLimitViewModel;
     private DailyLimitViewModel dailyLimitViewModel;
+
+    private SharedViewModel sharedViewModel;
+    private FrameLayout frameLayout;
 
     @Nullable
     @Override
@@ -96,6 +102,16 @@ public class ReportFragment extends Fragment {
                 });
             } else {
                 setupPieChartThisday(transactions, 0.0);
+            }
+        });
+
+        // thay đổi màu nền
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        frameLayout = view.findViewById(R.id.frStatistical);
+
+        sharedViewModel.getSelectedColor().observe(getViewLifecycleOwner(), newColor -> {
+            if (newColor != null) {
+                frameLayout.setBackgroundColor(newColor);
             }
         });
     }

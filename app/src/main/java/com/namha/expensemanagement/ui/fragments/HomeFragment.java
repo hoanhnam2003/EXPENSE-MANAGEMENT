@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -36,6 +37,7 @@ import com.namha.expensemanagement.databinding.HomeFragmentBinding;
 import com.namha.expensemanagement.ui.activities.MainActivity;
 import com.namha.expensemanagement.viewmodels.DailyLimitViewModel;
 import com.namha.expensemanagement.viewmodels.MonthlyLimitViewModel;
+import com.namha.expensemanagement.viewmodels.SharedViewModel;
 import com.namha.expensemanagement.viewmodels.TransactionViewModel;
 
 import java.text.DecimalFormat;
@@ -62,6 +64,9 @@ public class HomeFragment extends Fragment {
     private View.OnClickListener addClickListener;
     private boolean dayWarningShown = false;
     private boolean monthWarningShown = false;
+
+    private SharedViewModel sharedViewModel;
+    private FrameLayout frameLayout;
 
     @Nullable
     @Override
@@ -212,6 +217,15 @@ public class HomeFragment extends Fragment {
 //        // Gọi hàm cảnh báo khi vượt quá ngân sách
 //        warningMoney();
 
+        // thay đổi màu nền
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        frameLayout = view.findViewById(R.id.frTrackExpenses);
+
+        sharedViewModel.getSelectedColor().observe(getViewLifecycleOwner(), newColor -> {
+            if (newColor != null) {
+                frameLayout.setBackgroundColor(newColor);
+            }
+        });
     }
 
     // update đẩy thông báo ra ngoài
@@ -638,11 +652,5 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((MainActivity) requireActivity()).showFabChatbot();
     }
 }

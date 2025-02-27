@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -49,11 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private SettingViewModel mSettingViewModel;
     private ColorViewModel mColorViewModel;
 
-    private ProgressBar networkProgressBar;
-
-    private TextView networkStatusTextView;
-    private NetworkChangeReceiver networkChangeReceiver;
-
     FloatingActionButton fabChatbot;
 
 
@@ -67,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         if (binding != null) {
             setContentView(binding.getRoot());
         }
-        FloatingActionButton fabChatbot = findViewById(R.id.fabChatbot);
+        fabChatbot = findViewById(R.id.fabChatbot);
 
         if (fabChatbot != null) {
             fabChatbot.setOnClickListener(v -> {
@@ -77,18 +71,21 @@ public class MainActivity extends AppCompatActivity {
                             .replace(R.id.flHomeContainer, chatbotFragment)
                             .addToBackStack("ChatbotFragment")
                             .commit();
-                }
-            });
-
-            getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flHomeContainer);
-                if (currentFragment instanceof ChatbotFragment) {
-                    fabChatbot.hide();
                 } else {
-                    fabChatbot.show();
+                    // Thông báo khi không có mạng
+                    showToast("Vui lòng kiểm tra kết nối mạng để sử dụng chatbot.");
                 }
             });
         }
+
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flHomeContainer);
+            if (currentFragment instanceof ChatbotFragment) {
+                fabChatbot.hide();
+            } else {
+                fabChatbot.show();
+            }
+        });
 
         // Initialize ViewModels with null checks
         mTransactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
@@ -139,50 +136,40 @@ public class MainActivity extends AppCompatActivity {
                 binding.icMenuBottom.tvHome.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (isNetworkConnected()) {
                             getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, new HomeFragment()).commit();
                             updateSelectedItem(binding.icMenuBottom.tvHome);
-                        }
                     }
                 });
 
                 binding.icMenuBottom.tvHistory.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (isNetworkConnected()) {
                             getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, new HistoryFragment()).commit();
                             updateSelectedItem(binding.icMenuBottom.tvHistory);
-                        }
                     }
                 });
 
                 binding.icMenuBottom.tvUpdate.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (isNetworkConnected()) {
                             getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, new AddFragment()).commit();
                             updateSelectedItem(binding.icMenuBottom.tvUpdate);
-                        }
                     }
                 });
 
                 binding.icMenuBottom.tvReport.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (isNetworkConnected()) {
                             getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, new ReportFragment()).commit();
                             updateSelectedItem(binding.icMenuBottom.tvReport);
-                        }
                     }
                 });
 
                 binding.icMenuBottom.tvSetting.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (isNetworkConnected()) {
                             getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, new SettingFragment()).commit();
                             updateSelectedItem(binding.icMenuBottom.tvSetting);
-                        }
                     }
                 });
             }
@@ -191,20 +178,6 @@ public class MainActivity extends AppCompatActivity {
         if (binding != null) {
             setContentView(binding.getRoot());
         }
-
-        networkStatusTextView = findViewById(R.id.tvNoInternet);
-        networkProgressBar = findViewById(R.id.progressBar); // Tìm ProgressBar
-
-        if (networkStatusTextView != null) {
-            networkStatusTextView.setVisibility(View.GONE);
-        }
-
-        if (networkProgressBar != null) {
-            networkProgressBar.setVisibility(View.GONE);
-        }
-
-        networkChangeReceiver = new NetworkChangeReceiver();
-        registerReceiver(networkChangeReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
     }
 
@@ -286,65 +259,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(networkChangeReceiver);
-    }
-
-    // Lớp BroadcastReceiver để theo dõi kết nối mạng
-    private class NetworkChangeReceiver extends BroadcastReceiver {
-        private boolean wasDisconnected = false; // Biến để theo dõi trạng thái mạng trước đó
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-            boolean isConnected = activeNetwork != null && activeNetwork.isConnected();
-
-            if (!isConnected) {
-                if (networkStatusTextView != null) {
-                    networkStatusTextView.setVisibility(View.VISIBLE);
-                    Toast.makeText(context, "Không có kết nối Internet!", Toast.LENGTH_SHORT).show();
-                }
-
-                if (networkProgressBar != null) {
-                    networkProgressBar.setVisibility(View.VISIBLE);
-                }
-
-                wasDisconnected = true; // Đánh dấu là đã mất kết nối
-            } else {
-                if (networkStatusTextView != null) {
-                    networkStatusTextView.setVisibility(View.GONE);
-                }
-
-                if (networkProgressBar != null) {
-                    networkProgressBar.setVisibility(View.GONE);
-                }
-
-                // Nếu trước đó mất kết nối, bây giờ có mạng thì hiển thị thông báo
-                if (wasDisconnected) {
-                    Toast.makeText(context, "Đã kết nối Internet!", Toast.LENGTH_SHORT).show();
-                    wasDisconnected = false; // Reset trạng thái
-                }
-            }
-        }
-    }
-
     private boolean isNetworkConnected() {
-        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager != null) {
-            NetworkInfo activeNetwork = connectivityManager.getActiveNetworkInfo();
-            return activeNetwork != null && activeNetwork.isConnected();
-        }
-        return false;
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
-    public void showFabChatbot() {
-        FloatingActionButton fabChatbot = findViewById(R.id.fabChatbot);
-        if (fabChatbot != null) {
-            fabChatbot.show();
-        }
+    private void showToast(String message) {
+        runOnUiThread(() -> android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_SHORT).show());
     }
-
 }

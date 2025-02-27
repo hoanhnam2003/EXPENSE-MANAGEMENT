@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background với gradient 3 màu -->
+    <item android:id="@android:id/background">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="0"
+                android:startColor="@color/hongthongke"
+                android:centerColor="@color/color_red"
+                android:endColor="@color/color_green"
+                android:type="linear"/>
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+
+    <!-- Phần tiến trình của SeekBar -->
+    <item android:id="@android:id/progress">
+        <clip android:clipOrientation="horizontal" android:gravity="left">
+            <shape android:shape="rectangle">
+                <solid android:color="@color/hongthongke"/>
+                <corners android:radius="10dp"/>
+            </shape>
+        </clip>
+    </item>
+
+</layer-list>
