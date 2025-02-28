@@ -1,5 +1,6 @@
 package com.namha.expensemanagement.database.dao;
 
+
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
@@ -22,4 +23,5 @@ public interface ColorDao {
 //    xóa tất cả dữ liệu bảng colors
     @Query("DELETE FROM colors")
     void deleteAll();
+
 }

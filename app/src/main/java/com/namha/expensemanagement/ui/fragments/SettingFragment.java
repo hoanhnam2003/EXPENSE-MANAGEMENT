@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,13 +43,16 @@ public class SettingFragment extends Fragment {
     private SeekBar seekBar;
     private FrameLayout frameLayout;
     private SharedViewModel sharedViewModel;
-
+    private TextView setmonthlyspending, money, setcolor, setfontsize, datamanagement;
+    private SeekBar sbExpenses2;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = SettingFragmentBinding.inflate(inflater, container, false);
         return binding != null ? binding.getRoot() : null; // Kiểm tra binding null
+
+
     }
 
     @Override
@@ -66,6 +70,14 @@ public class SettingFragment extends Fragment {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         seekBar = view.findViewById(R.id.seekBar);
         frameLayout = view.findViewById(R.id.frStatistical);
+        // Find the views
+        setmonthlyspending = view.findViewById(R.id.setmonthlyspending);
+        money = view.findViewById(R.id.money);
+        setcolor = view.findViewById(R.id.setcolor);
+        setfontsize = view.findViewById(R.id.setfontsize);
+        datamanagement = view.findViewById(R.id.datamanagement);
+        sbExpenses2 = view.findViewById(R.id.sbExpenses2);
+
 
         setupUI();
 
@@ -119,6 +131,30 @@ public class SettingFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
         binding.gmailsupport.setOnClickListener(v -> openEmailSupport());
+
+        // Set an OnSeekBarChangeListener to change the font size
+        sbExpenses2.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // Adjust text size based on SeekBar progress
+                float textSize = 12 + (progress * 0.5f); // Adjust the multiplier as needed
+                setmonthlyspending.setTextSize(textSize);
+                money.setTextSize(textSize);
+                setcolor.setTextSize(textSize);
+                setfontsize.setTextSize(textSize);
+                datamanagement.setTextSize(textSize);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // Optionally handle when the user starts tracking
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Optionally handle when the user stops tracking
+            }
+        });
     }
 
     private void openEmailSupport() {
