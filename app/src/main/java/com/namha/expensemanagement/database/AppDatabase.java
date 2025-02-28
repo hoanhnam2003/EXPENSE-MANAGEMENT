@@ -25,7 +25,7 @@ import com.namha.expensemanagement.database.entities.Type;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Category.class, Type.class, DailyLimit.class, MonthlyLimit.class, Color.class, Transaction.class, Setting.class}, version = 8)
+@Database(entities = {Category.class, Type.class, DailyLimit.class, MonthlyLimit.class, Color.class, Transaction.class, Setting.class}, version = 12)
 public abstract class   AppDatabase extends RoomDatabase {
     private static volatile AppDatabase instance; // Đảm bảo tính đồng bộ
     private static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(4);
@@ -34,9 +34,11 @@ public abstract class   AppDatabase extends RoomDatabase {
     public abstract TypeDao typeDao();
     public abstract DailyLimitDao dailyLimitDao();
     public abstract MonthlyLimitDao monthlyLimitDao();
-    public abstract ColorDao colorDao();
     public abstract TransactionDao transactionDao();
+    public abstract ColorDao colorDao();
+
     public abstract SettingDao settingDao();
+
 
     public static AppDatabase getInstance(Context context) {
         if (context == null) {

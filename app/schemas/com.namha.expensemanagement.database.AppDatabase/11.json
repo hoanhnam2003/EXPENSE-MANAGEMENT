@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 8,
-    "identityHash": "16b2a241c1e312e2363716e4a5545062",
+    "version": 11,
+    "identityHash": "58c3ddd97a3eedca82991fe822105164",
     "entities": [
       {
         "tableName": "categories",
@@ -121,12 +121,27 @@
         "foreignKeys": []
       },
       {
-        "tableName": "Color",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` ()",
-        "fields": [],
+        "tableName": "colors",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name_color` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name_color",
+            "columnName": "name_color",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
         "primaryKey": {
-          "autoGenerate": false,
-          "columnNames": []
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -270,7 +285,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '16b2a241c1e312e2363716e4a5545062')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '58c3ddd97a3eedca82991fe822105164')"
     ]
   }
 }

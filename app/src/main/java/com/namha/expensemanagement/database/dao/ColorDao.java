@@ -22,5 +22,4 @@ public interface ColorDao {
 //    xóa tất cả dữ liệu bảng colors
     @Query("DELETE FROM colors")
     void deleteAll();
-
 }

@@ -118,6 +118,7 @@ public class SettingFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
+        binding.gmailsupport.setOnClickListener(v -> openEmailSupport());
     }
 
     private void openEmailSupport() {
