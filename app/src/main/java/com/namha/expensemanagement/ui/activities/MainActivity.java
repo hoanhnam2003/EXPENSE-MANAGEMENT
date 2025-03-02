@@ -24,10 +24,8 @@ import com.namha.expensemanagement.ui.fragments.HomeFragment;
 import com.namha.expensemanagement.ui.fragments.ReportFragment;
 import com.namha.expensemanagement.ui.fragments.SettingFragment;
 import com.namha.expensemanagement.viewmodels.CategoryViewModel;
-import com.namha.expensemanagement.viewmodels.ColorViewModel;
 import com.namha.expensemanagement.viewmodels.DailyLimitViewModel;
 import com.namha.expensemanagement.viewmodels.MonthlyLimitViewModel;
-import com.namha.expensemanagement.viewmodels.SettingViewModel;
 import com.namha.expensemanagement.viewmodels.TransactionViewModel;
 import com.namha.expensemanagement.viewmodels.TypeViewModel;
 
@@ -39,9 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private CategoryViewModel mCategoryViewModel;
     private DailyLimitViewModel mDailyLimitViewModel;
     private MonthlyLimitViewModel mMonthlyLimit;
-    private SettingViewModel mSettingViewModel;
-    private ColorViewModel mColorViewModel;
-
+    
     FloatingActionButton fabChatbot;
 
 
@@ -105,16 +101,6 @@ public class MainActivity extends AppCompatActivity {
         mMonthlyLimit = new ViewModelProvider(this).get(MonthlyLimitViewModel.class);
         if (mMonthlyLimit != null) {
             mMonthlyLimit.logAllMonthlyLimits();
-        }
-
-        mSettingViewModel = new ViewModelProvider(this).get(SettingViewModel.class);
-        if (mSettingViewModel != null) {
-            mSettingViewModel.logAllSettings();
-        }
-
-        mColorViewModel = new ViewModelProvider(this).get(ColorViewModel.class);
-        if (mColorViewModel != null) {
-            mColorViewModel.logAllColors();
         }
 
         // Display default HomeFragment

@@ -116,6 +116,7 @@ public class SettingFragment extends Fragment {
 
                 frameLayout.setBackgroundColor(selectedColor);
                 sharedViewModel.setSelectedColor(selectedColor); // Cập nhật vào ViewModel
+                saveSelectedColor(selectedColor);
 
                 // Lưu trạng thái màu vào SharedPreferences ngay lập tức
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -280,9 +281,7 @@ public class SettingFragment extends Fragment {
             appDatabase.categoryDao().deleteAll();
             appDatabase.dailyLimitDao().deleteAll();
             appDatabase.monthlyLimitDao().deleteAll();
-            appDatabase.colorDao().deleteAll();
             appDatabase.transactionDao().deleteAll();
-            appDatabase.settingDao().deleteAll();
         });
 
         // Xóa dữ liệu SharedPreferences
@@ -308,4 +307,11 @@ public class SettingFragment extends Fragment {
         super.onDestroyView();
         binding = null; // Giải phóng binding để tránh memory leak
     }
+
+    private void saveSelectedColor(int color) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("SelectedColor", color);
+        editor.apply();
+    }
+
 }

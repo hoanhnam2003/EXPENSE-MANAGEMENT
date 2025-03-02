@@ -215,7 +215,7 @@ public class HomeFragment extends Fragment {
         calculateAndDisplayMonthlyTotal();
 
 //        // Gọi hàm cảnh báo khi vượt quá ngân sách
-//        warningMoney();
+        warningMoney();
 
         // thay đổi màu nền
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
@@ -309,25 +309,23 @@ public class HomeFragment extends Fragment {
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), channelId)
                                 .setSmallIcon(R.drawable.logo)
                                 .setContentTitle("Ngân sách ngày")
-                                .setContentText("Bạn đã vượt quá ngân sách ngày: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion)
+                                .setContentText("Giới hạn: " + decimalFormat.format(moneyDaySetting) + " VND.\nBạn đã chi: "
+                                        + decimalFormat.format(sumAmountForToday) + " VND.\nVượt quá: "
+                                        + formattedWarningMoney + " VND.")
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                                 .setAutoCancel(true)
                                 .setContentIntent(pendingIntent)
                                 // Thêm BigTextStyle để hiển thị đầy đủ nội dung
                                 .setStyle(new NotificationCompat.BigTextStyle()
-                                        .bigText("Bạn đã vượt quá ngân sách ngày: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion));
+                                        .bigText("Giới hạn chi tiêu: " + decimalFormat.format(moneyDaySetting) + " VND.\n"
+                                                + "Bạn đã chi: " + decimalFormat.format(sumAmountForToday) + " VND.\n"
+                                                + "Vượt quá: " + formattedWarningMoney + " VND.\n"
+                                                + "Hãy: " + randomSuggestion));
 
+                        // Hiển thị thông báo
                         notificationManager.notify(1, builder.build());
+
                         dayWarningShown = true;
-                        Toast toast = Toast.makeText(getContext(), "Bạn đã vượt quá ngân sách ngày: " + formattedWarningMoney + " VND", Toast.LENGTH_SHORT);
-                        View toastView = toast.getView();
-                        if (toastView != null) {
-                            TextView toastMessage = toastView.findViewById(android.R.id.message);
-                            if (toastMessage != null) {
-                                toastMessage.setTextColor(Color.RED);
-                            }
-                        }
-                        toast.show();
                     }else{
                         double warningMoney = moneyDaySetting - sumAmountForToday;
                         String formattedWarningMoney = decimalFormat.format(warningMoney);
@@ -653,4 +651,6 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
+
 }

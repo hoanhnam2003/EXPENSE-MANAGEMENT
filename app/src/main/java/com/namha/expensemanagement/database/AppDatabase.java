@@ -8,24 +8,20 @@ import androidx.room.RoomDatabase;
 
 
 import com.namha.expensemanagement.database.dao.CategoryDao;
-import com.namha.expensemanagement.database.dao.ColorDao;
 import com.namha.expensemanagement.database.dao.DailyLimitDao;
 import com.namha.expensemanagement.database.dao.MonthlyLimitDao;
-import com.namha.expensemanagement.database.dao.SettingDao;
 import com.namha.expensemanagement.database.dao.TransactionDao;
 import com.namha.expensemanagement.database.dao.TypeDao;
 import com.namha.expensemanagement.database.entities.Category;
-import com.namha.expensemanagement.database.entities.Color;
 import com.namha.expensemanagement.database.entities.DailyLimit;
 import com.namha.expensemanagement.database.entities.MonthlyLimit;
-import com.namha.expensemanagement.database.entities.Setting;
 import com.namha.expensemanagement.database.entities.Transaction;
 import com.namha.expensemanagement.database.entities.Type;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Category.class, Type.class, DailyLimit.class, MonthlyLimit.class, Color.class, Transaction.class, Setting.class}, version = 15)
+@Database(entities = {Category.class, Type.class, DailyLimit.class, MonthlyLimit.class, Transaction.class}, version = 18)
 public abstract class   AppDatabase extends RoomDatabase {
     private static volatile AppDatabase instance; // Đảm bảo tính đồng bộ
     private static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(4);
@@ -35,10 +31,6 @@ public abstract class   AppDatabase extends RoomDatabase {
     public abstract DailyLimitDao dailyLimitDao();
     public abstract MonthlyLimitDao monthlyLimitDao();
     public abstract TransactionDao transactionDao();
-
-    public abstract ColorDao colorDao();
-
-    public abstract SettingDao settingDao();
 
 
 
