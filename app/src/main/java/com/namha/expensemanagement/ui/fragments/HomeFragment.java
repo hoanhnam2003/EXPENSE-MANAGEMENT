@@ -53,7 +53,6 @@ public class HomeFragment extends Fragment {
 
     private static final String PREFS_NAME = "HomeFragmentPrefs";
     private static final String KEY_EXPENSE_PROGRESS = "ExpenseProgress";
-    private static final String FONT_SIZE_KEY = "font_size";
 
     private HomeFragmentBinding binding;
     private TransactionViewModel transactionViewModel;
@@ -215,7 +214,7 @@ public class HomeFragment extends Fragment {
 
         calculateAndDisplayMonthlyTotal();
 
-//        // Gọi hàm cảnh báo khi vượt quá ngân sách
+        // Gọi hàm cảnh báo khi vượt quá ngân sách
         warningMoney();
 
         // thay đổi màu nền
@@ -516,11 +515,18 @@ public class HomeFragment extends Fragment {
         transactionViewModel.getAllTransactions().observe(getViewLifecycleOwner(), transactions -> {
             if (transactions != null) {
                 double totalIncome = sumAmountForCurrentMonth(transactions);
-                totalExpense = sumAmountForCurrentMonthChiTieu(transactions);
-                totalExpenseToday = sumAmountForToday(transactions);
+                double totalExpense = sumAmountForCurrentMonthChiTieu(transactions);
+                double totalExpenseToday = sumAmountForToday(transactions);
 
-                Log.d("totalExpenseToday", "totalExpenseToday: " + totalExpenseToday);
+                double totalUnusualExpense = 0;
+                for (Transaction transaction : transactions) {
+                    // Kiểm tra loại giao dịch, chỉ tính chi tiêu (typeId = 2) và có số tiền tuyệt đối lớn hơn 5 triệu
+                    if (transaction.getTypeId() == 1 && Math.abs(transaction.getAmount()) > 5_000_000) {
+                        totalUnusualExpense += Math.abs(transaction.getAmount());
+                    }
+                }
 
+                // Cập nhật UI
                 if (binding.tv0d != null) {
                     binding.tv0d.setText(String.format("%,.0f VND", totalIncome));
                 }
@@ -529,6 +535,9 @@ public class HomeFragment extends Fragment {
                 }
                 if (binding.tien != null) {
                     binding.tien.setText(String.format("%,.0f VND", totalExpenseToday));
+                }
+                if (binding.tv0d2 != null) {
+                    binding.tv0d2.setText(String.format("%,.0f VND", totalUnusualExpense));
                 }
             } else {
                 Log.e("HomeFragment", "Transactions list is null");
@@ -652,6 +661,5 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 
 }

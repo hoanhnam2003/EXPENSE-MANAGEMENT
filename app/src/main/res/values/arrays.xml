@@ -4,5 +4,7 @@
         <item>Chi tiền</item>
         <item>Vay tiền</item>
         <item>Thu nhập</item>
+        <item>Chi tiêu bất thường</item>
+        <item>Thu nhập thường xuyên</item>
     </string-array>
 </resources>
