@@ -139,33 +139,10 @@
                     android:max="3"
                     android:progressDrawable="@drawable/seekbar_color_gradient"
                     android:thumb="@drawable/seekbar_thumb"
-                    app:layout_constraintBottom_toTopOf="@+id/setfontsize"
+                    app:layout_constraintBottom_toTopOf="@+id/datamanagement"
                     app:layout_constraintTop_toBottomOf="@+id/setcolor"
                     tools:layout_editor_absoluteX="16dp" />
 
-                <TextView
-                    android:id="@+id/setfontsize"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/thiet_lap_co_chu"
-                    android:textStyle="bold"
-                    android:textColor="@color/xam"
-                    android:layout_marginTop="@dimen/_50dp"
-                    android:textSize="@dimen/_16sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/setcolor"
-                    />
-
-                <androidx.appcompat.widget.AppCompatSeekBar
-                    android:id="@+id/sbExpenses2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_16dp"
-                    android:progress="50"
-                    android:progressTint="@color/color_fd3665"
-                    android:thumbTint="@color/color_fd3665"
-                    app:layout_constraintTop_toBottomOf="@+id/setfontsize"
-                    />
 
                 <TextView
                     android:id="@+id/datamanagement"
@@ -177,7 +154,7 @@
                     android:layout_marginTop="@dimen/_50dp"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/setfontsize"
+                    app:layout_constraintTop_toBottomOf="@id/setcolor"
                     />
 
                 <TextView

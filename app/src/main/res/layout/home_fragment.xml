@@ -183,15 +183,29 @@
                     app:layout_constraintTop_toTopOf="@id/tvExpenses" />
 
 
+
                 <TextView
-                    android:id="@+id/tv"
+                    android:id="@+id/tvchitieubatthuong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_20dp"
-                    android:text="@string/chi_tieu"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/chi_tieu_bat_thuong"
                     android:textColor="@color/xam"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv0d" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvExpenses" />
+
+                <TextView
+                    android:id="@+id/tv0d2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_16dp"
+                    android:gravity="end"
+                    android:text="0đ"
+                    android:textColor="@color/color_hong"
+                    android:textSize="@dimen/_16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/tvchitieubatthuong"
+                    app:layout_constraintTop_toTopOf="@id/tvchitieubatthuong" />
 
                 <TextView
                     android:id="@+id/ngang"
@@ -201,7 +215,7 @@
                     android:background="@drawable/horizontal_line"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv0d1" />
+                    app:layout_constraintTop_toBottomOf="@id/tvchitieubatthuong" />
 
                 <TextView
                     android:id="@+id/tieu_trong_ngay"

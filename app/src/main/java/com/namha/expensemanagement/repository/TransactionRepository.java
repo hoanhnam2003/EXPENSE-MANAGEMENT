@@ -66,18 +66,25 @@ public class TransactionRepository {
     }
 
     // Tìm kiếm lịch sử
-    public LiveData<List<History>> searchByDate(String datePattern) {
-        if (datePattern == null || datePattern.isEmpty()) {
-            Log.e("TransactionRepository", "searchByDate: Date pattern is null or empty");
+    public LiveData<List<History>> searchByTypeAndDate(String typeName, String datePattern) {
+        if ((datePattern == null || datePattern.isEmpty()) && (typeName == null || typeName.isEmpty())) {
+            Log.e("TransactionRepository", "searchByTypeAndDate: Both parameters are null or empty");
             return null;
         }
-        Log.d("TransactionRepository", "Searching for date: " + datePattern);
-        LiveData<List<History>> searchResult = mTransactionDao.searchByDate(datePattern);
+
+        Log.d("TransactionRepository", "Searching for type: " + typeName + " and date: " + datePattern);
+
+        LiveData<List<History>> searchResult = mTransactionDao.searchByDate(
+                typeName == null || typeName.trim().isEmpty() ? null : typeName,
+                datePattern == null || datePattern.trim().isEmpty() ? null : datePattern
+        );
+
         if (searchResult == null) {
-            Log.e("TransactionRepository", "searchByDate: No search results found for date " + datePattern);
+            Log.e("TransactionRepository", "searchByTypeAndDate: No search results found for type " + typeName + " and date " + datePattern);
         }
         return searchResult;
     }
+
 
     // Xóa giao dịch theo ID
     public void deleteTransactionById(int transactionId) {

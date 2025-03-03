@@ -94,20 +94,24 @@ public class TransactionViewModel extends AndroidViewModel {
         }
     }
 
-    // Phương thức tìm kiếm theo ngày, kiểm tra null
-    public LiveData<List<History>> searchByDate(String datePattern) {
+    // Phương thức tìm kiếm theo ngày và loại, kiểm tra null
+    public LiveData<List<History>> searchByTypeAndDate(String typeName, String datePattern) {
         if (mRepository != null) {
-            Log.d(TAG, "Searching for date: " + datePattern);
-            LiveData<List<History>> result = mRepository.searchByDate(datePattern);
+            Log.d(TAG, "Searching for type: " + typeName + " and date: " + datePattern);
+
+            LiveData<List<History>> result = mRepository.searchByTypeAndDate(typeName, datePattern);
+
             result.observeForever(histories -> {
-                Log.d(TAG, "Search results: " + histories);
+                Log.d(TAG, "Search results: " + (histories != null ? histories.size() : "No results"));
             });
+
             return result;
         } else {
-            Log.e(TAG, "Repository is null, cannot search by date");
+            Log.e(TAG, "Repository is null, cannot search by type and date");
             return new MutableLiveData<>(); // Trả về LiveData rỗng nếu repository null
         }
     }
+
 
     // Xóa giao dịch theo ID, kiểm tra null
     public void deleteTransactionById(int transactionId) {

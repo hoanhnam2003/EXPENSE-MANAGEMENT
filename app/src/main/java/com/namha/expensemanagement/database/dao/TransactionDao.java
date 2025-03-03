@@ -36,14 +36,16 @@ public interface TransactionDao {
             "ORDER BY t.id DESC")
     LiveData<List<History>> getHistory(); // Sử dụng LiveData
 
-    // Thêm phương thức tìm kiếm theo ngày gần đúng
+    // Thêm phương thức tìm kiếm theo ngày và loại gần đúng
     @Query("SELECT t.id, c.name AS nameCategory, t.content, t.date, ty.type_name AS typeName, t.amount " +
             "FROM transactions t " +
             "JOIN categories c ON t.categoryId = c.id " +
             "JOIN types ty ON t.typeId = ty.id " +
-            "WHERE t.date LIKE '%' || :datePattern || '%' " +
+            "WHERE (:typeName IS NULL OR ty.type_name LIKE '%' || :typeName || '%') " +
+            "AND (:datePattern IS NULL OR t.date LIKE '%' || :datePattern || '%') " +
             "ORDER BY t.id DESC")
-    LiveData<List<History>> searchByDate(String datePattern);
+    LiveData<List<History>> searchByDate(String typeName, String datePattern);
+
 
     // Xóa bản ghi theo id
     @Query("DELETE FROM transactions WHERE id = :transactionId")

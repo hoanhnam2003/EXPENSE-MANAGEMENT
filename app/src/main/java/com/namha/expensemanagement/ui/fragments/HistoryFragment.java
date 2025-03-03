@@ -175,44 +175,53 @@ public class HistoryFragment extends Fragment {
     }
 
     private void performSearch() {
-        if (binding == null) return; // Ensure binding is not null
+        if (binding == null) return; // Đảm bảo binding không null
 
-        String datePattern = binding.etDate.getText().toString();
-        Log.d("HistoryFragment", "Searching for date: " + datePattern);
+        String inputText = binding.etDate.getText().toString().trim(); // Lấy dữ liệu từ EditText
 
-        if (datePattern.isEmpty()) {
-            // If no input is provided, hide the search bar
+        Log.d("HistoryFragment", "User input: " + inputText);
+
+        if (inputText.isEmpty()) {
+            // Nếu ô tìm kiếm trống, báo lỗi và ẩn thanh tìm kiếm
             if (isSearchMode) {
                 togglePopupSearchLayout();
                 isSearchMode = false;
             }
-            Toast.makeText(requireContext(), "Vui lòng nhập ngày để tìm kiếm.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Vui lòng nhập ngày hoặc loại để tìm kiếm.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (isValidDate(datePattern)) {
-            if (getViewLifecycleOwner() != null) {
-                transactionViewModel.searchByDate(datePattern).observe(getViewLifecycleOwner(), historyList -> {
-                    if (historyList != null && !historyList.isEmpty()) {
-                        updateHistoryList(historyList);
-                    } else {
-                        Toast.makeText(requireContext(), "Không tìm thấy giao dịch nào cho ngày này.", Toast.LENGTH_SHORT).show();
-                    }
+        String datePattern = "";
+        String typeName = "";
 
-                    // Hide the search layout after search
-                    if (isSearchMode) {
-                        togglePopupSearchLayout();
-                        isSearchMode = false;
-                    }
-                });
-            } else {
-                Log.e("HistoryFragment", "getViewLifecycleOwner is null, cannot observe search results");
-            }
+        if (isValidDate(inputText)) {
+            datePattern = inputText; // Nếu nhập đúng định dạng ngày, gán vào datePattern
         } else {
-            Toast.makeText(requireContext(), "Ngày tháng năm không hợp lệ. Vui lòng nhập theo định dạng DD/MM/YYYY.", Toast.LENGTH_SHORT).show();
-            Log.d("HistoryFragment", "Invalid date format: " + datePattern);
+            typeName = inputText; // Nếu không phải ngày, coi như loại giao dịch
+        }
+
+        Log.d("HistoryFragment", "Searching for date: " + datePattern + ", type: " + typeName);
+
+        if (getViewLifecycleOwner() != null) {
+            transactionViewModel.searchByTypeAndDate(typeName, datePattern).observe(getViewLifecycleOwner(), historyList -> {
+                if (historyList != null && !historyList.isEmpty()) {
+                    updateHistoryList(historyList);
+                } else {
+                    Toast.makeText(requireContext(), "Không tìm thấy giao dịch nào.", Toast.LENGTH_SHORT).show();
+                }
+
+                // Ẩn popup tìm kiếm sau khi tìm
+                if (isSearchMode) {
+                    togglePopupSearchLayout();
+                    isSearchMode = false;
+                }
+            });
+        } else {
+            Log.e("HistoryFragment", "getViewLifecycleOwner is null, cannot observe search results");
         }
     }
+
+
 
     private boolean isValidDate(String dateStr) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
