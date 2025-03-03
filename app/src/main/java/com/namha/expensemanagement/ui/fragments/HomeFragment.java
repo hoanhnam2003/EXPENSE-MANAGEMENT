@@ -53,6 +53,7 @@ public class HomeFragment extends Fragment {
 
     private static final String PREFS_NAME = "HomeFragmentPrefs";
     private static final String KEY_EXPENSE_PROGRESS = "ExpenseProgress";
+    private static final String FONT_SIZE_KEY = "font_size";
 
     private HomeFragmentBinding binding;
     private TransactionViewModel transactionViewModel;
