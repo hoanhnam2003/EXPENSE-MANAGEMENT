@@ -27,6 +27,7 @@ import com.namha.expensemanagement.databinding.SettingFragmentBinding;
 import com.namha.expensemanagement.viewmodels.DailyLimitViewModel;
 import com.namha.expensemanagement.viewmodels.MonthlyLimitViewModel;
 import com.namha.expensemanagement.viewmodels.SharedViewModel;
+import com.namha.expensemanagement.viewmodels.TransactionViewModel;
 
 
 public class SettingFragment extends Fragment {
@@ -44,6 +45,9 @@ public class SettingFragment extends Fragment {
     private FrameLayout frameLayout;
     private SharedViewModel sharedViewModel;
 
+    TransactionViewModel transactionViewModel;
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class SettingFragment extends Fragment {
         if (binding == null) {
             return; // Đảm bảo binding không null trước khi tiếp tục
         }
+        transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
 
         monthlyLimitViewModel = new ViewModelProvider(this).get(MonthlyLimitViewModel.class);
         dailyLimitViewModel = new ViewModelProvider(this).get(DailyLimitViewModel.class);
@@ -196,32 +201,59 @@ public class SettingFragment extends Fragment {
 
         binding.btnSave4.setOnClickListener(v -> {
             String inputMoneyStr = binding.edtMonthlySpending.getText().toString().trim();
+
+            // Kiểm tra nếu nhập vào rỗng
             if (inputMoneyStr.isEmpty()) {
                 Toast.makeText(getContext(), "Vui lòng nhập số tiền", Toast.LENGTH_SHORT).show();
                 return;
             }
+
             try {
+                // Chuyển đổi chuỗi thành giá trị double
                 double inputMoney = Double.parseDouble(inputMoneyStr);
+
+                // Kiểm tra nếu số tiền phải lớn hơn 0
                 if (inputMoney <= 0) {
                     Toast.makeText(getContext(), "Số tiền phải lớn hơn 0", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Lấy giá trị money_day_setting từ DailyLimit
-                dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), moneyDaySetting -> {
-                    if (moneyDaySetting != null && inputMoney < moneyDaySetting) {
-                        Toast.makeText(getContext(), "Thiết lập tháng phải lớn hơn thiết lập ngày", Toast.LENGTH_SHORT).show();
+                // Thiết lập typeName dựa trên ID loại thu nhập (Có thể thay đổi theo logic của bạn)
+                String incomeTypeName = "Thu nhập";  // Bạn có thể sử dụng loại thu nhập phù hợp
+
+                // Quan sát tổng thu nhập từ các giao dịch đã thêm
+                transactionViewModel.getTotalIncome(incomeTypeName).observe(getViewLifecycleOwner(), totalIncome -> {
+                    if (totalIncome != null) {
+                        double totalIncomeValue = totalIncome;
+
+                        // Kiểm tra nếu số tiền nhập vào vượt quá tổng thu nhập
+                        if (inputMoney > totalIncomeValue) {
+                            Toast.makeText(getContext(),
+                                    "Thiết lập tháng không được vượt quá tổng thu nhập",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            // Cập nhật hoặc thêm mới giới hạn thu nhập vào ViewModel
+                            monthlyLimitViewModel.insertOrUpdateMonthlyLimit(inputMoney);
+
+                            // Xóa trường nhập và hiển thị thông báo thành công
+                            binding.edtMonthlySpending.setText("");
+                            Toast.makeText(getContext(), "Thiết lập thành công", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
-                        // Chèn hoặc cập nhật nếu điều kiện hợp lệ
-                        monthlyLimitViewModel.insertOrUpdateMonthlyLimit(inputMoney);
-                        binding.edtMonthlySpending.setText("");
-                        Toast.makeText(getContext(), "Thiết lập thành công", Toast.LENGTH_SHORT).show();
+                        // Xử lý khi không lấy được tổng thu nhập
+                        Log.e("IncomeError", "Không thể lấy tổng thu nhập.");
+                        Toast.makeText(getContext(), "Vui lòng thêm thu nhập trước khi thiết lập chi tiêu tháng", Toast.LENGTH_SHORT).show();
                     }
                 });
+
             } catch (NumberFormatException e) {
                 Toast.makeText(getContext(), "Vui lòng nhập số tiền hợp lệ", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Log.e("UnexpectedError", e.getMessage(), e);
+                Toast.makeText(getContext(), "Đã xảy ra lỗi. Vui lòng thử lại sau", Toast.LENGTH_SHORT).show();
             }
         });
+
 
         binding.deletedata.setOnClickListener(v -> showDeleteConfirmationDialog());
     }

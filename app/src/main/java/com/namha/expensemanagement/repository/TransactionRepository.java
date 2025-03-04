@@ -144,4 +144,21 @@ public class TransactionRepository {
         }
         return transactionsByDate;
     }
+
+    // Phương thức lấy tổng thu nhập từ loại giao dịch theo tên loại
+    public LiveData<Double> getTotalIncome(String typeName) {
+        if (typeName == null || typeName.isEmpty()) {
+            Log.e("TransactionRepository", "getTotalIncome: Invalid typeName");
+            return null;
+        }
+
+        // Gọi phương thức trong Dao để lấy tổng thu nhập từ loại thu nhập theo tên
+        LiveData<Double> totalIncome = mTransactionDao.getTotalIncome(typeName);
+
+        if (totalIncome == null) {
+            Log.e("TransactionRepository", "getTotalIncome: No total income found for typeName: " + typeName);
+        }
+
+        return totalIncome;
+    }
 }

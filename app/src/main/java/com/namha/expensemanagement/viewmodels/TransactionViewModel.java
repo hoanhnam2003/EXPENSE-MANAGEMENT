@@ -166,5 +166,14 @@ public class TransactionViewModel extends AndroidViewModel {
         }
     }
 
-
+    // Giả sử phương thức này lấy tổng thu nhập từ Repository
+    // Lấy tổng thu nhập từ loại giao dịch theo tên loại
+    public LiveData<Double> getTotalIncome(String typeName) {
+        if (mRepository != null) {
+            return mRepository.getTotalIncome(typeName);
+        } else {
+            Log.e(TAG, "Repository is null, cannot get total income");
+            return new MutableLiveData<>(); // Trả về LiveData rỗng nếu repository null
+        }
+    }
 }

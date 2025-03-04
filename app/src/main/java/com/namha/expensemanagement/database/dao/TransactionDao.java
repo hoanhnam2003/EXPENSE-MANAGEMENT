@@ -75,4 +75,8 @@ public interface TransactionDao {
     // Thêm phương thức lấy giao dịch theo ngày/tháng/năm và tháng năm
     @Query("SELECT * FROM transactions WHERE date LIKE '%' || :date || '%'")
     LiveData<List<Transaction>> getTransactionsByDate(String date);
+
+    @Query("SELECT SUM(amount) FROM transactions WHERE typeId = (SELECT id FROM types WHERE type_name = :typeName LIMIT 2)")
+    LiveData<Double> getTotalIncome(String typeName);
+
 }

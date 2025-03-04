@@ -161,34 +161,26 @@ public class AddFragment extends Fragment {
             String content = binding.content.getText().toString().trim();
 
             if (!selectedCategory.isEmpty() && selectedType != null && !selectedTime.isEmpty() && !content.isEmpty()) {
-                dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), dailyLimitSetting -> {
-                    monthlyLimitViewModel.getLastMonthLimitSetting().observe(getViewLifecycleOwner(), monthlyLimitSetting -> {
-                        if (dailyLimitSetting == null || dailyLimitSetting == 0 || monthlyLimitSetting == null || monthlyLimitSetting == 0) {
-                            Toast.makeText(getContext(), "Bạn cần cài đặt số tiền ngày và tháng trước khi tạo mới thu chi.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            observeOnce(categoryViewModel.getCategoryIdByName(selectedCategory), getViewLifecycleOwner(), categoryId -> {
-                                if (categoryId != null) {
-                                    observeOnce(typeViewModel.getTypeIdByName(selectedType.getType_name()), getViewLifecycleOwner(), typeId -> {
-                                        if (typeId != null) {
-                                            observeOnce(dailyLimitViewModel.getLastDailyLimitId(), getViewLifecycleOwner(), idDailyLimit -> {
-                                                observeOnce(monthlyLimitViewModel.getLastMonthlyLimitId(), getViewLifecycleOwner(), idMonthyLimit -> {
-                                                    int dailyLimitId = idDailyLimit != null ? idDailyLimit : 0;
-                                                    int monthlyLimitId = idMonthyLimit != null ? idMonthyLimit : 0;
+                observeOnce(categoryViewModel.getCategoryIdByName(selectedCategory), getViewLifecycleOwner(), categoryId -> {
+                    if (categoryId != null) {
+                        observeOnce(typeViewModel.getTypeIdByName(selectedType.getType_name()), getViewLifecycleOwner(), typeId -> {
+                            if (typeId != null) {
+                                observeOnce(dailyLimitViewModel.getLastDailyLimitId(), getViewLifecycleOwner(), idDailyLimit -> {
+                                    observeOnce(monthlyLimitViewModel.getLastMonthlyLimitId(), getViewLifecycleOwner(), idMonthyLimit -> {
+                                        int dailyLimitId = idDailyLimit != null ? idDailyLimit : 0;
+                                        int monthlyLimitId = idMonthyLimit != null ? idMonthyLimit : 0;
 
-                                                    // Gọi phương thức để cập nhật số dư và lưu giao dịch
-                                                    updateTotalBalanceAndSaveTransaction(amount, typeId, content, selectedTime, categoryId, dailyLimitId, monthlyLimitId);
-                                                });
-                                            });
-                                        } else {
-                                            Toast.makeText(getContext(), "Loại giao dịch không tồn tại.", Toast.LENGTH_SHORT).show();
-                                        }
+                                        // Gọi phương thức để cập nhật số dư và lưu giao dịch
+                                        updateTotalBalanceAndSaveTransaction(amount, typeId, content, selectedTime, categoryId, dailyLimitId, monthlyLimitId);
                                     });
-                                } else {
-                                    Toast.makeText(getContext(), "Danh mục không tồn tại.", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    });
+                                });
+                            } else {
+                                Toast.makeText(getContext(), "Loại giao dịch không tồn tại.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getContext(), "Danh mục không tồn tại.", Toast.LENGTH_SHORT).show();
+                    }
                 });
             } else {
                 Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
