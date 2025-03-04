@@ -501,29 +501,39 @@ public class HomeFragment extends Fragment {
 
     // Tính toán và hiển thị tổng số tiền hàng tháng
     private void calculateAndDisplayMonthlyTotal() {
+        // Quan sát tất cả giao dịch từ ViewModel
         transactionViewModel.getAllTransactions().observe(getViewLifecycleOwner(), transactions -> {
+            // Kiểm tra xem danh sách giao dịch có null không
             if (transactions != null) {
+                // Tính tổng thu nhập trong tháng
                 final double totalIncome = sumAmountForCurrentMonth(transactions);
+                // Tính tổng chi tiêu trong tháng
                 totalExpense = sumAmountForCurrentMonthChiTieu(transactions);
+                // Tính tổng chi tiêu trong ngày hôm nay
                 totalExpenseToday = sumAmountForToday(transactions);
 
-                final double[] totalUnusualExpense = {0};  // Dùng mảng để thay thế cho biến không thể thay đổi
+                // Khởi tạo mảng để lưu tổng chi tiêu bất thường, vì phải sử dụng final
+                final double[] totalUnusualExpense = {0};
 
-                // Quan sát giá trị daily limit (money_day_setting)
+                // Quan sát giá trị giới hạn chi tiêu trong ngày
                 dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), newDailyLimitSetting -> {
+                    // Kiểm tra nếu giá trị giới hạn chi tiêu trong ngày không null
                     if (newDailyLimitSetting != null) {
                         final double dailyLimit = newDailyLimitSetting;
 
-                        // Kiểm tra các giao dịch bất thường vượt quá hạn mức chi tiêu trong ngày
+                        // Duyệt qua tất cả giao dịch và kiểm tra chi tiêu vượt quá giới hạn
                         for (Transaction transaction : transactions) {
+                            // Nếu giao dịch là chi tiêu (typeId = 1)
                             if (transaction.getTypeId() == 1) {
+                                // Nếu số tiền chi tiêu vượt quá giới hạn
                                 if (Math.abs(transaction.getAmount()) > dailyLimit) {
+                                    // Cộng chi tiêu bất thường vào tổng chi tiêu bất thường
                                     totalUnusualExpense[0] += Math.abs(transaction.getAmount());
                                 }
                             }
                         }
 
-                        // Cập nhật UI
+                        // Cập nhật giao diện người dùng với các giá trị tính toán
                         if (binding.tv0d != null) {
                             binding.tv0d.setText(String.format("%,.0f VND", totalIncome));
                         }
@@ -537,10 +547,12 @@ public class HomeFragment extends Fragment {
                             binding.tv0d2.setText(String.format("%,.0f VND", totalUnusualExpense[0]));
                         }
                     } else {
+                        // Ghi log nếu giá trị giới hạn chi tiêu là null
                         Log.e("HomeFragment", "Daily limit setting is null");
                     }
                 });
             } else {
+                // Ghi log nếu danh sách giao dịch là null
                 Log.e("HomeFragment", "Transactions list is null");
             }
         });
