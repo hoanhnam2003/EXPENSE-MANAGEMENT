@@ -250,7 +250,6 @@ public class HomeFragment extends Fragment {
             "Đặt cảnh báo nhắc nhở chi tiêu"
     };
 
-
     //    cảnh báo khi số tiền chi tiêu vượt quá
     //    thông báo ra toast và đẩy thông báo ra ngoài app
     private void warningMoney() {
@@ -326,7 +325,7 @@ public class HomeFragment extends Fragment {
                         notificationManager.notify(1, builder.build());
 
                         dayWarningShown = true;
-                    }else{
+                    } else {
                         double warningMoney = moneyDaySetting - sumAmountForToday;
                         String formattedWarningMoney = decimalFormat.format(warningMoney);
 
@@ -411,7 +410,6 @@ public class HomeFragment extends Fragment {
                             );
                         }
 
-
                         // Chọn ngẫu nhiên một gợi ý từ mảng negativeFinances
                         Random random = new Random();
                         String randomSuggestion = negativeFinances[random.nextInt(negativeFinances.length)];
@@ -428,19 +426,9 @@ public class HomeFragment extends Fragment {
                                 .setStyle(new NotificationCompat.BigTextStyle()
                                         .bigText("Bạn đã vượt quá ngân sách tháng: " + formattedWarningMoney + " VND.\nHãy: " + randomSuggestion));
 
-
                         notificationManager.notify(2, builder.build());
                         monthWarningShown = true;
-                        Toast toast = Toast.makeText(getContext(), "Bạn đã vượt quá ngân sách tháng: " + formattedWarningMoney + " VND", Toast.LENGTH_SHORT);
-                        View toastView = toast.getView();
-                        if (toastView != null) {
-                            TextView toastMessage = toastView.findViewById(android.R.id.message);
-                            if (toastMessage != null) {
-                                toastMessage.setTextColor(Color.RED);
-                            }
-                        }
-                        toast.show();
-                    }else{
+                    } else {
                         double warningMoney = moneyMonthSetting - sumAmountForCurrentMonth;
                         String formattedWarningMoney = decimalFormat.format(warningMoney);
 
@@ -466,6 +454,7 @@ public class HomeFragment extends Fragment {
                                     PendingIntent.FLAG_UPDATE_CURRENT // Không sử dụng FLAG_IMMUTABLE cho Android dưới API 31
                             );
                         }
+
                         // Chọn ngẫu nhiên một gợi ý từ mảng negativeFinances
                         Random random = new Random();
                         String randomSuggestion = negativeFinances[random.nextInt(negativeFinances.length)];
@@ -514,31 +503,43 @@ public class HomeFragment extends Fragment {
     private void calculateAndDisplayMonthlyTotal() {
         transactionViewModel.getAllTransactions().observe(getViewLifecycleOwner(), transactions -> {
             if (transactions != null) {
-                double totalIncome = sumAmountForCurrentMonth(transactions);
-                double totalExpense = sumAmountForCurrentMonthChiTieu(transactions);
-                double totalExpenseToday = sumAmountForToday(transactions);
+                final double totalIncome = sumAmountForCurrentMonth(transactions);
+                totalExpense = sumAmountForCurrentMonthChiTieu(transactions);
+                totalExpenseToday = sumAmountForToday(transactions);
 
-                double totalUnusualExpense = 0;
-                for (Transaction transaction : transactions) {
-                    // Kiểm tra loại giao dịch, chỉ tính chi tiêu (typeId = 2) và có số tiền tuyệt đối lớn hơn 5 triệu
-                    if (transaction.getTypeId() == 1 && Math.abs(transaction.getAmount()) > 5_000_000) {
-                        totalUnusualExpense += Math.abs(transaction.getAmount());
+                final double[] totalUnusualExpense = {0};  // Dùng mảng để thay thế cho biến không thể thay đổi
+
+                // Quan sát giá trị daily limit (money_day_setting)
+                dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), newDailyLimitSetting -> {
+                    if (newDailyLimitSetting != null) {
+                        final double dailyLimit = newDailyLimitSetting;
+
+                        // Kiểm tra các giao dịch bất thường vượt quá hạn mức chi tiêu trong ngày
+                        for (Transaction transaction : transactions) {
+                            if (transaction.getTypeId() == 1) {
+                                if (Math.abs(transaction.getAmount()) > dailyLimit) {
+                                    totalUnusualExpense[0] += Math.abs(transaction.getAmount());
+                                }
+                            }
+                        }
+
+                        // Cập nhật UI
+                        if (binding.tv0d != null) {
+                            binding.tv0d.setText(String.format("%,.0f VND", totalIncome));
+                        }
+                        if (binding.tv0d1 != null) {
+                            binding.tv0d1.setText(String.format("%,.0f VND", totalExpense));
+                        }
+                        if (binding.tien != null) {
+                            binding.tien.setText(String.format("%,.0f VND", totalExpenseToday));
+                        }
+                        if (binding.tv0d2 != null) {
+                            binding.tv0d2.setText(String.format("%,.0f VND", totalUnusualExpense[0]));
+                        }
+                    } else {
+                        Log.e("HomeFragment", "Daily limit setting is null");
                     }
-                }
-
-                // Cập nhật UI
-                if (binding.tv0d != null) {
-                    binding.tv0d.setText(String.format("%,.0f VND", totalIncome));
-                }
-                if (binding.tv0d1 != null) {
-                    binding.tv0d1.setText(String.format("%,.0f VND", totalExpense));
-                }
-                if (binding.tien != null) {
-                    binding.tien.setText(String.format("%,.0f VND", totalExpenseToday));
-                }
-                if (binding.tv0d2 != null) {
-                    binding.tv0d2.setText(String.format("%,.0f VND", totalUnusualExpense));
-                }
+                });
             } else {
                 Log.e("HomeFragment", "Transactions list is null");
             }
