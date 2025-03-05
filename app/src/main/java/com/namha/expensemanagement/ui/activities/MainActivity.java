@@ -1,16 +1,23 @@
 package com.namha.expensemanagement.ui.activities;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -39,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private MonthlyLimitViewModel mMonthlyLimit;
     
     FloatingActionButton fabChatbot;
-
-
+    // check thông báo
+    private static final int REQUEST_CODE_NOTIFICATION = 101;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,6 +166,49 @@ public class MainActivity extends AppCompatActivity {
             setContentView(binding.getRoot());
         }
 
+    }
+    // thông báo
+    @Override
+    protected void onStart() {
+        super.onStart();
+        checkAndRequestNotificationPermission();
+    }
+
+    // Kiểm tra và yêu cầu quyền nếu cần
+    private void checkAndRequestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_CODE_NOTIFICATION);
+            } else {
+                // Quyền đã được cấp, có thể gửi thông báo ngay
+                sendNotification();
+            }
+        } else {
+            // Nếu là Android 12 trở xuống, không cần xin quyền -> gửi thông báo ngay
+            sendNotification();
+        }
+    }
+
+    // Xử lý kết quả khi người dùng cấp hoặc từ chối quyền
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_NOTIFICATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Quyền thông báo đã được cấp!", Toast.LENGTH_SHORT).show();
+                sendNotification();
+            } else {
+                Toast.makeText(this, "Bạn cần cấp quyền để nhận thông báo.", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    // Hàm gửi thông báo (giữ nguyên logic của bạn)
+    private void sendNotification() {
+        // Thực hiện logic gửi thông báo của bạn ở đây
+        Toast.makeText(this, "Thông báo sẽ được gửi!", Toast.LENGTH_SHORT).show();
     }
 
     public void onAddNewClicked() {

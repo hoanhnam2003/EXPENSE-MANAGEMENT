@@ -75,6 +75,8 @@ public class AddFragment extends Fragment {
 
         setupSpinners();
 
+
+
         categoryViewModel.getAllCategories().observe(getViewLifecycleOwner(), categories -> {
             if (categories != null) {
                 categoriesList.clear();
@@ -82,6 +84,10 @@ public class AddFragment extends Fragment {
                     categoriesList.add(category.getName());
                 }
                 spinnerCategoryAdapter.notifyDataSetChanged();
+                spinnerCategoryAdapter = new ArrayAdapter<>(requireContext(), R.layout.spinner_item, categoriesList);
+                spinnerCategoryAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+                binding.spinnerCatalog.setAdapter(spinnerCategoryAdapter);
+
             } else {
                 Log.e("AddFragment", "categories is null");
             }
@@ -102,6 +108,10 @@ public class AddFragment extends Fragment {
                 typesList.clear();
                 typesList.addAll(types);
                 spinnerTypeAdapter.notifyDataSetChanged();
+                spinnerTypeAdapter = new ArrayAdapter<>(requireContext(), R.layout.spinner_item, typesList);
+                spinnerTypeAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+                binding.spinnerType.setAdapter(spinnerTypeAdapter);
+
             } else {
                 Log.e("AddFragment", "types is null");
             }
@@ -280,8 +290,8 @@ public class AddFragment extends Fragment {
             if (binding != null) {
                 // Setup spinner for categories
                 if (categoriesList != null) {
-                    spinnerCategoryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categoriesList);
-                    spinnerCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerCategoryAdapter = new ArrayAdapter<>(requireContext(), R.layout.spinner_item, categoriesList);
+                    spinnerCategoryAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
                     binding.spinnerCatalog.setAdapter(spinnerCategoryAdapter);
                 } else {
                     Log.e("AddFragment", "categoriesList is null, cannot setup spinnerCategoryAdapter");
@@ -289,8 +299,8 @@ public class AddFragment extends Fragment {
 
                 // Setup spinner for types
                 if (typesList != null) {
-                    spinnerTypeAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, typesList);
-                    spinnerTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    spinnerTypeAdapter = new ArrayAdapter<>(requireContext(), R.layout.spinner_item, typesList);
+                    spinnerTypeAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
                     binding.spinnerType.setAdapter(spinnerTypeAdapter);
                 } else {
                     Log.e("AddFragment", "typesList is null, cannot setup spinnerTypeAdapter");

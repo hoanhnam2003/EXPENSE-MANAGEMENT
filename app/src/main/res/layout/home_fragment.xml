@@ -302,7 +302,9 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_thong_tin"
                         android:hint="Nhập số tiền thiết lập"
+                        android:textColor="@color/black"
                         android:justificationMode="inter_word"
+                        android:textColorHint="@color/xam"
                         android:paddingVertical="@dimen/_16dp"
                         android:paddingStart="@dimen/_20dp" />
 
@@ -325,6 +327,7 @@
                     android:layout_marginTop="@dimen/_16dp"
                     android:backgroundTint="@color/color_fd3665"
                     android:text="@string/save"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_14sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

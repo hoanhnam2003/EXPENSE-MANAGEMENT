@@ -88,9 +88,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_thong_tin"
+                        android:textColorHint="@color/xam"
                         android:hint="Nhập số tiền thiết lập"
                         android:paddingVertical="@dimen/_16dp"
                         android:paddingStart="@dimen/_20dp"
+                        android:textColor="@color/black"
                         android:justificationMode="inter_word"
                         />
                 </LinearLayout>
@@ -122,8 +124,10 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_thong_tin"
                         android:hint="Thêm danh mục"
+                        android:textColor="@color/black"
                         android:paddingVertical="@dimen/_16dp"
                         android:paddingStart="@dimen/_20dp"
+                        android:textColorHint="@color/xam"
                         android:justificationMode="inter_word"
                         />
                 </LinearLayout>
@@ -137,9 +141,10 @@
                     android:backgroundTint="@color/color_fd3665"
                     android:text="@string/them"
                     android:textSize="@dimen/_14sp"
+                    android:textColor="@color/white"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lnnhap_danh_muc" />
-                    app:layout_constraintTop_toBottomOf="@id/lnnhap_danh_muc"/>
+                    app:layout_constraintTop_toBottomOf="@+id/lnnhap_danh_muc"
+                    />
 
                 <Button
                     android:id="@+id/btnDeleteCategory"
@@ -163,6 +168,7 @@
                     android:popupBackground="@drawable/spinner_dropdown_background"
                     app:layout_constraintBottom_toTopOf="@id/type"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:backgroundTint="@color/black"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btnSave2"
                     android:layout_marginTop="@dimen/_24dp"
@@ -188,6 +194,7 @@
                     android:layout_height="wrap_content"
                     android:popupBackground="@drawable/spinner_dropdown_background"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:backgroundTint="@color/black"
                     app:layout_constraintTop_toTopOf="@id/type" />
 
 
@@ -219,6 +226,8 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_thong_tin"
                         android:hint="Nhập nội dung"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/xam"
                         android:paddingVertical="@dimen/_16dp"
                         android:paddingStart="@dimen/_20dp"
                         android:justificationMode="inter_word"
@@ -256,6 +265,7 @@
                     android:backgroundTint="@color/color_fd3665"
                     android:text="@string/save"
                     android:textSize="@dimen/_14sp"
+                    android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
