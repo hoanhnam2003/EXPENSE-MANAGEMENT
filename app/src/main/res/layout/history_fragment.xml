@@ -50,8 +50,6 @@
                 android:background="@drawable/shape_thong_tin"
                 android:hint="@string/nhap_tim_kiem"
                 android:paddingVertical="@dimen/_16dp"
-                android:focusableInTouchMode="true"
-                android:focusable="true"
                 android:paddingStart="@dimen/_20dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/xam" />

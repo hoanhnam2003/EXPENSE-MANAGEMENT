@@ -11,7 +11,9 @@ import com.namha.expensemanagement.databinding.ItemHistoryBinding;
 import com.namha.expensemanagement.dto.History;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
@@ -64,21 +66,22 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
 
         public void bind(History item, int position, OnThreeDotsClickListener listener) {
-            // Khởi tạo DecimalFormat với định dạng mong muốn
-            DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
+            // Tạo DecimalFormatSymbols và đặt dấu phân cách là ','
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());
+            symbols.setGroupingSeparator(','); // Dùng dấu ',' cho phân cách hàng nghìn
 
-            // Bind data to views with null checks
-            binding.tvHistoryBuyContent.setText(item.getNameCategory() != null ? item.getNameCategory() : "N/A"); // Handle null for nameCategory
-            binding.tvHistoryBuy1.setText(item.getContent() != null ? item.getContent() : "No content"); // Handle null for content
-            binding.tvTime.setText(item.getDate() != null ? item.getDate() : "No date"); // Handle null for date
-            binding.tvspend.setText(item.getTypeName() != null ? item.getTypeName() : "Unknown type"); // Handle null for type_name
+            DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
 
-            // Format số tiền và gán vào TextView
+            binding.tvHistoryBuyContent.setText(item.getNameCategory() != null ? item.getNameCategory() : "N/A");
+            binding.tvHistoryBuy1.setText(item.getContent() != null ? item.getContent() : "No content");
+            binding.tvTime.setText(item.getDate() != null ? item.getDate() : "No date");
+            binding.tvspend.setText(item.getTypeName() != null ? item.getTypeName() : "Unknown type");
+
+            // Format số tiền theo chuẩn mong muốn
             String amount = decimalFormat.format(item.getAmount());
-            binding.tvAmount.setText(amount != null ? amount : "0.00"); // Bind amount, handle null case
+            binding.tvAmount.setText(amount != null ? amount : "0");
 
-            // Set the click listener for tvThreedots, check if listener is not null
-            binding.tvThreedots.setOnClickListener(v -> listener.onThreeDotsClick(item.getId())); // Pass the transaction ID
+            binding.tvThreedots.setOnClickListener(v -> listener.onThreeDotsClick(item.getId()));
         }
     }
 }

@@ -41,6 +41,8 @@ import com.namha.expensemanagement.viewmodels.SharedViewModel;
 import com.namha.expensemanagement.viewmodels.TransactionViewModel;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -67,6 +69,9 @@ public class HomeFragment extends Fragment {
 
     private SharedViewModel sharedViewModel;
     private FrameLayout frameLayout;
+
+    DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+    DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
 
     @Nullable
     @Override
@@ -97,11 +102,17 @@ public class HomeFragment extends Fragment {
         ImageView imEye = binding.imEye;
         TextView tvBalance = binding.tvBalance;
 
+        // Tạo DecimalFormat để đảm bảo dấu phân tách là dấu ","
+
+
+        symbols.setGroupingSeparator(',');
+
+
         imEye.setOnClickListener(v -> {
             if (!isBalanceVisible) {
                 transactionViewModel.getTotalBalance().observe(getViewLifecycleOwner(), totalBalance -> {
                     if (totalBalance != null) {
-                        tvBalance.setText(String.format("%,.0f VND", totalBalance));
+                        tvBalance.setText(decimalFormat.format(totalBalance) + " VND");
                     } else {
                         tvBalance.setText("0 VND");
                         Log.e("HomeFragment", "Total balance is null");
@@ -140,7 +151,7 @@ public class HomeFragment extends Fragment {
                                 sbExpenses.setProgress(savedProgress);
                             }
 
-                            tvExpenseValue.setText(String.format("%,d VND", sbExpenses.getProgress()));
+                            tvExpenseValue.setText(decimalFormat.format(sbExpenses.getProgress()) + " VND");
                         } else {
                             Log.e("HomeFragment", "Last daily limit is null");
                         }
@@ -149,7 +160,7 @@ public class HomeFragment extends Fragment {
                     sbExpenses.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                         @Override
                         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                            tvExpenseValue.setText(String.format("%,d VND", progress));
+                            tvExpenseValue.setText(decimalFormat.format(progress) + " VND");
                         }
 
                         @Override
@@ -255,7 +266,6 @@ public class HomeFragment extends Fragment {
     //    cảnh báo khi số tiền chi tiêu vượt quá
     //    thông báo ra toast và đẩy thông báo ra ngoài app
     private void warningMoney() {
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
         NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
         String channelId = "expense_channel";
 
@@ -395,7 +405,6 @@ public class HomeFragment extends Fragment {
     private void calculateAndDisplayMonthlyTotal() {
         // Quan sát tất cả giao dịch từ ViewModel
         transactionViewModel.getAllTransactions().observe(getViewLifecycleOwner(), transactions -> {
-            // Kiểm tra xem danh sách giao dịch có null không
             if (transactions != null) {
                 // Tính tổng thu nhập trong tháng
                 final double totalIncome = sumAmountForCurrentMonth(transactions);
@@ -404,51 +413,45 @@ public class HomeFragment extends Fragment {
                 // Tính tổng chi tiêu trong ngày hôm nay
                 totalExpenseToday = sumAmountForToday(transactions);
 
-                // Khởi tạo mảng để lưu tổng chi tiêu bất thường, vì phải sử dụng final
+                // Khởi tạo mảng để lưu tổng chi tiêu bất thường
                 final double[] totalUnusualExpense = {0};
 
                 // Quan sát giá trị giới hạn chi tiêu trong ngày
                 dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), newDailyLimitSetting -> {
-                    // Kiểm tra nếu giá trị giới hạn chi tiêu trong ngày không null
                     if (newDailyLimitSetting != null) {
                         final double dailyLimit = newDailyLimitSetting;
 
                         // Duyệt qua tất cả giao dịch và kiểm tra chi tiêu vượt quá giới hạn
                         for (Transaction transaction : transactions) {
-                            // Nếu giao dịch là chi tiêu (typeId = 1)
-                            if (transaction.getTypeId() == 1) {
-                                // Nếu số tiền chi tiêu vượt quá giới hạn
-                                if (Math.abs(transaction.getAmount()) > dailyLimit) {
-                                    // Cộng chi tiêu bất thường vào tổng chi tiêu bất thường
-                                    totalUnusualExpense[0] += Math.abs(transaction.getAmount());
-                                }
+                            if (transaction.getTypeId() == 1 && Math.abs(transaction.getAmount()) > dailyLimit) {
+                                totalUnusualExpense[0] += Math.abs(transaction.getAmount());
                             }
                         }
 
                         // Cập nhật giao diện người dùng với các giá trị tính toán
+
                         if (binding.tv0d != null) {
-                            binding.tv0d.setText(String.format("%,.0f VND", totalIncome));
+                            binding.tv0d.setText(decimalFormat.format(totalIncome) + " VND");
                         }
                         if (binding.tv0d1 != null) {
-                            binding.tv0d1.setText(String.format("%,.0f VND", totalExpense));
+                            binding.tv0d1.setText(decimalFormat.format(totalExpense) + " VND");
                         }
                         if (binding.tien != null) {
-                            binding.tien.setText(String.format("%,.0f VND", totalExpenseToday));
+                            binding.tien.setText(decimalFormat.format(totalExpenseToday) + " VND");
                         }
                         if (binding.tv0d2 != null) {
-                            binding.tv0d2.setText(String.format("%,.0f VND", totalUnusualExpense[0]));
+                            binding.tv0d2.setText(decimalFormat.format(totalUnusualExpense[0]) + " VND");
                         }
                     } else {
-                        // Ghi log nếu giá trị giới hạn chi tiêu là null
                         Log.e("HomeFragment", "Daily limit setting is null");
                     }
                 });
             } else {
-                // Ghi log nếu danh sách giao dịch là null
                 Log.e("HomeFragment", "Transactions list is null");
             }
         });
     }
+
 
     private String cleanDateString(String dateStr) {
         return dateStr != null ? dateStr.replace("Chiều", "").replace("Sáng", "").trim() : "";

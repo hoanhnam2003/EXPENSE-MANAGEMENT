@@ -55,14 +55,6 @@ public class HistoryFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
-        View view = requireActivity().getCurrentFocus();
-        if (view == null) {
-            view = new View(requireActivity());
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -80,17 +72,6 @@ public class HistoryFragment extends Fragment {
         ViewGroup.MarginLayoutParams rvParams = (ViewGroup.MarginLayoutParams) binding.rvHistory.getLayoutParams();
         originalRvTopMargin = rvParams.topMargin;
 
-
-        // Set the click listener for imSearch
-
-//        binding.etDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            @Override
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                if (!hasFocus) {
-//                    hideKeyboard();
-//                }
-//            }
-//        });
 
         binding.etDate.addTextChangedListener(new TextWatcher() {
             @Override

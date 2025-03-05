@@ -16,7 +16,7 @@ import com.namha.expensemanagement.repository.TypeRepository;
 
 import java.util.List;
 
-public class TypeViewModel extends AndroidViewModel {
+public class  TypeViewModel extends AndroidViewModel {
     private final TypeRepository repository;
     private final LiveData<List<Type>> allTypes;
     private static final String TAG = "TypeViewModel";

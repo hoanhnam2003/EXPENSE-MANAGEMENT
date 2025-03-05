@@ -31,6 +31,7 @@ import com.namha.expensemanagement.viewmodels.SharedViewModel;
 import com.namha.expensemanagement.viewmodels.TransactionViewModel;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,6 +48,7 @@ public class ReportFragment extends Fragment {
 
     private SharedViewModel sharedViewModel;
     private FrameLayout frameLayout;
+    DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
 
     @Nullable
     @Override
@@ -271,7 +273,6 @@ public class ReportFragment extends Fragment {
         pieChart.invalidate();
     }
 
-    // Hàm cập nhật báo cáo cho ngày hiện tại
     private void updateTodayReport(List<Transaction> transactions) {
         String todayDate = getTodayDate();
         Pair<Double, Double> totalAmountForToday = calculateTotalAmountForToday(transactions);
@@ -279,7 +280,10 @@ public class ReportFragment extends Fragment {
         double amountSpentToday = totalAmountForToday.first;
         double amountCollectedToday = totalAmountForToday.second;
 
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        // Cấu hình dấu phân tách theo kiểu `1,000,000.00`
+        symbols.setGroupingSeparator(','); // Dấu phân tách hàng nghìn là dấu `,`
+
+        DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
 
         String formattedAmountSpent = decimalFormat.format(amountSpentToday);
         String formattedAmountCollected = decimalFormat.format(amountCollectedToday);
@@ -302,7 +306,10 @@ public class ReportFragment extends Fragment {
         double amountSpentToday = totalAmountForToday.first;
         double amountCollectedToday = totalAmountForToday.second;
 
-        DecimalFormat decimalFormat = new DecimalFormat("#,###");
+        // Áp dụng định dạng tương tự
+        symbols.setGroupingSeparator(',');
+
+        DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
 
         String formattedAmountSpent = decimalFormat.format(amountSpentToday);
         String formattedAmountCollected = decimalFormat.format(amountCollectedToday);

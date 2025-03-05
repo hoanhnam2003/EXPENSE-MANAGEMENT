@@ -29,6 +29,10 @@ import com.namha.expensemanagement.viewmodels.MonthlyLimitViewModel;
 import com.namha.expensemanagement.viewmodels.SharedViewModel;
 import com.namha.expensemanagement.viewmodels.TransactionViewModel;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 
 public class SettingFragment extends Fragment {
 
@@ -46,6 +50,10 @@ public class SettingFragment extends Fragment {
     private SharedViewModel sharedViewModel;
 
     TransactionViewModel transactionViewModel;
+
+    DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+
+    DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
 
 
     @Nullable
@@ -151,8 +159,10 @@ public class SettingFragment extends Fragment {
                 binding.sbExpenses1.setMax(maxAmount);
 
                 int savedProgress = sharedPreferences.getInt(KEY_EXPENSE_PROGRESS, 0);
+                symbols.setGroupingSeparator(',');
+
                 binding.sbExpenses1.setProgress(savedProgress);
-                binding.money.setText(String.format("%,d VND", savedProgress));
+                binding.money.setText(String.format("%s VND", decimalFormat.format(savedProgress)));
             } else {
                 binding.sbExpenses1.setMax(0); // Set max khi không có dữ liệu
                 binding.sbExpenses1.setProgress(0);
@@ -164,7 +174,7 @@ public class SettingFragment extends Fragment {
         binding.sbExpenses1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                binding.money.setText(String.format("%,d VND", progress));
+                binding.money.setText(String.format("%s VND", decimalFormat.format(progress)));
             }
 
             @Override

@@ -280,8 +280,7 @@ public class AddFragment extends Fragment {
 
     // Hàm định dạng số tiền
     private String formatCurrency(double amount) {
-        NumberFormat formatter = NumberFormat.getNumberInstance(Locale.getDefault());
-        formatter.setGroupingUsed(true);
+        NumberFormat formatter = NumberFormat.getInstance(Locale.US);
         return formatter.format(amount);
     }
 
