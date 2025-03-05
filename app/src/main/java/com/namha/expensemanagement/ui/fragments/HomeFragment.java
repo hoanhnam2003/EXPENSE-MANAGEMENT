@@ -103,6 +103,7 @@ public class HomeFragment extends Fragment {
                     if (totalBalance != null) {
                         tvBalance.setText(String.format("%,.0f VND", totalBalance));
                     } else {
+                        tvBalance.setText("0 VND");
                         Log.e("HomeFragment", "Total balance is null");
                     }
                 });

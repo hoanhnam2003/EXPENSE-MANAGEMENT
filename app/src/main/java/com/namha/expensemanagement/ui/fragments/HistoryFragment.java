@@ -1,11 +1,17 @@
 package com.namha.expensemanagement.ui.fragments;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,7 +46,6 @@ public class HistoryFragment extends Fragment {
     private int originalRvTopMargin;
 
     private SharedViewModel sharedViewModel;
-    private FrameLayout frameLayout;
 
     @Nullable
     @Override
@@ -48,6 +53,15 @@ public class HistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = HistoryFragmentBinding.inflate(inflater, container, false);
         return binding.getRoot();
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = requireActivity().getCurrentFocus();
+        if (view == null) {
+            view = new View(requireActivity());
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override
@@ -68,15 +82,39 @@ public class HistoryFragment extends Fragment {
 
 
         // Set the click listener for imSearch
-        binding.imSearch.setOnClickListener(v -> {
-            if (!isSearchMode) {
-                // Show the search layout and adjust other views
-                togglePopupSearchLayout();
-                isSearchMode = true;
-            } else {
-                // Perform search when clicked again
-                performSearch();
+
+//        binding.etDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//            @Override
+//            public void onFocusChange(View v, boolean hasFocus) {
+//                if (!hasFocus) {
+//                    hideKeyboard();
+//                }
+//            }
+//        });
+
+        binding.etDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String textInput = s.toString();
+                if (textInput.isEmpty()) binding.imClear.setVisibility(View.GONE);
+                else binding.imClear.setVisibility(View.VISIBLE);
+                performSearch(textInput);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        binding.imClear.setOnClickListener(v -> {
+            binding.etDate.setText("");
+            binding.rvHistory.setVisibility(View.VISIBLE);
         });
 
         // Initialize RecyclerView with HistoryAdapter
@@ -89,23 +127,22 @@ public class HistoryFragment extends Fragment {
 
         // thay đổi màu nền
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        frameLayout = view.findViewById(R.id.frHistory);
 
         sharedViewModel.getSelectedColor().observe(getViewLifecycleOwner(), newColor -> {
             if (newColor != null) {
-                frameLayout.setBackgroundColor(newColor);
+                binding.frHistory.setBackgroundColor(newColor);
             }
         });
     }
 
     private void setupRecyclerView() {
-        HistoryAdapter adapter = new HistoryAdapter(null, this::showPopupMethod);
-        if (requireContext() != null) {
-            binding.rvHistory.setLayoutManager(new LinearLayoutManager(requireContext()));
-            binding.rvHistory.setAdapter(adapter);
-        } else {
-            Log.e("HistoryFragment", "Context is null, cannot setup RecyclerView");
-        }
+        HistoryAdapter adapter = new HistoryAdapter(null,
+                position -> {
+                    showPopupMethod(position);
+                }
+        );
+        binding.rvHistory.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        binding.rvHistory.setAdapter(adapter);
     }
 
     private void updateHistoryList(List<History> historyList) {
@@ -160,7 +197,6 @@ public class HistoryFragment extends Fragment {
             binding.rvHistory.setLayoutParams(rvParams);
         } else {
             // Clear the input in the search field
-            binding.etDate.setText("");
 
             binding.popupSearchLayout.setVisibility(View.GONE);
 
@@ -174,30 +210,27 @@ public class HistoryFragment extends Fragment {
         }
     }
 
-    private void performSearch() {
+    private void performSearch(String keySearch) {
         if (binding == null) return; // Đảm bảo binding không null
 
-        String inputText = binding.etDate.getText().toString().trim(); // Lấy dữ liệu từ EditText
+        Log.d("HistoryFragment", "User input: " + keySearch);
 
-        Log.d("HistoryFragment", "User input: " + inputText);
-
-        if (inputText.isEmpty()) {
+        if (keySearch.isEmpty()) {
             // Nếu ô tìm kiếm trống, báo lỗi và ẩn thanh tìm kiếm
             if (isSearchMode) {
                 togglePopupSearchLayout();
                 isSearchMode = false;
             }
-            Toast.makeText(requireContext(), "Vui lòng nhập ngày hoặc loại để tìm kiếm.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         String datePattern = "";
         String typeName = "";
 
-        if (isValidDate(inputText)) {
-            datePattern = inputText; // Nếu nhập đúng định dạng ngày, gán vào datePattern
+        if (isValidDate(keySearch)) {
+            datePattern = keySearch; // Nếu nhập đúng định dạng ngày, gán vào datePattern
         } else {
-            typeName = inputText; // Nếu không phải ngày, coi như loại giao dịch
+            typeName = keySearch; // Nếu không phải ngày, coi như loại giao dịch
         }
 
         Log.d("HistoryFragment", "Searching for date: " + datePattern + ", type: " + typeName);
@@ -205,8 +238,10 @@ public class HistoryFragment extends Fragment {
         if (getViewLifecycleOwner() != null) {
             transactionViewModel.searchByTypeAndDate(typeName, datePattern).observe(getViewLifecycleOwner(), historyList -> {
                 if (historyList != null && !historyList.isEmpty()) {
+                    binding.rvHistory.setVisibility(View.VISIBLE);
                     updateHistoryList(historyList);
                 } else {
+                    binding.rvHistory.setVisibility(View.GONE);
                     Toast.makeText(requireContext(), "Không tìm thấy giao dịch nào.", Toast.LENGTH_SHORT).show();
                 }
 
@@ -220,7 +255,6 @@ public class HistoryFragment extends Fragment {
             Log.e("HistoryFragment", "getViewLifecycleOwner is null, cannot observe search results");
         }
     }
-
 
 
     private boolean isValidDate(String dateStr) {

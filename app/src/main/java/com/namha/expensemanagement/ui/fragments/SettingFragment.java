@@ -282,7 +282,6 @@ public class SettingFragment extends Fragment {
             appDatabase.monthlyLimitDao().deleteAll();
             appDatabase.transactionDao().deleteAll();
         });
-
         // Xóa dữ liệu SharedPreferences
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();

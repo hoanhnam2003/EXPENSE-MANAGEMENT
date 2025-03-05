@@ -1,6 +1,7 @@
 package com.namha.expensemanagement.ui.activities;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -9,6 +10,9 @@ import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -58,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
         if (binding != null) {
             setContentView(binding.getRoot());
         }
+
+        //setupUI(findViewById(R.id.main));
+
+
         fabChatbot = findViewById(R.id.fabChatbot);
 
         if (fabChatbot != null) {
@@ -165,8 +173,34 @@ public class MainActivity extends AppCompatActivity {
         if (binding != null) {
             setContentView(binding.getRoot());
         }
-
     }
+
+
+//    public void setupUI(View view) {
+//        if (!(view instanceof EditText)) {
+//            view.setOnTouchListener((v, event) -> {
+//                hideKeyboard();
+//                return false;
+//            });
+//        }
+//
+//        if (view instanceof ViewGroup) {
+//            for (int i = 0; i < ((ViewGroup) view).getChildCount(); i++) {
+//                View innerView = ((ViewGroup) view).getChildAt(i);
+//                setupUI(innerView);
+//            }
+//        }
+//    }
+//
+//    private void hideKeyboard() {
+//        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+//        View view = getCurrentFocus();
+//        if (view == null) {
+//            view = new View(this);
+//        }
+//        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//    }
+
     // thông báo
     @Override
     protected void onStart() {

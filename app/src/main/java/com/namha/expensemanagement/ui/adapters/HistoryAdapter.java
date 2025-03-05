@@ -78,9 +78,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             binding.tvAmount.setText(amount != null ? amount : "0.00"); // Bind amount, handle null case
 
             // Set the click listener for tvThreedots, check if listener is not null
-            if (listener != null) {
-                binding.tvThreedots.setOnClickListener(v -> listener.onThreeDotsClick(item.getId())); // Pass the transaction ID
-            }
+            binding.tvThreedots.setOnClickListener(v -> listener.onThreeDotsClick(item.getId())); // Pass the transaction ID
         }
     }
 }
