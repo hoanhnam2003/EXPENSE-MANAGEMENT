@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +35,8 @@ import com.namha.expensemanagement.viewmodels.SharedViewModel;
 import com.namha.expensemanagement.viewmodels.TransactionViewModel;
 import com.namha.expensemanagement.viewmodels.TypeViewModel;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -74,7 +78,6 @@ public class AddFragment extends Fragment {
         monthlyLimitViewModel = new ViewModelProvider(this).get(MonthlyLimitViewModel.class);
 
         setupSpinners();
-
 
 
         categoryViewModel.getAllCategories().observe(getViewLifecycleOwner(), categories -> {
@@ -148,17 +151,22 @@ public class AddFragment extends Fragment {
             }
         });
 
-        // Xử lý lưu loại giao dịch
         binding.btnSave3.setOnClickListener(v -> {
             String amountText = binding.editTextAmount.getText().toString().trim();
+
+            // Loại bỏ các ký tự không phải số và dấu phân cách nghìn
             String cleanedAmountText = amountText.replaceAll("[^0-9]", "");
 
-            if (TextUtils.isEmpty(cleanedAmountText) || !isValidDecimal(cleanedAmountText)) {
-                Toast.makeText(getContext(), "Vui lòng nhập số tiền hợp lệ (ví dụ: 10.300)", Toast.LENGTH_SHORT).show();
+            // Kiểm tra số tiền hợp lệ
+            if (TextUtils.isEmpty(cleanedAmountText)) {
+                Toast.makeText(getContext(), "Vui lòng nhập số tiền hợp lệ", Toast.LENGTH_SHORT).show();
                 return;
             }
 
+            // Chuyển đổi cleanedAmountText thành số
             double amount = Double.parseDouble(cleanedAmountText);
+
+            // Định dạng lại số tiền có dấu phẩy phân tách nghìn để hiển thị
             String formattedAmount = formatCurrency(amount);
             binding.editTextAmount.setText(formattedAmount);
 
@@ -170,6 +178,11 @@ public class AddFragment extends Fragment {
             String selectedTime = binding.tvTime1.getText().toString().trim();
             String content = binding.content.getText().toString().trim();
 
+            // Kiểm tra nếu chưa chọn ngày giờ
+            if (!isDateTimeSelected) {
+                Toast.makeText(getContext(), "Vui lòng chọn ngày và giờ", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (!selectedCategory.isEmpty() && selectedType != null && !selectedTime.isEmpty() && !content.isEmpty()) {
                 observeOnce(categoryViewModel.getCategoryIdByName(selectedCategory), getViewLifecycleOwner(), categoryId -> {
                     if (categoryId != null) {
@@ -196,7 +209,45 @@ public class AddFragment extends Fragment {
                 Toast.makeText(getContext(), "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
             }
         });
+
+        binding.editTextAmount.addTextChangedListener(new TextWatcher() {
+            private boolean isEditing = false;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (isEditing) return;
+                isEditing = true;
+
+                String rawText = s.toString().replaceAll("[^0-9]", "");
+
+                try {
+                    double parsed = Double.parseDouble(rawText);
+                    String formatted = formatCurrency(parsed);
+                    binding.editTextAmount.setText(formatted);
+                    binding.editTextAmount.setSelection(formatted.length());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+
+                isEditing = false;
+            }
+        });
     }
+    // Phương thức định dạng số tiền với dấu phẩy phân tách hàng nghìn
+        private String formatCurrency(double amount) {
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+            symbols.setGroupingSeparator(',');
+            DecimalFormat formatter = new DecimalFormat("#,###", symbols);
+            return formatter.format(amount);
+        }
 
     // Hàm observeOnce để quan sát LiveData một lần
     public static <T> void observeOnce(LiveData<T> liveData, LifecycleOwner owner, Observer<T> observer) {
@@ -278,11 +329,6 @@ public class AddFragment extends Fragment {
         }
     }
 
-    // Hàm định dạng số tiền
-    private String formatCurrency(double amount) {
-        NumberFormat formatter = NumberFormat.getInstance(Locale.US);
-        return formatter.format(amount);
-    }
 
     private void setupSpinners() {
         if (getContext() != null) {
@@ -321,6 +367,8 @@ public class AddFragment extends Fragment {
         }
     }
 
+    private boolean isDateTimeSelected = false; // Đánh dấu trạng thái chọn ngày giờ
+
     private void showDateTimePicker() {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -334,10 +382,12 @@ public class AddFragment extends Fragment {
                 String selectedTime = String.format("%02d:%02d", hourOfDay, minute1);
                 String selectedDate = String.format("%02d/%02d/%d", dayOfMonth, month1 + 1, year1);
                 binding.tvTime1.setText(selectedTime + " " + selectedDate);
+                isDateTimeSelected = true; // Đánh dấu đã chọn
             }, hour, minute, true);
             timePickerDialog.show();
         }, year, month, day);
 
         datePickerDialog.show();
     }
+
 }

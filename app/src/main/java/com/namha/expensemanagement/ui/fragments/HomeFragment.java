@@ -10,6 +10,8 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,6 +90,7 @@ public class HomeFragment extends Fragment {
             Log.e("HomeFragment", "Binding is null in onViewCreated");
             return;
         }
+
 
         // Initialize ViewModel
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
@@ -193,12 +196,12 @@ public class HomeFragment extends Fragment {
             Log.e("HomeFragment", "Activity is null, cannot access SharedPreferences");
         }
 
-
         btnSave.setOnClickListener(v -> {
             String inputMoneyStr = etInputMoney.getText().toString();
             if (!inputMoneyStr.isEmpty()) {
                 try {
-                    double inputMoney = Double.parseDouble(inputMoneyStr);
+                    // Loại bỏ dấu phẩy trước khi chuyển thành double
+                    double inputMoney = Double.parseDouble(inputMoneyStr.replace(",", ""));
 
                     // Lấy giá trị money_month_setting từ ViewModel để so sánh
                     monthlyLimitViewModel.getLastMonthLimitSetting().observe(getViewLifecycleOwner(), moneyMonthSetting -> {
@@ -223,11 +226,47 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // Thêm TextWatcher để tự động format số khi nhập
+        etInputMoney.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String input = editable.toString().replace(",", ""); // Xóa dấu phẩy trước khi xử lý
+                if (!input.isEmpty()) {
+                    try {
+                        String formatted = decimalFormat.format(Double.parseDouble(input));
+                        if (!formatted.equals(editable.toString())) {
+                            etInputMoney.removeTextChangedListener(this);
+                            etInputMoney.setText(formatted);
+                            etInputMoney.setSelection(formatted.length());
+                            etInputMoney.addTextChangedListener(this);
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
         calculateAndDisplayMonthlyTotal();
 
         // Gọi hàm cảnh báo khi vượt quá ngân sách
         warningMoney();
+        // Quan sát thay đổi về chi tiêu và ngân sách (Nếu cần)
+        dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), lastDailyLimit -> {
+            warningMoney();  // Kiểm tra lại cảnh báo khi có thay đổi ngân sách ngày
+        });
+
+        monthlyLimitViewModel.getLastMonthLimitSetting().observe(getViewLifecycleOwner(), lastMonthLimit -> {
+            warningMoney();  // Kiểm tra lại cảnh báo khi có thay đổi ngân sách tháng
+        });
 
 
         // thay đổi màu nền
@@ -241,7 +280,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    // update đẩy thông báo ra ngoài
+    // hàm tính toán
     double totalExpenseToday = 0.0;
     double totalExpense = 0.0;
 
@@ -272,59 +311,53 @@ public class HomeFragment extends Fragment {
         // Tạo kênh thông báo nếu cần thiết
         createNotificationChannel(notificationManager, channelId);
 
-        if (!dayWarningShown) {
-            dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), lastDailyLimit -> {
-                if (lastDailyLimit != null) {
-                    double moneyDaySetting = lastDailyLimit;
-                    double sumAmountForToday = totalExpenseToday;
-                    String title, message;
+        // Kiểm tra và hiển thị cảnh báo cho chi tiêu ngày
+        dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), lastDailyLimit -> {
+            if (lastDailyLimit != null) {
+                double moneyDaySetting = lastDailyLimit;  // Giới hạn chi tiêu ngày
+                double sumAmountForToday = totalExpenseToday;  // Tổng chi tiêu hôm nay
 
-                    if (sumAmountForToday > moneyDaySetting) {
-                        double warningMoney = sumAmountForToday - moneyDaySetting;
-                        title = "Cảnh báo ngân sách ngày";
-                        message = String.format("Bạn đã vượt quá giới hạn: %s VND.\nHãy: %s",
-                                decimalFormat.format(warningMoney),
-                                getRandomSuggestion(negativeFinances));
-                    } else {
-                        double remainingMoney = moneyDaySetting - sumAmountForToday;
-                        title = "Ngân sách ngày còn lại";
-                        message = String.format("Bạn còn: %s VND.\nHãy: %s",
-                                decimalFormat.format(remainingMoney),
-                                getRandomSuggestion(positiveFinances));
-                    }
-
-                    showNotification(notificationManager, channelId, 1, title, message);
+                // Nếu chi tiêu hôm nay vượt mức ngân sách ngày
+                if (sumAmountForToday > moneyDaySetting) {
+                    double warningMoney = sumAmountForToday - moneyDaySetting;
+                    String suggestion = getRandomSuggestion(negativeFinances); // Lấy gợi ý tiêu cực
+                    String message = String.format(
+                            "Bạn đã chi tiêu vượt mức %s VND hôm nay\nHãy %s.",
+                            decimalFormat.format(warningMoney), suggestion
+                    );
+                    showNotification(notificationManager, channelId, 1, "Cảnh báo chi tiêu ngày", message);
                     dayWarningShown = true;
+                } else {  // Nếu chi tiêu hôm nay không vượt mức
+                    String suggestion = getRandomSuggestion(positiveFinances); // Lấy gợi ý tích cực
+                    String message = String.format("Bạn vẫn đang chi tiêu hợp lý hôm nay!\nHãy %s.", suggestion);
+                    showNotification(notificationManager, channelId, 1, "Thông báo chi tiêu ngày", message);
                 }
-            });
-        }
+            }
+        });
 
-        if (!monthWarningShown) {
-            monthlyLimitViewModel.getLastMonthLimitSetting().observe(getViewLifecycleOwner(), lastMonthLimit -> {
-                if (lastMonthLimit != null) {
-                    double moneyMonthSetting = lastMonthLimit;
-                    double sumAmountForMonth = totalExpense;
-                    String title, message;
+        // Kiểm tra và hiển thị cảnh báo cho chi tiêu tháng
+        monthlyLimitViewModel.getLastMonthLimitSetting().observe(getViewLifecycleOwner(), lastMonthLimit -> {
+            if (lastMonthLimit != null) {
+                double moneyMonthSetting = lastMonthLimit;  // Giới hạn chi tiêu tháng
+                double sumAmountForMonth = totalExpense;  // Tổng chi tiêu tháng
 
-                    if (sumAmountForMonth > moneyMonthSetting) {
-                        double warningMoney = sumAmountForMonth - moneyMonthSetting;
-                        title = "Cảnh báo ngân sách tháng";
-                        message = String.format("Bạn đã vượt quá giới hạn: %s VND.\nHãy: %s",
-                                decimalFormat.format(warningMoney),
-                                getRandomSuggestion(negativeFinances));
-                    } else {
-                        double remainingMoney = moneyMonthSetting - sumAmountForMonth;
-                        title = "Ngân sách tháng còn lại";
-                        message = String.format("Bạn còn: %s VND.\nHãy: %s",
-                                decimalFormat.format(remainingMoney),
-                                getRandomSuggestion(positiveFinances));
-                    }
-
-                    showNotification(notificationManager, channelId, 2, title, message);
+                // Nếu chi tiêu tháng vượt mức ngân sách tháng
+                if (sumAmountForMonth > moneyMonthSetting) {
+                    double warningMoney = sumAmountForMonth - moneyMonthSetting;
+                    String suggestion = getRandomSuggestion(negativeFinances); // Lấy gợi ý tiêu cực
+                    String message = String.format(
+                            "Bạn đã vượt ngân sách tháng %s VND!\nHãy %s.",
+                            decimalFormat.format(warningMoney), suggestion
+                    );
+                    showNotification(notificationManager, channelId, 2, "Cảnh báo chi tiêu tháng", message);
                     monthWarningShown = true;
+                } else {  // Nếu chi tiêu tháng không vượt mức
+                    String suggestion = getRandomSuggestion(positiveFinances); // Lấy gợi ý tích cực
+                    String message = String.format("Ngân sách tháng của bạn vẫn ổn!\nHãy %s.", suggestion);
+                    showNotification(notificationManager, channelId, 2, "Thông báo chi tiêu tháng", message);
                 }
-            });
-        }
+            }
+        });
     }
 
     /**
@@ -569,5 +602,4 @@ public class HomeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -219,8 +221,9 @@ public class SettingFragment extends Fragment {
             }
 
             try {
-                // Chuyển đổi chuỗi thành giá trị double
-                double inputMoney = Double.parseDouble(inputMoneyStr);
+                // Loại bỏ dấu phẩy trước khi chuyển đổi thành số
+                String cleanInputMoneyStr = inputMoneyStr.replace(",", "");
+                double inputMoney = Double.parseDouble(cleanInputMoneyStr);
 
                 // Kiểm tra nếu số tiền phải lớn hơn 0
                 if (inputMoney <= 0) {
@@ -228,8 +231,8 @@ public class SettingFragment extends Fragment {
                     return;
                 }
 
-                // Thiết lập typeName dựa trên ID loại thu nhập (Có thể thay đổi theo logic của bạn)
-                String incomeTypeName = "Thu nhập";  // Bạn có thể sử dụng loại thu nhập phù hợp
+                // Thiết lập typeName dựa trên ID loại thu nhập
+                String incomeTypeName = "Thu nhập";  // Có thể thay đổi theo logic của bạn
 
                 // Quan sát tổng thu nhập từ các giao dịch đã thêm
                 transactionViewModel.getTotalIncome(incomeTypeName).observe(getViewLifecycleOwner(), totalIncome -> {
@@ -250,7 +253,6 @@ public class SettingFragment extends Fragment {
                             Toast.makeText(getContext(), "Thiết lập thành công", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        // Xử lý khi không lấy được tổng thu nhập
                         Log.e("IncomeError", "Không thể lấy tổng thu nhập.");
                         Toast.makeText(getContext(), "Vui lòng thêm thu nhập trước khi thiết lập chi tiêu tháng", Toast.LENGTH_SHORT).show();
                     }
@@ -264,8 +266,48 @@ public class SettingFragment extends Fragment {
             }
         });
 
+        // Bổ sung TextWatcher để tự động thêm dấu phẩy khi nhập
+        binding.edtMonthlySpending.addTextChangedListener(new TextWatcher() {
+            private boolean isEditing = false;
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (isEditing) return;
+
+                isEditing = true;
+                String rawText = s.toString().replaceAll(",", ""); // Xóa dấu phẩy cũ
+
+                try {
+                    // Chuyển thành số và định dạng lại
+                    double parsed = Double.parseDouble(rawText);
+                    String formatted = formatCurrency(parsed);
+
+                    // Cập nhật lại EditText với giá trị đã định dạng
+                    binding.edtMonthlySpending.setText(formatted);
+                    binding.edtMonthlySpending.setSelection(formatted.length()); // Đặt con trỏ về cuối
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+
+                isEditing = false;
+            }
+        });
 
         binding.deletedata.setOnClickListener(v -> showDeleteConfirmationDialog());
+    }
+
+    // Hàm định dạng số tiền với dấu phẩy phân tách hàng nghìn
+    private String formatCurrency(double amount) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+        symbols.setGroupingSeparator(',');  // Đặt dấu phẩy làm phân cách nghìn
+        DecimalFormat formatter = new DecimalFormat("#,###", symbols);
+        return formatter.format(amount);
     }
 
     // Hiển thị hộp thoại xác nhận xóa

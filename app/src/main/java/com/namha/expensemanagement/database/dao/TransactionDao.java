@@ -79,4 +79,12 @@ public interface TransactionDao {
     @Query("SELECT SUM(amount) FROM transactions WHERE typeId = (SELECT id FROM types WHERE type_name = :typeName LIMIT 2)")
     LiveData<Double> getTotalIncome(String typeName);
 
+
+    @Query("SELECT t.id, c.name AS nameCategory, t.content, t.date, ty.type_name AS typeName, t.amount " +
+            "FROM transactions t " +
+            "JOIN categories c ON t.categoryId = c.id " +
+            "JOIN types ty ON t.typeId = ty.id " +
+            "ORDER BY t.id DESC")
+    LiveData<List<History>> getAllHistory(); // Đổi tên thành getAllHistory()
+
 }

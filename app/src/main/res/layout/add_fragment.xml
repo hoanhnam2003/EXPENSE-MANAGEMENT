@@ -88,7 +88,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_thong_tin"
-                        android:textColorHint="@color/xam"
+                        android:textColorHint="@color/xamnhat"
                         android:hint="Nhập số tiền thiết lập"
                         android:paddingVertical="@dimen/_16dp"
                         android:paddingStart="@dimen/_20dp"
@@ -127,7 +127,7 @@
                         android:textColor="@color/black"
                         android:paddingVertical="@dimen/_16dp"
                         android:paddingStart="@dimen/_20dp"
-                        android:textColorHint="@color/xam"
+                        android:textColorHint="@color/xamnhat"
                         android:justificationMode="inter_word"
                         />
                 </LinearLayout>
@@ -227,7 +227,7 @@
                         android:background="@drawable/shape_thong_tin"
                         android:hint="Nhập nội dung"
                         android:textColor="@color/black"
-                        android:textColorHint="@color/xam"
+                        android:textColorHint="@color/xamnhat"
                         android:paddingVertical="@dimen/_16dp"
                         android:paddingStart="@dimen/_20dp"
                         android:justificationMode="inter_word"

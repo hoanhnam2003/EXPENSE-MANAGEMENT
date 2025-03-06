@@ -176,4 +176,14 @@ public class TransactionViewModel extends AndroidViewModel {
             return new MutableLiveData<>(); // Trả về LiveData rỗng nếu repository null
         }
     }
+
+    public LiveData<List<History>> getAllHistory() {
+        if (mRepository != null) {
+            return mRepository.getAllHistory(); // Đảm bảo phương thức này có trong TransactionRepository
+        } else {
+            Log.e(TAG, "Repository is null, cannot get all history");
+            return new MutableLiveData<>(); // Trả về LiveData rỗng nếu repository null
+        }
+    }
+
 }

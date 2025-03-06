@@ -76,27 +76,49 @@ public class HistoryFragment extends Fragment {
         binding.etDate.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String textInput = s.toString();
-                if (textInput.isEmpty()) binding.imClear.setVisibility(View.GONE);
-                else binding.imClear.setVisibility(View.VISIBLE);
-                performSearch(textInput);
+
+                if (textInput.isEmpty()) {
+                    binding.imClear.setVisibility(View.GONE);
+                    binding.rvHistory.setVisibility(View.VISIBLE);
+
+                    // Load lại danh sách đầy đủ khi xóa hết nội dung tìm kiếm
+                    transactionViewModel.getAllHistory().observe(getViewLifecycleOwner(), historyList -> {
+                        if (historyList != null && !historyList.isEmpty()) {
+                            updateHistoryList(historyList);
+                        } else {
+                            binding.rvHistory.setVisibility(View.GONE);
+                        }
+                    });
+                } else {
+                    binding.imClear.setVisibility(View.VISIBLE);
+                    performSearch(textInput);
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
         binding.imClear.setOnClickListener(v -> {
-            binding.etDate.setText("");
+            binding.etDate.setText(""); // Xóa nội dung ô tìm kiếm
             binding.rvHistory.setVisibility(View.VISIBLE);
+
+            // Lấy lại danh sách giao dịch đầy đủ và cập nhật giao diện
+            transactionViewModel.getAllHistory().observe(getViewLifecycleOwner(), historyList -> {
+                if (historyList != null && !historyList.isEmpty()) {
+                    updateHistoryList(historyList);
+                } else {
+                    binding.rvHistory.setVisibility(View.GONE);
+                }
+            });
         });
+
 
         // Initialize RecyclerView with HistoryAdapter
         setupRecyclerView();
@@ -163,55 +185,22 @@ public class HistoryFragment extends Fragment {
         binding = null; // Avoid memory leaks
     }
 
-    private void togglePopupSearchLayout() {
-        if (binding == null) return; // Ensure binding is not null
-
-        if (binding.popupSearchLayout.getVisibility() == View.GONE) {
-            binding.popupSearchLayout.setVisibility(View.VISIBLE);
-
-            ViewGroup.MarginLayoutParams historyParams = (ViewGroup.MarginLayoutParams) binding.history.getLayoutParams();
-            historyParams.topMargin = getResources().getDimensionPixelSize(R.dimen.popup_search_layout_height);
-            binding.history.setLayoutParams(historyParams);
-
-            ViewGroup.MarginLayoutParams rvParams = (ViewGroup.MarginLayoutParams) binding.rvHistory.getLayoutParams();
-            rvParams.topMargin = getResources().getDimensionPixelSize(R.dimen.popup_search_layout_height);
-            binding.rvHistory.setLayoutParams(rvParams);
-        } else {
-            // Clear the input in the search field
-
-            binding.popupSearchLayout.setVisibility(View.GONE);
-
-            ViewGroup.MarginLayoutParams historyParams = (ViewGroup.MarginLayoutParams) binding.history.getLayoutParams();
-            historyParams.topMargin = originalHistoryTopMargin;
-            binding.history.setLayoutParams(historyParams);
-
-            ViewGroup.MarginLayoutParams rvParams = (ViewGroup.MarginLayoutParams) binding.rvHistory.getLayoutParams();
-            rvParams.topMargin = originalRvTopMargin;
-            binding.rvHistory.setLayoutParams(rvParams);
-        }
-    }
-
     private void performSearch(String keySearch) {
         if (binding == null) return; // Đảm bảo binding không null
 
         Log.d("HistoryFragment", "User input: " + keySearch);
 
         if (keySearch.isEmpty()) {
-            // Nếu ô tìm kiếm trống, báo lỗi và ẩn thanh tìm kiếm
-            if (isSearchMode) {
-                togglePopupSearchLayout();
-                isSearchMode = false;
-            }
-            return;
+            return; // Nếu ô tìm kiếm trống, không thực hiện tìm kiếm
         }
 
         String datePattern = "";
         String typeName = "";
 
         if (isValidDate(keySearch)) {
-            datePattern = keySearch; // Nếu nhập đúng định dạng ngày, gán vào datePattern
+            datePattern = keySearch;
         } else {
-            typeName = keySearch; // Nếu không phải ngày, coi như loại giao dịch
+            typeName = keySearch;
         }
 
         Log.d("HistoryFragment", "Searching for date: " + datePattern + ", type: " + typeName);
@@ -224,12 +213,6 @@ public class HistoryFragment extends Fragment {
                 } else {
                     binding.rvHistory.setVisibility(View.GONE);
                     Toast.makeText(requireContext(), "Không tìm thấy giao dịch nào.", Toast.LENGTH_SHORT).show();
-                }
-
-                // Ẩn popup tìm kiếm sau khi tìm
-                if (isSearchMode) {
-                    togglePopupSearchLayout();
-                    isSearchMode = false;
                 }
             });
         } else {

@@ -52,7 +52,7 @@
                 android:paddingVertical="@dimen/_16dp"
                 android:paddingStart="@dimen/_20dp"
                 android:textColor="@color/black"
-                android:textColorHint="@color/xam" />
+                android:textColorHint="@color/xamnhat"/>
 
             <ImageView
                 android:id="@+id/imClear"

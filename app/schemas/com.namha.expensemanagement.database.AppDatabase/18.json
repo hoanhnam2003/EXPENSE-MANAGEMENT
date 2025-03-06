@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 18,
-    "identityHash": "9b93912c03041de6efdbc961e9448a00",
+    "identityHash": "ebae2675ff66201beca751ae290bcbb0",
     "entities": [
       {
         "tableName": "categories",
@@ -122,7 +122,7 @@
       },
       {
         "tableName": "transactions",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` TEXT, `typeId` INTEGER NOT NULL, `content` TEXT, `date` TEXT, `categoryId` INTEGER NOT NULL, `totalBalance` TEXT, `id_daily_limit` INTEGER, `id_monthly_limit` INTEGER, FOREIGN KEY(`id_daily_limit`) REFERENCES `daily_limits`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`id_monthly_limit`) REFERENCES `monthly_limits`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `amount` REAL NOT NULL, `typeId` INTEGER NOT NULL, `content` TEXT, `date` TEXT, `categoryId` INTEGER NOT NULL, `totalBalance` REAL NOT NULL, `id_daily_limit` INTEGER, `id_monthly_limit` INTEGER, FOREIGN KEY(`id_daily_limit`) REFERENCES `daily_limits`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE , FOREIGN KEY(`id_monthly_limit`) REFERENCES `monthly_limits`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -133,8 +133,8 @@
           {
             "fieldPath": "amount",
             "columnName": "amount",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "REAL",
+            "notNull": true
           },
           {
             "fieldPath": "typeId",
@@ -163,8 +163,8 @@
           {
             "fieldPath": "totalBalance",
             "columnName": "totalBalance",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "REAL",
+            "notNull": true
           },
           {
             "fieldPath": "idDailyLimit",
@@ -215,7 +215,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '9b93912c03041de6efdbc961e9448a00')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ebae2675ff66201beca751ae290bcbb0')"
     ]
   }
 }

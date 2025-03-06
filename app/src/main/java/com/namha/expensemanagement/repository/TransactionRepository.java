@@ -161,4 +161,9 @@ public class TransactionRepository {
 
         return totalIncome;
     }
+
+    public LiveData<List<History>> getAllHistory() {
+        return mTransactionDao.getAllHistory(); // Giả sử TransactionDao có phương thức này
+    }
+
 }

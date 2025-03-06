@@ -13,10 +13,10 @@ import java.util.List;
 
 @Dao
 public interface DailyLimitDao {
-
+    // Phương thức chèn một đối tượng DailyLimit vào bảng daily_limits
     @Insert
     void insertDailyLimit(DailyLimit dailyLimit);
-
+    // Phương thức cập nhật một đối tượng DailyLimit trong bảng daily_limits
     @Update
     void updateDailyLimit(DailyLimit dailyLimit);
 
