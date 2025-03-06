@@ -80,6 +80,7 @@ public interface TransactionDao {
     LiveData<Double> getTotalIncome(String typeName);
 
 
+
     @Query("SELECT t.id, c.name AS nameCategory, t.content, t.date, ty.type_name AS typeName, t.amount " +
             "FROM transactions t " +
             "JOIN categories c ON t.categoryId = c.id " +

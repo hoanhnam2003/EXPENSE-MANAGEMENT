@@ -165,6 +165,15 @@ public class AddFragment extends Fragment {
 
             // Chuyển đổi cleanedAmountText thành số
             double amount = Double.parseDouble(cleanedAmountText);
+            // check vượt triệu tỷ
+
+            double checkamount = 1_000_000_000_000_000L;
+
+            // **Kiểm tra nếu vượt quá 1 triệu tỷ**
+            if (amount > checkamount) {
+                Toast.makeText(getContext(), "Số tiền không được vượt quá 1 triệu tỷ", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             // Định dạng lại số tiền có dấu phẩy phân tách nghìn để hiển thị
             String formattedAmount = formatCurrency(amount);
