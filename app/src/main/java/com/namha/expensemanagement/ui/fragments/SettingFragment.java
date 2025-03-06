@@ -143,7 +143,7 @@ public class SettingFragment extends Fragment {
     private void openEmailSupport() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("message/rfc822");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"hotro.quanlychitieu@gmail.com"});
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"hoanhnam13@gmail.com"});
         intent.putExtra(Intent.EXTRA_SUBJECT, "Yêu cầu hỗ trợ");
 
         if (intent.resolveActivity(requireActivity().getPackageManager()) != null) {

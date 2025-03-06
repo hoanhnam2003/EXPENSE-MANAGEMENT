@@ -301,7 +301,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_thong_tin"
-                        android:hint="Nhập số tiền thiết lập"
+                        android:hint="Nhập số tiền thiết lập ngày"
                         android:textColor="@color/black"
                         android:justificationMode="inter_word"
                         android:textColorHint="@color/xamnhat"

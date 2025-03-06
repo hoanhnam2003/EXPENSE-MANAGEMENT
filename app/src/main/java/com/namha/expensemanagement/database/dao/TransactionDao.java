@@ -85,6 +85,6 @@ public interface TransactionDao {
             "JOIN categories c ON t.categoryId = c.id " +
             "JOIN types ty ON t.typeId = ty.id " +
             "ORDER BY t.id DESC")
-    LiveData<List<History>> getAllHistory(); // Đổi tên thành getAllHistory()
+    LiveData<List<History>> getAllHistory();
 
 }

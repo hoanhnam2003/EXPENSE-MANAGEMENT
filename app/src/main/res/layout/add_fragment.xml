@@ -89,7 +89,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_thong_tin"
                         android:textColorHint="@color/xamnhat"
-                        android:hint="Nhập số tiền thiết lập"
+                        android:hint="Nhập số tiền"
                         android:paddingVertical="@dimen/_16dp"
                         android:paddingStart="@dimen/_20dp"
                         android:textColor="@color/black"
