@@ -35,12 +35,13 @@
         android:contentDescription="@string/add_title"
         android:scaleType="centerCrop"
         android:src="@drawable/logo1"
+        android:layout_marginLeft="-20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTrackExpenses" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="199dp"
+        android:layout_width="220dp"
         android:layout_height="81dp"
         android:layout_marginEnd="@dimen/dp16"
         android:background="@drawable/shape_account"
@@ -64,7 +65,7 @@
 
         <TextView
             android:id="@+id/tvBalance"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_12dp"
             android:text="*** *** *** VND"
