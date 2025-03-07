@@ -212,7 +212,6 @@ public class HistoryFragment extends Fragment {
                     updateHistoryList(historyList);
                 } else {
                     binding.rvHistory.setVisibility(View.GONE);
-                    Toast.makeText(requireContext(), "Không tìm thấy giao dịch nào.", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
