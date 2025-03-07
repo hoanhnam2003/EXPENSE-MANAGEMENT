@@ -8,18 +8,6 @@
     android:background="@drawable/shape_thong_tin"
     android:padding="@dimen/_16dp">
 
-    <TextView
-        android:id="@+id/tvHistoryBuyContent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/mua_sam"
-        android:textColor="@color/xam"
-        android:textSize="@dimen/_16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/tvThreedots"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvThreedots" />
-
 
     <FrameLayout
         android:id="@+id/tvThreedots"
@@ -36,55 +24,182 @@
             android:gravity="center"
             android:scaleType="fitXY"
             android:src="@drawable/there_dots"
-            android:textColor="@color/color_fd3665"
-            android:textStyle="bold" />
+            />
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/tvHistoryBuy1"
-        android:layout_width="wrap_content"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ctItem"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_34dp"
-        android:justificationMode="inter_word"
-        android:text="@string/mua_do_an"
-        android:textColor="@color/xam"
-        android:textSize="@dimen/_16sp"
+        android:layout_marginTop="@dimen/_8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tvThreedots">
 
-    <TextView
-        android:id="@+id/tvTime"
-        android:layout_width="wrap_content"
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/item_title"
+            android:textColor="@color/xam"
+            android:textSize="@dimen/_16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.48" />
+
+        <TextView
+            android:id="@+id/tvHistoryBuyContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@string/mua_sam"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.48" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ctExpenseContent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_24dp"
-        android:text="02:58 Chiều 17/02/2025"
-        android:textColor="@color/color_009CDF"
+        android:layout_marginTop="@dimen/_8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvHistoryBuy1" />
+        app:layout_constraintTop_toBottomOf="@id/ctItem">
 
-    <TextView
-        android:id="@+id/tvspend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16dp"
-        android:text="@string/chi"
-        android:textColor="@color/xam"
-        android:textSize="@dimen/_16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvTime" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/expense_content_title"
+            android:textColor="@color/xam"
+            android:textSize="@dimen/_16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.48" />
 
-    <TextView
-        android:id="@+id/tvAmount"
-        android:layout_width="wrap_content"
+
+        <TextView
+            android:id="@+id/tvHistoryBuy1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@string/mua_do_an"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.48" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ctExpenseStartDate"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_16dp"
-        android:text="@string/_25_000"
-        android:textColor="@color/black"
-        android:textSize="@dimen/_16sp"
+        android:layout_marginTop="@dimen/_8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvspend" />
+        app:layout_constraintTop_toBottomOf="@id/ctExpenseContent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/ngay_tao_thu_chi"
+            android:textColor="@color/xam"
+            android:textSize="@dimen/_16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.48" />
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:textColor="@color/color_009CDF"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.48"
+            tools:text="02:58 Chiều 17/02/2025" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ctExpenseType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ctExpenseStartDate">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/expense_type_title"
+            android:textColor="@color/xam"
+            android:textSize="@dimen/_16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.48" />
+
+        <TextView
+            android:id="@+id/tvspend"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@string/chi"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.48" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ctExpenseTotalAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ctExpenseType">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/expense_total_amount_title"
+            android:textColor="@color/xam"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.48" />
+
+        <TextView
+            android:id="@+id/tvAmount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:gravity="end"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.48"
+            tools:text="0 VND" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

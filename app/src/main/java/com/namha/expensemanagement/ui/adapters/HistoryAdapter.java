@@ -77,9 +77,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             binding.tvTime.setText(item.getDate() != null ? item.getDate() : "No date");
             binding.tvspend.setText(item.getTypeName() != null ? item.getTypeName() : "Unknown type");
 
-            // Format số tiền theo chuẩn mong muốn
-            String amount = decimalFormat.format(item.getAmount());
-            binding.tvAmount.setText(amount != null ? amount : "0");
+            // Format số tiền theo chuẩn mong muốn và thêm đơn vị VND
+            String amount = decimalFormat.format(item.getAmount()) + " VND";
+            binding.tvAmount.setText(amount);
 
             binding.tvThreedots.setOnClickListener(v -> listener.onThreeDotsClick(item.getId()));
         }

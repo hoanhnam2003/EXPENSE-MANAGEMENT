@@ -22,19 +22,23 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatSeekBar;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.namha.expensemanagement.R;
 import com.namha.expensemanagement.database.entities.Transaction;
 import com.namha.expensemanagement.databinding.HomeFragmentBinding;
+import com.namha.expensemanagement.ui.AppBarStateChangeListener;
 import com.namha.expensemanagement.ui.activities.MainActivity;
 import com.namha.expensemanagement.viewmodels.DailyLimitViewModel;
 import com.namha.expensemanagement.viewmodels.MonthlyLimitViewModel;
@@ -69,7 +73,9 @@ public class HomeFragment extends Fragment {
     private boolean monthWarningShown = false;
 
     private SharedViewModel sharedViewModel;
-    private FrameLayout frameLayout;
+    private ConstraintLayout frameLayout;
+
+    private Toolbar toolbar;
 
     DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
     DecimalFormat decimalFormat = new DecimalFormat("#,###", symbols);
@@ -126,6 +132,17 @@ public class HomeFragment extends Fragment {
                 imEye.setImageResource(R.drawable.eye);
             }
             isBalanceVisible = !isBalanceVisible;
+        });
+
+        binding.apAccountGroup.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+            @Override
+            public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                if (state == State.COLLAPSED) {
+                    binding.frTrackExpenses.setVisibility(View.INVISIBLE);
+                } else {
+                    binding.frTrackExpenses.setVisibility(View.VISIBLE);
+                }
+            }
         });
 
         // Initialize SeekBar and TextView
@@ -275,6 +292,15 @@ public class HomeFragment extends Fragment {
         sharedViewModel.getSelectedColor().observe(getViewLifecycleOwner(), newColor -> {
             if (newColor != null) {
                 frameLayout.setBackgroundColor(newColor);
+            }
+        });
+
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        toolbar = view.findViewById(R.id.toolbar);
+
+        sharedViewModel.getSelectedColor().observe(getViewLifecycleOwner(), newColor -> {
+            if (newColor != null) {
+                toolbar.setBackgroundColor(newColor);
             }
         });
     }

@@ -290,8 +290,8 @@ public class ReportFragment extends Fragment {
 
         if (binding != null) {
             binding.todayreport.setText(String.format("Báo cáo hôm nay (%s):", todayDate));
-            binding.amountspent.setText(String.format("%sđ", formattedAmountSpent));
-            binding.amountcollected.setText(String.format("%sđ", formattedAmountCollected));
+            binding.amountspent.setText(String.format("%s VND", formattedAmountSpent));
+            binding.amountcollected.setText(String.format("%s VND", formattedAmountCollected));
         } else {
             Log.e("ReportFragment", "Binding is null in updateTodayReport");
         }
@@ -316,8 +316,8 @@ public class ReportFragment extends Fragment {
 
         if (binding != null) {
             binding.thismonthreport.setText(String.format("Báo cáo tháng này (%s):", monthYear));
-            binding.totalexpensesthismonth1.setText(String.format("%sđ", formattedAmountSpent));
-            binding.totalrevenuethismonth1.setText(String.format("%sđ", formattedAmountCollected));
+            binding.totalexpensesthismonth1.setText(String.format("%s VND", formattedAmountSpent));
+            binding.totalrevenuethismonth1.setText(String.format("%s VND", formattedAmountCollected));
         } else {
             Log.e("ReportFragment", "Binding is null in updateThisMonthReport");
         }

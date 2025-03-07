@@ -55,8 +55,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/thiet_lap_chi_tieu_trong_thang"
+                    android:textColor="@color/black"
                     android:textStyle="bold"
-                    android:textColor="@color/xam"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -77,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_16dp"
-                    android:text="@string/_50_000"
+                    tools:text="0 VND"
                     android:textColor="@color/color_fd3665"
                     android:textSize="@dimen/_16sp"
                     android:textStyle="normal"
@@ -100,6 +100,7 @@
                         android:layout_height="wrap_content"
                         android:paddingVertical="@dimen/_16dp"
                         android:textColor="@color/black"
+                        android:inputType="number"
                         android:textColorHint="@color/xamnhat"
                         android:background="@drawable/shape_thong_tin"
                         android:paddingStart="@dimen/_20dp"
@@ -107,8 +108,20 @@
                         android:justificationMode="inter_word"
                         />
 
-
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvCurrency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_20dp"
+                    android:gravity="end"
+                    android:text="VND"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/lnnhap_thiet_lap_chi_tieu_trong_thang"
+                    app:layout_constraintEnd_toEndOf="@+id/lnnhap_thiet_lap_chi_tieu_trong_thang"
+                    app:layout_constraintTop_toTopOf="@+id/lnnhap_thiet_lap_chi_tieu_trong_thang" />
 
                 <Button
                     android:id="@+id/btnSave4"
@@ -129,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:text="Thiết lập màu sắc"
                     android:textStyle="bold"
-                    android:textColor="@color/xam"
+                    android:textColor="@color/black"
                     android:layout_marginTop="@dimen/_25dp"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -153,7 +166,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/quan_ly_du_lieu"
                     android:textStyle="bold"
-                    android:textColor="@color/xam"
+                    android:textColor="@color/black"
                     android:layout_marginTop="@dimen/_50dp"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -192,7 +205,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/ho_tro"
                     android:textStyle="bold"
-                    android:textColor="@color/xam"
+                    android:textColor="@color/black"
                     android:layout_marginTop="@dimen/_25dp"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintStart_toStartOf="parent"

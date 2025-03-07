@@ -1,105 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
-        android:id="@+id/frTrackExpenses"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/apAccountGroup"
         android:layout_width="match_parent"
-        android:layout_height="240dp"
-        android:background="#F7FD3665"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="250dp"
+        app:liftOnScroll="true">
 
-
-    <TextView
-        android:id="@+id/tvTrackExpenses"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp16"
-        android:layout_marginTop="@dimen/dp16"
-        android:text="@string/expense_management"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_20sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imAnimal"
-        android:layout_width="160dp"
-        android:layout_height="150dp"
-        android:contentDescription="@string/add_title"
-        android:scaleType="centerCrop"
-        android:src="@drawable/logo1"
-        android:layout_marginLeft="-20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvTrackExpenses" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="220dp"
-        android:layout_height="81dp"
-        android:layout_marginEnd="@dimen/dp16"
-        android:background="@drawable/shape_account"
-        android:padding="@dimen/_12dp"
-        app:layout_constraintBottom_toBottomOf="@id/imAnimal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imAnimal">
-
-        <TextView
-            android:id="@+id/tvBalanceTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="@dimen/_4dp"
-            android:gravity="center_vertical"
-            android:text="@string/balance_total_title"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_16sp"
-            app:drawableRightCompat="@drawable/arrow_forward_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tvBalance"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_12dp"
-            android:text="*** *** *** VND"
-            android:textColor="@color/white"
-            android:textSize="@dimen/_16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvBalanceTotal" />
+            android:layout_height="match_parent"
+            app:collapsedTitleTextAppearance="@style/CoollapsedAppBar"
+            app:collapsedTitleTextColor="@color/white"
+            app:expandedTitleMarginBottom="@dimen/_8dp"
+            app:expandedTitleMarginStart="0dp"
+            app:expandedTitleMarginTop="@dimen/_8dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="EXPENSE MANAGEMENT">
 
-        <ImageView
-            android:id="@+id/imEye"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_48dp"
-            android:contentDescription="ẩn hiện số dư"
-            android:scaleType="fitXY"
-            android:src="@drawable/eye"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvBalanceTotal"
-            app:layout_constraintTop_toTopOf="parent" />
+            <Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:background="#F7FD3665"
+                android:contentInsetStart="0dp"
+                android:contentInsetLeft="0dp"
+                app:layout_collapseMode="pin">
+            </Toolbar>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/frTrackExpenses"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="#F7FD3665">
+
+                <TextView
+                    android:id="@+id/tvTrackExpenses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp16"
+                    android:layout_marginTop="@dimen/dp16"
+                    android:text="@string/expense_management"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/imAnimal"
+                    android:layout_width="160dp"
+                    android:layout_height="150dp"
+                    android:contentDescription="@string/add_title"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/logo1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvTrackExpenses" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp16"
+                    android:background="@drawable/shape_account"
+                    android:padding="@dimen/_16dp"
+                    app:layout_constraintBottom_toBottomOf="@id/imAnimal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/imAnimal"
+                    app:layout_constraintTop_toTopOf="@id/imAnimal">
+
+                    <TextView
+                        android:id="@+id/tvBalanceTotal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/_4dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/balance_total_title"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_16sp"
+                        android:textStyle="bold"
+                        app:drawableRightCompat="@drawable/arrow_forward_icon"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvBalance"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_12dp"
+                        android:text="*** *** *** VND"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_16sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tvBalanceTotal" />
+
+                    <ImageView
+                        android:id="@+id/imEye"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/hide_balance"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/eye"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="-50dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="-48dp"
         android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/frTrackExpenses">
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@drawable/shape_group_expenses"
             android:orientation="vertical"
             android:paddingVertical="@dimen/dp16">
@@ -130,7 +158,7 @@
                     android:gravity="center"
                     android:padding="@dimen/_4dp"
                     android:text="@string/thong_tin"
-                    android:textColor="@color/xam"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/icdong"
@@ -153,12 +181,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_16dp"
                     android:gravity="end"
-                    android:text="0đ"
                     android:textColor="@color/xanhla"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/tvExpenses"
-                    app:layout_constraintTop_toTopOf="@id/tvIncome" />
+                    app:layout_constraintStart_toEndOf="@id/tvIncome"
+                    app:layout_constraintTop_toTopOf="@id/tvIncome"
+                    android:text="0 VND" />
 
                 <TextView
                     android:id="@+id/tvExpenses"
@@ -176,13 +204,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_16dp"
                     android:gravity="end"
-                    android:text="0đ"
+                    android:text="0 VND"
                     android:textColor="@color/xanhtroi"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tvExpenses"
                     app:layout_constraintTop_toTopOf="@id/tvExpenses" />
-
 
 
                 <TextView
@@ -201,17 +228,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_16dp"
                     android:gravity="end"
-                    android:text="0đ"
+                    android:text="0 VND"
                     android:textColor="@color/color_hong"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/tvchitieubatthuong"
                     app:layout_constraintTop_toTopOf="@id/tvchitieubatthuong" />
 
-                <TextView
+                <View
                     android:id="@+id/ngang"
                     android:layout_width="0dp"
-                    android:layout_height="1dp"
+                    android:layout_height="2dp"
                     android:layout_marginTop="@dimen/_20dp"
                     android:background="@drawable/horizontal_line"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -247,7 +274,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dp16"
-                android:layout_marginTop="@dimen/dp32"
+                android:layout_marginTop="@dimen/_24dp"
                 android:background="@drawable/shape_account_not_stroke"
                 android:padding="@dimen/_16dp">
 
@@ -259,7 +286,7 @@
                     android:gravity="center"
                     android:padding="@dimen/_8dp"
                     android:text="@string/thiet_lap_chi_tieu_trong_ngay"
-                    android:textColor="@color/xam"
+                    android:textColor="@color/black"
                     android:textSize="@dimen/_16sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/icsetting"
@@ -271,7 +298,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="25dp"
                     android:layout_marginTop="@dimen/_16dp"
-                    app:drawableTopCompat="@drawable/setting"
+                    app:drawableTopCompat="@drawable/setting1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -303,20 +330,34 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/shape_thong_tin"
                         android:hint="Nhập số tiền thiết lập ngày"
-                        android:textColor="@color/black"
+                        android:inputType="number"
                         android:justificationMode="inter_word"
-                        android:textColorHint="@color/xamnhat"
                         android:paddingVertical="@dimen/_16dp"
-                        android:paddingStart="@dimen/_20dp" />
+                        android:paddingStart="@dimen/_20dp"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/xamnhat" />
 
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvCurrency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_20dp"
+                    android:gravity="end"
+                    android:text="VND"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_16sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/lnnhap_so_tien_thiet_lap"
+                    app:layout_constraintEnd_toEndOf="@+id/lnnhap_so_tien_thiet_lap"
+                    app:layout_constraintTop_toTopOf="@+id/lnnhap_so_tien_thiet_lap" />
 
                 <TextView
                     android:id="@+id/tvMoney"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_16dp"
-                    android:text="0 VND"
+                    tools:text="0 VND"
                     android:textColor="@color/color_fd3665"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/sbExpenses" />
@@ -337,4 +378,6 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

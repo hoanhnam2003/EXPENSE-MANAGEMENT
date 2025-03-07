@@ -9,18 +9,18 @@
     <string name="history">Lịch sử</string>
     <string name="report">Thống kê</string>
     <string name="setting">Setting</string>
-    <string name="_0">0đ</string>
+    <string name="_0">0 VND</string>
     <string name="chi_tieu">Chi tiêu tháng</string>
     <string name="chi_tieu_bat_thuong">Thu chi bất thường</string>
     <string name="so_tien_da_tieu">Số tiền đã tiêu trong ngày:</string>
-    <string name="_50_000">50.000đ</string>
+    <string name="_50_000">50,000 VND</string>
     <string name="save">Lưu</string>
     <string name="history1">Lịch sử</string>
     <string name="thiet_lap_chi_tieu_trong_ngay">Thiết lập chi tiêu trong ngày</string>
     <string name="mua_do_an">Mua đồ ăn sáng</string>
     <string name="thu">Thu</string>
     <string name="chi">Chi</string>
-    <string name="_25_000">25.000đ</string>
+    <string name="_25_000">25,000 VND</string>
     <string name="them_sua_thu_chi">Thêm/sửa thu chi</string>
     <string name="so_tien">Số tiền:</string>
     <string name="nhap_so_tien">Nhập số tiền</string>
@@ -35,9 +35,9 @@
     <string name="loai">Loại:</string>
     <string name="ghi_chu">Ghi chú</string>
     <string name="chi_tien">Chi tiền</string>
-    <string name="_10_000">10.000đ</string>
+    <string name="_10_000">10,000 VND</string>
     <string name="so_tien_da_chi">Số tiền đã chi:</string>
-    <string name="_100_000">100.000đ</string>
+    <string name="_100_000">100,000 VND</string>
     <string name="tong_chi">Tổng chi:</string>
     <string name="tong_thu">Tổng thu:</string>
     <string name="bao_cao_hom_nay">Báo cáo hôm nay (19/02/2025)</string>
@@ -63,4 +63,10 @@
     <string name="nhap_tim_kiem">Nhập tìm kiếm theo ngày và loại</string>
     <string name="baocaothang">Báo cáo tháng này (20/02/2025)</string>
     <string name="chatbot">ChatBot</string>
+    <string name="hide_balance">ẩn hiện số dư</string>
+    <string name="item_title">Danh mục:</string>
+    <string name="expense_content_title">Nội dung chi tiêu:</string>
+    <string name="expense_type_title">Hình thức thu chi:</string>
+    <string name="expense_total_amount_title">Tổng tiền thu chi:</string>
+    <string name="ngay_tao_thu_chi">Ngày tạo thu chi:</string>
 </resources>
