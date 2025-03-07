@@ -264,7 +264,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_16dp"
-                    android:text="02:58 Chiều 17/02/2025"
+                    android:text="02:58 17/02/2025"
                     android:textColor="@color/color_009CDF"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintEnd_toEndOf="parent"

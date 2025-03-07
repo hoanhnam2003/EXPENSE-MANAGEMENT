@@ -65,7 +65,7 @@
     <string name="chatbot">ChatBot</string>
     <string name="hide_balance">ẩn hiện số dư</string>
     <string name="item_title">Danh mục:</string>
-    <string name="expense_content_title">Nội dung chi tiêu:</string>
+    <string name="expense_content_title">Nội dung thu chi:</string>
     <string name="expense_type_title">Hình thức thu chi:</string>
     <string name="expense_total_amount_title">Tổng tiền thu chi:</string>
     <string name="ngay_tao_thu_chi">Ngày tạo thu chi:</string>
