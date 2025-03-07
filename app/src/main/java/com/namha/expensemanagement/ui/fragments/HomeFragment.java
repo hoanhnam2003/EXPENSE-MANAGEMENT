@@ -1,4 +1,3 @@
-
 package com.namha.expensemanagement.ui.fragments;
 
 import android.app.NotificationChannel;
@@ -329,7 +328,7 @@ public class HomeFragment extends Fragment {
                     dayWarningShown = true;
                 } else {  // Nếu chi tiêu hôm nay không vượt mức
                     String suggestion = getRandomSuggestion(positiveFinances); // Lấy gợi ý tích cực
-                    String message = String.format("Bạn vẫn đang chi tiêu hợp lý hôm nay!\nHãy %s.", suggestion);
+                    String message = String.format("Bạn vẫn đang chi tiêu hợp lý hôm nay!\nHãy: %s.", suggestion);
                     showNotification(notificationManager, channelId, 1, "Thông báo chi tiêu ngày", message);
                 }
             }
@@ -353,7 +352,7 @@ public class HomeFragment extends Fragment {
                     monthWarningShown = true;
                 } else {  // Nếu chi tiêu tháng không vượt mức
                     String suggestion = getRandomSuggestion(positiveFinances); // Lấy gợi ý tích cực
-                    String message = String.format("Ngân sách tháng của bạn vẫn ổn!\nHãy %s.", suggestion);
+                    String message = String.format("Ngân sách tháng của bạn vẫn ổn!\nHãy: %s.", suggestion);
                     showNotification(notificationManager, channelId, 2, "Thông báo chi tiêu tháng", message);
                 }
             }
