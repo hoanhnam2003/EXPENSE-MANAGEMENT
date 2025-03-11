@@ -39,6 +39,7 @@
         app:layout_constraintTop_toBottomOf="@id/frChatbot">
 
         <LinearLayout
+            android:id="@+id/lnChatBot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_group_expenses"
