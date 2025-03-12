@@ -79,7 +79,6 @@ public class AddFragment extends Fragment {
 
         setupSpinners();
 
-
         categoryViewModel.getAllCategories().observe(getViewLifecycleOwner(), categories -> {
             if (categories != null) {
                 categoriesList.clear();

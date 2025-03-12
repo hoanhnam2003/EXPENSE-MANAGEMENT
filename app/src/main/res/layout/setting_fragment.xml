@@ -175,7 +175,7 @@
                     />
 
                 <TextView
-                    android:id="@+id/content"
+                    android:id="@+id/content1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/noi_dung"
@@ -196,7 +196,7 @@
                     android:layout_marginTop="@dimen/_25dp"
                     android:textSize="@dimen/_16sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/content"
+                    app:layout_constraintTop_toBottomOf="@id/content1"
                     app:layout_constraintEnd_toEndOf="parent"
                     />
 

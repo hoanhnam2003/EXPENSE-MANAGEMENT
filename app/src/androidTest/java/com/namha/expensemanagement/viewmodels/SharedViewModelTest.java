@@ -1,84 +1,84 @@
 package com.namha.expensemanagement.viewmodels;
 
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
-import androidx.test.core.app.ApplicationProvider;
 
 import com.namha.expensemanagement.R;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 public class SharedViewModelTest {
-    private SharedViewModel viewModel;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
-    private Application application;
-    private Context context;
 
-    // Đảm bảo LiveData chạy trên main thread trong test
     @Rule
-    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule(); // Đảm bảo LiveData cập nhật ngay lập tức
+
+    @Mock
+    private Application mockApplication;
+
+    @Mock
+    private Context mockContext;
+
+    @Mock
+    private SharedPreferences mockSharedPreferences;
+
+    @Mock
+    private SharedPreferences.Editor mockEditor;
+
+    @Mock
+    private Resources mockResources;
+
+    private SharedViewModel viewModel;
+    private final int defaultColor = Color.RED; // Mô phỏng màu mặc định
 
     @Before
     public void setUp() {
-        // Lấy context của ứng dụng trong môi trường test
-        application = ApplicationProvider.getApplicationContext();
-        context = application;
+        MockitoAnnotations.initMocks(this);
 
-        // Mock SharedPreferences
-        sharedPreferences = mock(SharedPreferences.class);
-        editor = mock(SharedPreferences.Editor.class);
+        when(mockApplication.getApplicationContext()).thenReturn(mockContext);
+        when(mockApplication.getBaseContext()).thenReturn(mockContext);
+        when(mockApplication.getSharedPreferences("app_settings", Context.MODE_PRIVATE)).thenReturn(mockSharedPreferences);
+        when(mockSharedPreferences.edit()).thenReturn(mockEditor);
+        when(mockEditor.putInt(anyString(), anyInt())).thenReturn(mockEditor);
+        when(mockContext.getResources()).thenReturn(mockResources);
+        when(mockResources.getColor(R.color.hongthongke, null)).thenReturn(defaultColor); // Mô phỏng ContextCompat.getColor()
 
-        // Giả lập SharedPreferences
-        int defaultColor = ContextCompat.getColor(context, R.color.hongthongke);
-        when(sharedPreferences.getInt(eq("selected_color"), anyInt())).thenReturn(defaultColor);
-        when(sharedPreferences.edit()).thenReturn(editor);
-        when(editor.putInt(anyString(), anyInt())).thenReturn(editor);
+        // Giả lập lấy giá trị màu từ SharedPreferences
+        when(mockSharedPreferences.getInt("SelectedColor", defaultColor)).thenReturn(defaultColor);
 
-        // Tạo ViewModel
-        viewModel = new SharedViewModel(application);
+        viewModel = new SharedViewModel(mockApplication);
     }
 
     @Test
-    public void testInitialColor() {
-        int expectedColor = ContextCompat.getColor(context, R.color.hongthongke);
-        assertEquals(expectedColor, (int) viewModel.getSelectedColor().getValue());
+    public void testDefaultColor() {
+        // Kiểm tra màu mặc định được thiết lập đúng
+        assertEquals(defaultColor, (int) viewModel.getSelectedColor().getValue());
     }
 
     @Test
-    public void testSetSelectedColor() throws InterruptedException {
-        int newColor = Color.RED;
+    public void testSetSelectedColor() {
+        int newColor = Color.BLUE;
 
-        // Quan sát LiveData để kiểm tra cập nhật
-        Observer<Integer> observer = mock(Observer.class);
-        viewModel.getSelectedColor().observeForever(observer);
-
+        // Gọi setSelectedColor để cập nhật màu
         viewModel.setSelectedColor(newColor);
 
-        // Đợi LiveData cập nhật (chỉ cần trong môi trường test)
-        Thread.sleep(100); // Đợi 100ms để đảm bảo LiveData được cập nhật
-
-        // Kiểm tra LiveData có nhận đúng giá trị mới không
-        verify(observer).onChanged(newColor);
+        // Kiểm tra LiveData đã cập nhật đúng màu
         assertEquals(newColor, (int) viewModel.getSelectedColor().getValue());
 
-        // Xác nhận SharedPreferences đã lưu giá trị mới
-        verify(editor, times(1)).putInt(eq("selected_color"), eq(newColor));
-        verify(editor, times(1)).apply();
-
-        // Bỏ quan sát để tránh memory leak
-        viewModel.getSelectedColor().removeObserver(observer);
+        // Kiểm tra SharedPreferences có được lưu đúng màu không
+        verify(mockEditor).putInt("SelectedColor", newColor);
+        verify(mockEditor).apply();
     }
 }
