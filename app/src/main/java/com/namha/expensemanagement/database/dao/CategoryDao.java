@@ -11,7 +11,7 @@ import com.namha.expensemanagement.database.entities.Category;
 import java.util.List;
 
 @Dao
-public interface   CategoryDao {
+public interface CategoryDao {
     // Phương thức chèn một đối tượng Category vào bảng categories
     @Insert
     void insertCategory(Category category);

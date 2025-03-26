@@ -1,12 +1,9 @@
 package com.namha.expensemanagement.database;
 
 import android.content.Context;
-
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-
-
 import com.namha.expensemanagement.database.dao.CategoryDao;
 import com.namha.expensemanagement.database.dao.DailyLimitDao;
 import com.namha.expensemanagement.database.dao.MonthlyLimitDao;
@@ -31,8 +28,6 @@ public abstract class   AppDatabase extends RoomDatabase {
     public abstract DailyLimitDao dailyLimitDao();
     public abstract MonthlyLimitDao monthlyLimitDao();
     public abstract TransactionDao transactionDao();
-
-
 
     public static AppDatabase getInstance(Context context) {
         if (context == null) {

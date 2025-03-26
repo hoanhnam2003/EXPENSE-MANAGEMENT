@@ -10,7 +10,7 @@ public class Type {
 
     public String type_name;
     public Type(int id, String type_name) {
-        this.type_name = type_name;
+        this.type_name = type_name; 
         this.id = id;
     }
     public int getId() {
