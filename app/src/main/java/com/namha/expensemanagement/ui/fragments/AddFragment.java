@@ -153,7 +153,7 @@ public class AddFragment extends Fragment {
         binding.btnSave3.setOnClickListener(v -> {
             String amountText = binding.editTextAmount.getText().toString().trim();
 
-            // Loại bỏ các ký tự không phải số
+            // Loại bỏ các ký tự không phải số và dấu phân cách nghìn
             String cleanedAmountText = amountText.replaceAll("[^0-9]", "");
 
             // Kiểm tra số tiền hợp lệ
@@ -164,20 +164,17 @@ public class AddFragment extends Fragment {
 
             // Chuyển đổi cleanedAmountText thành số
             double amount = Double.parseDouble(cleanedAmountText);
+            // check vượt triệu tỷ
 
-            // Giới hạn số tiền không vượt quá 1 triệu tỷ
             double checkamount = 1_000_000_000_000_000L;
+
+            // **Kiểm tra nếu vượt quá 1 triệu tỷ**
             if (amount > checkamount) {
                 Toast.makeText(getContext(), "Số tiền không được vượt quá 1 triệu tỷ", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Kiểm tra nếu chưa chọn ngày giờ
-            if (!isDateTimeSelected) {
-                Toast.makeText(getContext(), "Vui lòng chọn ngày và giờ", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
+            // Định dạng lại số tiền có dấu phẩy phân tách nghìn để hiển thị
             String formattedAmount = formatCurrency(amount);
             binding.editTextAmount.setText(formattedAmount);
 
@@ -189,27 +186,23 @@ public class AddFragment extends Fragment {
             String selectedTime = binding.tvTime1.getText().toString().trim();
             String content = binding.content.getText().toString().trim();
 
+            // Kiểm tra nếu chưa chọn ngày giờ
+            if (!isDateTimeSelected) {
+                Toast.makeText(getContext(), "Vui lòng chọn ngày và giờ", Toast.LENGTH_SHORT).show();
+                return;
+            }
             if (!selectedCategory.isEmpty() && selectedType != null && !selectedTime.isEmpty() && !content.isEmpty()) {
                 observeOnce(categoryViewModel.getCategoryIdByName(selectedCategory), getViewLifecycleOwner(), categoryId -> {
                     if (categoryId != null) {
                         observeOnce(typeViewModel.getTypeIdByName(selectedType.getType_name()), getViewLifecycleOwner(), typeId -> {
                             if (typeId != null) {
-                                // Lấy tổng thu nhập để kiểm tra
-                                observeOnce(transactionViewModel.getTotalIncome("Thu nhập"), getViewLifecycleOwner(), totalIncome -> {
-                                    if (totalIncome != null && amount > totalIncome) {
-                                        Toast.makeText(getContext(), "Số tiền chi không thể nhỏ hơn tổng thu nhập hiện có", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
+                                observeOnce(dailyLimitViewModel.getLastDailyLimitId(), getViewLifecycleOwner(), idDailyLimit -> {
+                                    observeOnce(monthlyLimitViewModel.getLastMonthlyLimitId(), getViewLifecycleOwner(), idMonthyLimit -> {
+                                        int dailyLimitId = idDailyLimit != null ? idDailyLimit : 0;
+                                        int monthlyLimitId = idMonthyLimit != null ? idMonthyLimit : 0;
 
-                                    // Nếu số tiền hợp lệ, tiếp tục lưu giao dịch
-                                    observeOnce(dailyLimitViewModel.getLastDailyLimitId(), getViewLifecycleOwner(), idDailyLimit -> {
-                                        observeOnce(monthlyLimitViewModel.getLastMonthlyLimitId(), getViewLifecycleOwner(), idMonthyLimit -> {
-                                            int dailyLimitId = idDailyLimit != null ? idDailyLimit : 0;
-                                            int monthlyLimitId = idMonthyLimit != null ? idMonthyLimit : 0;
-
-                                            // Gọi phương thức cập nhật số dư và lưu giao dịch
-                                            updateTotalBalanceAndSaveTransaction(amount, typeId, content, selectedTime, categoryId, dailyLimitId, monthlyLimitId);
-                                        });
+                                        // Gọi phương thức để cập nhật số dư và lưu giao dịch
+                                        updateTotalBalanceAndSaveTransaction(amount, typeId, content, selectedTime, categoryId, dailyLimitId, monthlyLimitId);
                                     });
                                 });
                             } else {
