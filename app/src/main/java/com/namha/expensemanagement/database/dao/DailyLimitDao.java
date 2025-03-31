@@ -1,14 +1,10 @@
 package com.namha.expensemanagement.database.dao;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
-
-
 import com.namha.expensemanagement.database.entities.DailyLimit;
-
 import java.util.List;
 
 @Dao

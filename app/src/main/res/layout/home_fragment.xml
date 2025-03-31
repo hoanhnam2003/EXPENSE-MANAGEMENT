@@ -219,7 +219,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:text="@string/chi_tieu_bat_thuong"
-                    android:textColor="@color/xam"
+                    android:textColor="@color/hongthongke"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvExpenses" />
 

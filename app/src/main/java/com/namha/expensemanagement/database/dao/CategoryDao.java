@@ -1,13 +1,9 @@
 package com.namha.expensemanagement.database.dao;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
-
-
 import com.namha.expensemanagement.database.entities.Category;
-
 import java.util.List;
 
 @Dao

@@ -339,23 +339,17 @@ public class HomeFragment extends Fragment {
         // Kiểm tra và hiển thị cảnh báo cho chi tiêu ngày
         dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), lastDailyLimit -> {
             if (lastDailyLimit != null) {
-                double moneyDaySetting = lastDailyLimit;  // Giới hạn chi tiêu ngày
-                double sumAmountForToday = totalExpenseToday;  // Tổng chi tiêu hôm nay
+                double moneyDaySetting = lastDailyLimit;
+                double sumAmountForToday = totalExpenseToday;
 
-                // Nếu chi tiêu hôm nay vượt mức ngân sách ngày
                 if (sumAmountForToday > moneyDaySetting) {
                     double warningMoney = sumAmountForToday - moneyDaySetting;
-                    String suggestion = getRandomSuggestion(negativeFinances); // Lấy gợi ý tiêu cực
+                    String suggestion = getRandomSuggestion(negativeFinances);
                     String message = String.format(
-                            "Bạn đã chi tiêu vượt mức %s VND hôm nay\nHãy %s.",
+                            "⚠️ Bạn đã chi tiêu vượt mức %s VND hôm nay!\n💡 Hãy: %s.",
                             decimalFormat.format(warningMoney), suggestion
                     );
-                    showNotification(notificationManager, channelId, 1, "Cảnh báo chi tiêu ngày", message);
-                    dayWarningShown = true;
-                } else {  // Nếu chi tiêu hôm nay không vượt mức
-                    String suggestion = getRandomSuggestion(positiveFinances); // Lấy gợi ý tích cực
-                    String message = String.format("Bạn vẫn đang chi tiêu hợp lý hôm nay!\nHãy: %s.", suggestion);
-                    showNotification(notificationManager, channelId, 1, "Thông báo chi tiêu ngày", message);
+                    showNotification(notificationManager, channelId, 1, "🚨 Cảnh báo chi tiêu ngày!", message);
                 }
             }
         });
@@ -363,24 +357,45 @@ public class HomeFragment extends Fragment {
         // Kiểm tra và hiển thị cảnh báo cho chi tiêu tháng
         monthlyLimitViewModel.getLastMonthLimitSetting().observe(getViewLifecycleOwner(), lastMonthLimit -> {
             if (lastMonthLimit != null) {
-                double moneyMonthSetting = lastMonthLimit;  // Giới hạn chi tiêu tháng
-                double sumAmountForMonth = totalExpense;  // Tổng chi tiêu tháng
+                double moneyMonthSetting = lastMonthLimit;
+                double sumAmountForMonth = totalExpense;
 
-                // Nếu chi tiêu tháng vượt mức ngân sách tháng
                 if (sumAmountForMonth > moneyMonthSetting) {
                     double warningMoney = sumAmountForMonth - moneyMonthSetting;
-                    String suggestion = getRandomSuggestion(negativeFinances); // Lấy gợi ý tiêu cực
+                    String suggestion = getRandomSuggestion(negativeFinances);
                     String message = String.format(
-                            "Bạn đã vượt ngân sách tháng %s VND!\nHãy %s.",
+                            "⚠️ Bạn đã vượt ngân sách tháng %s VND!\n💡 Hãy: %s.",
                             decimalFormat.format(warningMoney), suggestion
                     );
-                    showNotification(notificationManager, channelId, 2, "Cảnh báo chi tiêu tháng", message);
-                    monthWarningShown = true;
-                } else {  // Nếu chi tiêu tháng không vượt mức
-                    String suggestion = getRandomSuggestion(positiveFinances); // Lấy gợi ý tích cực
-                    String message = String.format("Ngân sách tháng của bạn vẫn ổn!\nHãy: %s.", suggestion);
-                    showNotification(notificationManager, channelId, 2, "Thông báo chi tiêu tháng", message);
+                    showNotification(notificationManager, channelId, 2, "🚨 Cảnh báo chi tiêu tháng!", message);
                 }
+            }
+        });
+
+        // Kiểm tra và hiển thị cảnh báo chi tiêu bất thường
+        transactionViewModel.getAllTransactions().observe(getViewLifecycleOwner(), transactions -> {
+            if (transactions != null) {
+                final double[] totalUnusualExpense = {0};
+
+                dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), newDailyLimitSetting -> {
+                    if (newDailyLimitSetting != null) {
+                        double dailyLimit = newDailyLimitSetting;
+
+                        for (Transaction transaction : transactions) {
+                            if (transaction.getTypeId() == 1 && Math.abs(transaction.getAmount()) > dailyLimit) {
+                                totalUnusualExpense[0] += Math.abs(transaction.getAmount());
+                            }
+                        }
+
+                        if (totalUnusualExpense[0] > 0) {
+                            String message = String.format(
+                                    "🚨 Cảnh báo chi tiêu bất thường!\n💰 Bạn đã có những khoản chi vượt mức tổng cộng %s VND hôm nay!",
+                                    decimalFormat.format(totalUnusualExpense[0])
+                            );
+                            showNotification(notificationManager, channelId, 3, "⚠️ Chi tiêu bất thường!", message);
+                        }
+                    }
+                });
             }
         });
     }

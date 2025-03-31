@@ -170,11 +170,7 @@ public class MainActivity extends AppCompatActivity {
         if (binding != null) {
             setContentView(binding.getRoot());
         }
-
-
-
     }
-
 
     // thông báo
     @Override
