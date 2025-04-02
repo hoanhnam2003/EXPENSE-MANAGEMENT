@@ -20,12 +20,13 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     private List<History> items;
     private final OnThreeDotsClickListener threeDotsClickListener;
 
-    // Constructor accepting the OnThreeDotsClickListener
+    // Constructor chấp nhận OnThreeDotsClickListener
     public HistoryAdapter(List<History> items, OnThreeDotsClickListener listener) {
         this.items = items;
         this.threeDotsClickListener = listener;
     }
 
+    // Tạo ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,29 +35,33 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         return new ViewHolder(binding);
     }
 
+    // Đảm bảo mục không phải là null
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         History item = items.get(position);
         if (item != null) {
-            holder.bind(item, position, threeDotsClickListener); // Ensure item is not null
+            holder.bind(item, position, threeDotsClickListener);
         }
     }
 
+    // Xử lý trường hợp khi các mục là null
     @Override
     public int getItemCount() {
-        return items != null ? items.size() : 0; // Handle case when items is null
+        return items != null ? items.size() : 0;
     }
 
+    // Thông báo adapter để làm mới giao diện
     public void setItems(List<History> items) {
         this.items = items;
-        notifyDataSetChanged(); // Thông báo adapter để làm mới giao diện
+        notifyDataSetChanged();
     }
 
-    // Define the interface for the click listener
+    // Xác định giao diện cho trình lắng nghe nhấn vào nút ba chấm
     public interface OnThreeDotsClickListener {
         void onThreeDotsClick(int position);
     }
 
+    // ViewHolder cho item
     static class ViewHolder extends RecyclerView.ViewHolder {
         private final ItemHistoryBinding binding;
 
@@ -65,6 +70,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             this.binding = binding;
         }
 
+        // Gắn dữ liệu vào item
         public void bind(History item, int position, OnThreeDotsClickListener listener) {
             // Tạo DecimalFormatSymbols và đặt dấu phân cách là ','
             DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.getDefault());

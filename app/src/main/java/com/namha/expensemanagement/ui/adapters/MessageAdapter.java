@@ -22,10 +22,12 @@ import java.util.List;
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.viewHolder> {
     List<MessageModel>modelList;
 
+    // Constructor
     public MessageAdapter(List<MessageModel> modelList) {
         this.modelList = modelList;
     }
 
+    // Tạo ViewHolder
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,6 +36,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.viewHold
         return new viewHolder(view);
     }
 
+    // Gắn dữ liệu vào item
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         MessageModel model = modelList.get(position);
@@ -64,12 +67,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.viewHold
         }
     }
 
-
+    // Số lượng item
     @Override
     public int getItemCount() {
         return modelList.size();
     }
 
+    // Tạo ViewHolder
     public class viewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout leftChat, rightChat;
         TextView leftText, rightText;

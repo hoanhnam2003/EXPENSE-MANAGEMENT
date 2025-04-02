@@ -337,7 +337,7 @@ public class AddFragment extends Fragment {
         }
     }
 
-
+    // Hàm setupSpinner để thiết lập spinner
     private void setupSpinners() {
         if (getContext() != null) {
             if (binding != null) {
@@ -366,7 +366,7 @@ public class AddFragment extends Fragment {
         }
     }
 
-
+    // Hàm setupDateTimePicker để thiết lập DateTimePicker
     private void setupDateTimePicker() {
         if (binding.tvTime1 != null) {
             binding.tvTime1.setOnClickListener(v -> showDateTimePicker());
@@ -377,6 +377,7 @@ public class AddFragment extends Fragment {
 
     private boolean isDateTimeSelected = false; // Đánh dấu trạng thái chọn ngày giờ
 
+    // Hàm showDateTimePicker để hiển thị DateTimePicker
     private void showDateTimePicker() {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -397,5 +398,4 @@ public class AddFragment extends Fragment {
 
         datePickerDialog.show();
     }
-
 }

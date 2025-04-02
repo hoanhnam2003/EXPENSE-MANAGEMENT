@@ -339,6 +339,9 @@ public class SettingFragment extends Fragment {
         editor.clear();
         editor.apply();
 
+        // Xóa màu đã lưu trong SharedPreferences thông qua SharedViewModel
+        sharedViewModel.resetSelectedColor();
+
         // Cập nhật giao diện sau khi xóa
         requireActivity().runOnUiThread(() -> {
             monthlyLimitViewModel.updateMoneyMonthSetting(0);

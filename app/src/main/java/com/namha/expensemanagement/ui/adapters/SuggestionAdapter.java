@@ -16,15 +16,18 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Vi
     private List<String> suggestions;
     private OnItemClickListener listener;
 
+    // Xác định giao diện cho item
     public interface OnItemClickListener {
         void onItemClick(String suggestion);
     }
 
+    // Constructor
     public SuggestionAdapter(List<String> suggestions, OnItemClickListener listener) {
         this.suggestions = suggestions;
         this.listener = listener;
     }
 
+    // Tạo ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -32,6 +35,7 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Vi
         return new ViewHolder(view);
     }
 
+    // Gắn dữ liệu vào item
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String suggestion = suggestions.get(position);
@@ -39,11 +43,13 @@ public class SuggestionAdapter extends RecyclerView.Adapter<SuggestionAdapter.Vi
         holder.itemView.setOnClickListener(v -> listener.onItemClick(suggestion));
     }
 
+    // Số lượng item
     @Override
     public int getItemCount() {
         return suggestions.size();
     }
 
+    // ViewHolder cho item
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView suggestionText;
 

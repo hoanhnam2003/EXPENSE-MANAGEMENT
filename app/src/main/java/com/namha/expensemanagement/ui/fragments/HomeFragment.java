@@ -23,7 +23,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatSeekBar;
@@ -380,14 +379,43 @@ public class HomeFragment extends Fragment {
                 dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), newDailyLimitSetting -> {
                     if (newDailyLimitSetting != null) {
                         double dailyLimit = newDailyLimitSetting;
-
+                        boolean hasTransactionToday = false; // Biến để kiểm tra xem có giao dịch trong ngày hôm nay hay không
                         for (Transaction transaction : transactions) {
-                            if (transaction.getTypeId() == 1 && Math.abs(transaction.getAmount()) > dailyLimit) {
-                                totalUnusualExpense[0] += Math.abs(transaction.getAmount());
+                            // Lấy ngày của giao dịch
+                            String dateStr = cleanDateString(transaction.getDate());
+                            Date date = null;
+                            try {
+                                date = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault()).parse(dateStr);
+                            } catch (ParseException e) {
+                                Log.e("HomeFragment", "Error parsing date: " + dateStr, e);
+                            }
+
+                            if (date != null) {
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTime(date);
+
+                                int recordDay = calendar.get(Calendar.DAY_OF_MONTH);
+                                int recordMonth = calendar.get(Calendar.MONTH) + 1;
+                                int recordYear = calendar.get(Calendar.YEAR);
+
+                                int currentDay = getCurrentDay();
+                                int currentMonth = getCurrentMonth();
+                                int currentYear = getCurrentYear();
+
+                                // Kiểm tra xem giao dịch có phải là trong ngày hôm nay không
+                                if (recordDay == currentDay && recordMonth == currentMonth && recordYear == currentYear) {
+                                    hasTransactionToday = true; // Đánh dấu có giao dịch trong ngày
+                                }
+
+                                // Kiểm tra nếu giao dịch vượt mức chi tiêu
+                                if (transaction.getTypeId() == 1 && Math.abs(transaction.getAmount()) > dailyLimit) {
+                                    totalUnusualExpense[0] += Math.abs(transaction.getAmount());
+                                }
                             }
                         }
 
-                        if (totalUnusualExpense[0] > 0) {
+                        // Nếu có chi tiêu bất thường và có giao dịch trong ngày hôm nay, cảnh báo chi tiêu bất thường
+                        if (hasTransactionToday && totalUnusualExpense[0] > 0) {
                             String message = String.format(
                                     "🚨 Cảnh báo chi tiêu bất thường!\n💰 Bạn đã có những khoản chi vượt mức tổng cộng %s VND hôm nay!",
                                     decimalFormat.format(totalUnusualExpense[0])
@@ -476,33 +504,56 @@ public class HomeFragment extends Fragment {
 
     // Tính toán và hiển thị tổng số tiền hàng tháng
     private void calculateAndDisplayMonthlyTotal() {
-        // Quan sát tất cả giao dịch từ ViewModel
         transactionViewModel.getAllTransactions().observe(getViewLifecycleOwner(), transactions -> {
             if (transactions != null) {
-                // Tính tổng thu nhập trong tháng
                 final double totalIncome = sumAmountForCurrentMonth(transactions);
-                // Tính tổng chi tiêu trong tháng
                 totalExpense = sumAmountForCurrentMonthChiTieu(transactions);
-                // Tính tổng chi tiêu trong ngày hôm nay
                 totalExpenseToday = sumAmountForToday(transactions);
 
-                // Khởi tạo mảng để lưu tổng chi tiêu bất thường
-                final double[] totalUnusualExpense = {0};
+                final double[] totalUnusualExpense = {0}; // Mảng để tránh lỗi final
+                final boolean[] hasTransactionToday = {false}; // Dùng mảng thay vì biến boolean
 
-                // Quan sát giá trị giới hạn chi tiêu trong ngày
                 dailyLimitViewModel.getLastDailyLimitSetting().observe(getViewLifecycleOwner(), newDailyLimitSetting -> {
                     if (newDailyLimitSetting != null) {
                         final double dailyLimit = newDailyLimitSetting;
 
-                        // Duyệt qua tất cả giao dịch và kiểm tra chi tiêu vượt quá giới hạn
                         for (Transaction transaction : transactions) {
-                            if (transaction.getTypeId() == 1 && Math.abs(transaction.getAmount()) > dailyLimit) {
-                                totalUnusualExpense[0] += Math.abs(transaction.getAmount());
+                            String dateStr = cleanDateString(transaction.getDate());
+                            Date date = null;
+                            try {
+                                date = new SimpleDateFormat("HH:mm dd/MM/yyyy", Locale.getDefault()).parse(dateStr);
+                            } catch (ParseException e) {
+                                Log.e("HomeFragment", "Error parsing date: " + dateStr, e);
+                            }
+
+                            if (date != null) {
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTime(date);
+
+                                int recordDay = calendar.get(Calendar.DAY_OF_MONTH);
+                                int recordMonth = calendar.get(Calendar.MONTH) + 1;
+                                int recordYear = calendar.get(Calendar.YEAR);
+
+                                int currentDay = getCurrentDay();
+                                int currentMonth = getCurrentMonth();
+                                int currentYear = getCurrentYear();
+
+                                if (recordDay == currentDay && recordMonth == currentMonth && recordYear == currentYear) {
+                                    hasTransactionToday[0] = true; // Đánh dấu có giao dịch trong ngày
+                                }
+
+                                if (transaction.getTypeId() == 1 && Math.abs(transaction.getAmount()) > dailyLimit) {
+                                    totalUnusualExpense[0] += Math.abs(transaction.getAmount());
+                                }
                             }
                         }
 
-                        // Cập nhật giao diện người dùng với các giá trị tính toán
+                        // Nếu không có giao dịch trong ngày => reset về 0
+                        if (!hasTransactionToday[0]) {
+                            totalUnusualExpense[0] = 0;
+                        }
 
+                        // Cập nhật UI
                         if (binding.tv0d != null) {
                             binding.tv0d.setText(decimalFormat.format(totalIncome) + " VND");
                         }
@@ -524,7 +575,6 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
 
     private String cleanDateString(String dateStr) {
         return dateStr != null ? dateStr.replace("Chiều", "").replace("Sáng", "").trim() : "";

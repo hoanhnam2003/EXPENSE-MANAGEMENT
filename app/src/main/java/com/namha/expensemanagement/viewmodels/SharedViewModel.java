@@ -29,12 +29,23 @@ public class SharedViewModel extends AndroidViewModel {
 
     public void setSelectedColor(int color) {
         selectedColor.setValue(color);
-
         // Lưu màu vào SharedPreferences
         sharedPreferences.edit().putInt(KEY_SELECTED_COLOR, color).apply();
     }
 
     public LiveData<Integer> getSelectedColor() {
         return selectedColor;
+    }
+
+    public void resetSelectedColor() {
+        int defaultColor = ContextCompat.getColor(getApplication(), R.color.hongthongke);
+
+        // Xóa màu sắc đã lưu khỏi SharedPreferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(KEY_SELECTED_COLOR);
+        editor.apply();
+
+        // Cập nhật LiveData để giao diện thay đổi ngay lập tức
+        selectedColor.setValue(defaultColor);
     }
 }

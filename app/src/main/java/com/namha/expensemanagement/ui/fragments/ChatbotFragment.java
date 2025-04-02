@@ -56,6 +56,7 @@ public class ChatbotFragment extends Fragment {
     private SharedViewModel sharedViewModel;
     private FrameLayout frameLayout;
 
+    // Khởi tạo ChatService
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -82,6 +83,7 @@ public class ChatbotFragment extends Fragment {
 
     }
 
+    // thay đổi màu nền
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -97,6 +99,7 @@ public class ChatbotFragment extends Fragment {
         });
     }
 
+    // Khởi tạo danh sách gợi ý
     private void setupSuggestions() {
         suggestionList = new ArrayList<>();
 

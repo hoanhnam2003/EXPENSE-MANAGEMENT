@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
-        // Check if binding is not null before setting the content view
+        // Kiểm tra xem binding có phải là null không trước khi thiết lập chế độ xem nội dung
         if (binding != null) {
             setContentView(binding.getRoot());
         }
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Initialize ViewModels with null checks
+        // Khởi tạo ViewModels với kiểm tra null
         mTransactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         if (mTransactionViewModel != null) {
             mTransactionViewModel.getLastTransaction();
@@ -115,14 +115,14 @@ public class MainActivity extends AppCompatActivity {
             mMonthlyLimit.logAllMonthlyLimits();
         }
 
-        // Display default HomeFragment
+        // Hiển thị HomeFragment mặc định
         HomeFragment homeFragment = new HomeFragment();
         if (homeFragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, homeFragment).commit();
             setUpFragmentListener(homeFragment);
         }
 
-        // Menu click listeners with null checks
+        // Trình nghe nhấp vào menu với kiểm tra null
         if (binding != null) {
             if (binding.icMenuBottom != null) {
                 binding.icMenuBottom.tvHome.setOnClickListener(new View.OnClickListener() {
@@ -262,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Hàm cập nhật màu sắc của TextView được chọn
     private void updateSelectedItem(View selectedView) {
         if (binding != null && binding.icMenuBottom != null) {
             int defaultColor = getResources().getColor(R.color.black);
@@ -312,12 +313,13 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.dispatchTouchEvent(ev);
     }
-
+    // Kiem tra co mang hay khong
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
     }
 
+    // Hàm hiển thị thông báo
     private void showToast(String message) {
         runOnUiThread(() -> android.widget.Toast.makeText(this, message, android.widget.Toast.LENGTH_SHORT).show());
     }
