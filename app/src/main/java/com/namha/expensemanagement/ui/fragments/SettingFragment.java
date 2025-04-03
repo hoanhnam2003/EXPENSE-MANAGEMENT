@@ -45,7 +45,6 @@ public class SettingFragment extends Fragment {
     private MonthlyLimitViewModel monthlyLimitViewModel;
     private DailyLimitViewModel dailyLimitViewModel;
     private SharedPreferences sharedPreferences;
-    private View.OnClickListener addClickListener;
     private AppDatabase appDatabase;
     private SeekBar seekBar;
     private FrameLayout frameLayout;
@@ -140,6 +139,7 @@ public class SettingFragment extends Fragment {
 
     }
 
+    // Mở hộp thoại để gửi email hỗ trợ
     private void openEmailSupport() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("message/rfc822");
@@ -153,6 +153,7 @@ public class SettingFragment extends Fragment {
         }
     }
 
+    // Thiết lập giao diện
     private void setupUI() {
         // Kiểm tra và thiết lập dữ liệu từ ViewModel
         monthlyLimitViewModel.getLastMonthlyLimitMoney().observe(getViewLifecycleOwner(), lastMoneyDay -> {
@@ -349,10 +350,6 @@ public class SettingFragment extends Fragment {
             binding.money.setText("0 VND");
             Toast.makeText(getContext(), "Toàn bộ dữ liệu đã được xóa", Toast.LENGTH_SHORT).show();
         });
-    }
-
-    public void setAddClickListener(View.OnClickListener listener) {
-        this.addClickListener = listener;
     }
 
     @Override

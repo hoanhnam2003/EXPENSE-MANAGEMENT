@@ -23,7 +23,8 @@ public class PopupChooseMethodFragment extends DialogFragment {
         this.callback = callback;
     }
 
-    private int transactionId; // Store the transaction ID
+    private int transactionId;// Lưu trữ ID của giao dịch
+
     private TransactionViewModel transactionViewModel;
 
     @Nullable
@@ -33,7 +34,7 @@ public class PopupChooseMethodFragment extends DialogFragment {
         dialog.setContentView(R.layout.popup_choose_method);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-        // Initialize ViewModel
+        // Khởi tạo ViewModel
         transactionViewModel = new ViewModelProvider(requireActivity()).get(TransactionViewModel.class);
 
         Button btnDelete = dialog.findViewById(R.id.btnDeleteRecord);
@@ -46,12 +47,12 @@ public class PopupChooseMethodFragment extends DialogFragment {
             dismiss(); // Đóng dialog sau khi thực hiện
         });
 
-        btnClose.setOnClickListener(v -> dismiss()); // Close the popup
+        btnClose.setOnClickListener(v -> dismiss()); // đóng popup
 
         return dialog;
     }
 
-    // Method to set transaction ID
+    //Phương thức thiết lập ID giao dịch
     public void setTransactionId(int transactionId) {
         this.transactionId = transactionId;
     }
@@ -60,7 +61,7 @@ public class PopupChooseMethodFragment extends DialogFragment {
         // Biến tạm để lưu trữ dữ liệu từ LiveData
         double[] amount = new double[1];
         String[] typeName = new String[1];
-        // Get the transaction to be deleted
+        // Lấy giao dịch cần xóa
         transactionViewModel.getTransactionById(transactionId).observe(this, transaction -> {
             if (transaction != null) {
                 amount[0] = transaction.getAmount();
@@ -95,7 +96,7 @@ public class PopupChooseMethodFragment extends DialogFragment {
                                 return;
                         }
 
-                        // Delete the transaction and update the total balance
+                        // Xóa giao dịch và cập nhật tổng số dư
                         transactionViewModel.deleteTransactionById(transactionId);
                         transactionViewModel.updateTotalAmount(newTotalAmount);
                     }

@@ -190,6 +190,7 @@ public class ChatbotFragment extends Fragment {
         ((MainActivity) requireActivity()).findViewById(R.id.fabChatbot).setVisibility(View.VISIBLE);
     }
 
+    // Check ô nhập tin nhắn và gửi tin nhắn
     private void sendMessage() {
         pendingMessage = inputMessage.getText().toString().trim();
         if (pendingMessage.isEmpty()) {
@@ -208,6 +209,7 @@ public class ChatbotFragment extends Fragment {
         performSendMessage(pendingMessage);
     }
 
+    // Gửi tin nhắn đến server
     private void performSendMessage(String message) {
         messageList.add(new MessageModel(message, MessageModel.SENT_BY_ME));
         messageAdapter.notifyItemInserted(messageList.size() - 1);
@@ -248,6 +250,7 @@ public class ChatbotFragment extends Fragment {
         });
     }
 
+    // Gửi tin nhắn khi có kết nối
     private void retrySendMessage() {
         retryRunnable = new Runnable() {
             @Override
@@ -263,6 +266,7 @@ public class ChatbotFragment extends Fragment {
         handler.postDelayed(retryRunnable, 3000);
     }
 
+    // Kiểm tra kết nối mạng
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) requireContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();

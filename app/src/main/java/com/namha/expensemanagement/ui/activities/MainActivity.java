@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
         HomeFragment homeFragment = new HomeFragment();
         if (homeFragment != null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, homeFragment).commit();
-            setUpFragmentListener(homeFragment);
         }
 
         // Trình nghe nhấp vào menu với kiểm tra null
@@ -216,52 +215,6 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "Thông báo sẽ được gửi!", Toast.LENGTH_SHORT).show();
     }
 
-    public void onAddNewClicked() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.flHomeContainer, new AddFragment()).commit();
-    }
-
-    private void setUpFragmentListener(Fragment fragment) {
-        if (fragment != null) {
-            int defaultColor = getResources().getColor(R.color.black);
-
-            if (fragment instanceof HomeFragment) {
-                ((HomeFragment) fragment).setAddClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onAddNewClicked();
-                        if (binding != null && binding.icMenuBottom != null) {
-                            binding.icMenuBottom.tvHome.setTextColor(defaultColor);
-                            binding.icMenuBottom.tvHome.setTypeface(null, Typeface.NORMAL);
-                        }
-                    }
-                });
-            } else if (fragment instanceof HistoryFragment) {
-                ((HistoryFragment) fragment).setAddClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onAddNewClicked();
-                        if (binding != null && binding.icMenuBottom != null) {
-                            binding.icMenuBottom.tvHistory.setTextColor(defaultColor);
-                            binding.icMenuBottom.tvHistory.setTypeface(null, Typeface.NORMAL);
-                        }
-                    }
-                });
-            } else if (fragment instanceof SettingFragment) {
-                ((SettingFragment) fragment).setAddClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        onAddNewClicked();
-                        if (binding != null && binding.icMenuBottom != null) {
-                            binding.icMenuBottom.tvSetting.setTextColor(defaultColor);
-                            binding.icMenuBottom.tvSetting.setTypeface(null, Typeface.NORMAL);
-                        }
-                    }
-                });
-            }
-        }
-
-    }
-
     // Hàm cập nhật màu sắc của TextView được chọn
     private void updateSelectedItem(View selectedView) {
         if (binding != null && binding.icMenuBottom != null) {
@@ -313,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.dispatchTouchEvent(ev);
     }
-    // Kiem tra co mang hay khong
+    // Kiểm tra có mạng hay không
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();

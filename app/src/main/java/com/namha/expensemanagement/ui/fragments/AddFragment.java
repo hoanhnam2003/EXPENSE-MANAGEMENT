@@ -218,6 +218,7 @@ public class AddFragment extends Fragment {
             }
         });
 
+        // Xử lý nhập số tiền
         binding.editTextAmount.addTextChangedListener(new TextWatcher() {
             private boolean isEditing = false;
 
@@ -249,6 +250,7 @@ public class AddFragment extends Fragment {
             }
         });
     }
+
     // Phương thức định dạng số tiền với dấu phẩy phân tách hàng nghìn
         private String formatCurrency(double amount) {
             DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);

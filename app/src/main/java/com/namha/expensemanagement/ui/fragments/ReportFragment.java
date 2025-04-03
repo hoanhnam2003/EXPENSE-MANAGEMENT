@@ -41,7 +41,6 @@ import java.util.Locale;
 public class ReportFragment extends Fragment {
 
     private StatisticalFragmentBinding binding;
-    private View.OnClickListener addClickListener;
     private TransactionViewModel transactionViewModel;
     private MonthlyLimitViewModel monthlyLimitViewModel;
     private DailyLimitViewModel dailyLimitViewModel;
@@ -152,15 +151,15 @@ public class ReportFragment extends Fragment {
         pieChart.setCenterTextColor(Color.BLACK);
         ArrayList<PieEntry> entries = new ArrayList<>();
         if(monthlySpendingRatio > 100){
-            // Add data to PieChart
+            // Thêm dữ liệu vào biểu đồ tròn (PieChart)
             entries.add(new PieEntry(100, "Số tiền đã chi"));
             entries.add(new PieEntry(0, "Số tiền còn lại"));
         }else if(monthlySpendingRatio < 100 && monthlySpendingRatio > 0){
-            // Add data to PieChart
+            // Thêm dữ liệu vào biểu đồ tròn (PieChart)
             entries.add(new PieEntry(monthlySpendingRatio, "Số tiền đã chi"));
             entries.add(new PieEntry(monthlyBalanceRatio, "Số tiền còn lại"));
         }else{
-            // Add data to PieChart
+            // Thêm dữ liệu vào biểu đồ tròn (PieChart)
             entries.add(new PieEntry(0, "Số tiền đã chi"));
             entries.add(new PieEntry(100, "Số tiền còn lại"));
         }
@@ -228,18 +227,18 @@ public class ReportFragment extends Fragment {
         pieChart.setCenterTextSize(16f);
         pieChart.setCenterTextColor(Color.BLACK);
 
-        // Add data to PieChart
+        // Thêm dữ liệu vào biểu đồ tròn (PieChart)
         ArrayList<PieEntry> entries = new ArrayList<>();
         if(monthlySpendingRatio > 100){
-            // Add data to PieChart
+            // Thêm dữ liệu vào biểu đồ tròn (PieChart)
             entries.add(new PieEntry(100, "Số tiền đã chi"));
             entries.add(new PieEntry(0, "Số tiền còn lại"));
         }else if(monthlySpendingRatio < 100 && monthlySpendingRatio > 0){
-            // Add data to PieChart
+            // Thêm dữ liệu vào biểu đồ tròn (PieChart)
             entries.add(new PieEntry(monthlySpendingRatio, "Số tiền đã chi"));
             entries.add(new PieEntry(monthlyBalanceRatio, "Số tiền còn lại"));
         }else{
-            // Add data to PieChart
+            // Thêm dữ liệu vào biểu đồ tròn (PieChart)
             entries.add(new PieEntry(0, "Số tiền đã chi"));
             entries.add(new PieEntry(100, "Số tiền còn lại"));
         }
@@ -273,6 +272,7 @@ public class ReportFragment extends Fragment {
         pieChart.invalidate();
     }
 
+    // Hàm cập nhật báo cáo ngày
     private void updateTodayReport(List<Transaction> transactions) {
         String todayDate = getTodayDate();
         Pair<Double, Double> totalAmountForToday = calculateTotalAmountForToday(transactions);
@@ -297,6 +297,7 @@ public class ReportFragment extends Fragment {
         }
     }
 
+    // Hàm cập nhật báo cáo tháng
     private void updateThisMonthReport(List<Transaction> transactions) {
         String todayDate = getTodayDate();
         String monthYear = convertToMonthYear(todayDate);

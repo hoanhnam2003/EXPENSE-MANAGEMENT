@@ -38,8 +38,6 @@ public class HistoryFragment extends Fragment {
 
     private HistoryFragmentBinding binding;
     private TransactionViewModel transactionViewModel;
-
-    private View.OnClickListener addClickListener;
     private boolean isSearchMode = false;
 
     private int originalHistoryTopMargin;
@@ -50,7 +48,7 @@ public class HistoryFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Tạo và hiển thị giao diện từ file XML cho Fragment này
         binding = HistoryFragmentBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -60,12 +58,12 @@ public class HistoryFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (binding == null) return; // Ensure binding is not null
+        if (binding == null) return; // Đảm bảo binding không bị null
 
-        // Initialize ViewModel
+        // Khởi tạo ViewModel
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
 
-        // Save the original margin values
+        // Lưu giá trị margin ban đầu
         ViewGroup.MarginLayoutParams historyParams = (ViewGroup.MarginLayoutParams) binding.history.getLayoutParams();
         originalHistoryTopMargin = historyParams.topMargin;
 
@@ -120,10 +118,10 @@ public class HistoryFragment extends Fragment {
         });
 
 
-        // Initialize RecyclerView with HistoryAdapter
+        // Khởi tạo RecyclerView với HistoryAdapter
         setupRecyclerView();
 
-        // Observe LiveData from ViewModel
+        // Quan sát LiveData từ ViewModel
         if (getViewLifecycleOwner() != null) {
             transactionViewModel.getHistoryList().observe(getViewLifecycleOwner(), this::updateHistoryList);
         }
@@ -138,6 +136,7 @@ public class HistoryFragment extends Fragment {
         });
     }
 
+    // Khởi tạo RecyclerView
     private void setupRecyclerView() {
         HistoryAdapter adapter = new HistoryAdapter(null,
                 position -> {
@@ -148,6 +147,7 @@ public class HistoryFragment extends Fragment {
         binding.rvHistory.setAdapter(adapter);
     }
 
+    // Cập nhật danh sách giao dịch
     private void updateHistoryList(List<History> historyList) {
         if (historyList != null) {
             Log.d("HistoryFragment", "Updating history list with " + historyList.size() + " items");
@@ -163,6 +163,7 @@ public class HistoryFragment extends Fragment {
         }
     }
 
+    // Hiển thị popup chọn phương thức
     private void showPopupMethod(int transactionId) {
         PopupChooseMethodFragment dialogFragment = new PopupChooseMethodFragment();
         dialogFragment.setCancelable(true);
@@ -175,14 +176,10 @@ public class HistoryFragment extends Fragment {
         }
     }
 
-    public void setAddClickListener(View.OnClickListener listener) {
-        this.addClickListener = listener;
-    }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null; // Avoid memory leaks
+        binding = null; // Tránh rò rỉ bộ nhớ
     }
 
     private void performSearch(String keySearch) {
@@ -219,7 +216,7 @@ public class HistoryFragment extends Fragment {
         }
     }
 
-
+    // Kiểm tra định dạng ngày
     private boolean isValidDate(String dateStr) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         sdf.setLenient(false);

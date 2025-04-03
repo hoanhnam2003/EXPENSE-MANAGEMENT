@@ -67,7 +67,6 @@ public class HomeFragment extends Fragment {
     private boolean isBalanceVisible = false;
     private EditText etInputMoney;
     private Button btnSave;
-    private View.OnClickListener addClickListener;
     private boolean dayWarningShown = false;
     private boolean monthWarningShown = false;
 
@@ -95,23 +94,20 @@ public class HomeFragment extends Fragment {
             return;
         }
 
-
-        // Initialize ViewModel
+        // Khởi tạo ViewModel
         transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
         dailyLimitViewModel = new ViewModelProvider(this).get(DailyLimitViewModel.class);
         monthlyLimitViewModel = new ViewModelProvider(this).get(MonthlyLimitViewModel.class);
 
-        // Initialize UI components
+        // Khởi tạo các thành phần giao diện người dùng (UI)
         etInputMoney = binding.etInputMoney;
         btnSave = binding.btnSave;
 
-        // Toggle balance visibility
+        // Chuyển đổi khả năng hiển thị số dư
         ImageView imEye = binding.imEye;
         TextView tvBalance = binding.tvBalance;
 
         // Tạo DecimalFormat để đảm bảo dấu phân tách là dấu ","
-
-
         symbols.setGroupingSeparator(',');
 
 
@@ -144,7 +140,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        // Initialize SeekBar and TextView
+        // Khởi tạo SeekBar và TextView
         AppCompatSeekBar sbExpenses = binding.sbExpenses;
         TextView tvExpenseValue = binding.tvMoney;
 
@@ -428,9 +424,8 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    /**
-     * Tạo NotificationChannel cho Android 8.0 trở lên.
-     */
+    // Tạo NotificationChannel cho Android 8.0 trở lên.
+
     private void createNotificationChannel(NotificationManager manager, String channelId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
@@ -443,9 +438,8 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    /**
-     * Hiển thị thông báo với tiêu đề và nội dung tùy chỉnh.
-     */
+    // Hiển thị thông báo với tiêu đề và nội dung tùy chỉnh.
+
     private void showNotification(NotificationManager manager, String channelId, int notificationId, String title, String message) {
         PendingIntent pendingIntent = createPendingIntent();
 
@@ -461,9 +455,7 @@ public class HomeFragment extends Fragment {
         manager.notify(notificationId, builder.build());
     }
 
-    /**
-     * Tạo PendingIntent mở MainActivity, hỗ trợ tất cả phiên bản Android.
-     */
+    // Tạo PendingIntent mở MainActivity, hỗ trợ tất cả phiên bản Android.
     private PendingIntent createPendingIntent() {
         Intent intent = new Intent(getContext(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -475,9 +467,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    /**
-     * Chọn ngẫu nhiên một lời khuyên từ danh sách.
-     */
+    // Chọn ngẫu nhiên một lời khuyên từ danh sách.
     private String getRandomSuggestion(String[] suggestions) {
         Random random = new Random();
         return suggestions[random.nextInt(suggestions.length)];
@@ -576,10 +566,13 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    // Phương thức này loại bỏ các từ "Sáng" và "Chiều" trong chuỗi ngày tháng và cắt bỏ khoảng trắng thừa.
+    // Trả về chuỗi đã được làm sạch, nếu chuỗi đầu vào là null, trả về chuỗi rỗng.
     private String cleanDateString(String dateStr) {
         return dateStr != null ? dateStr.replace("Chiều", "").replace("Sáng", "").trim() : "";
     }
 
+    // Tính toán và hiển thị tổng số tiền hôm nay
     private double sumAmountForToday(List<Transaction> transactions) {
         int currentDay = getCurrentDay();
         int currentMonth = getCurrentMonth();
@@ -616,6 +609,7 @@ public class HomeFragment extends Fragment {
         return totalAmount;
     }
 
+    // Tính toán và hiển thị tổng số tiền hàng tháng
     private double sumAmountForCurrentMonth(List<Transaction> transactions) {
         int currentMonth = getCurrentMonth();
         int currentYear = getCurrentYear();
@@ -649,6 +643,7 @@ public class HomeFragment extends Fragment {
         return totalAmount;
     }
 
+    // Tính toán và hiển thị tổng số tiền hàng tháng
     private double sumAmountForCurrentMonthChiTieu(List<Transaction> transactions) {
         int currentMonth = getCurrentMonth();
         int currentYear = getCurrentYear();
@@ -683,10 +678,7 @@ public class HomeFragment extends Fragment {
         return totalAmount;
     }
 
-    public void setAddClickListener(View.OnClickListener listener) {
-        this.addClickListener = listener;
-    }
-
+    // Hủy ViewBinding
     @Override
     public void onDestroyView() {
         super.onDestroyView();
