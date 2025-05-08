@@ -39,6 +39,9 @@ import com.namha.expensemanagement.viewmodels.DailyLimitViewModel;
 import com.namha.expensemanagement.viewmodels.MonthlyLimitViewModel;
 import com.namha.expensemanagement.viewmodels.TransactionViewModel;
 import com.namha.expensemanagement.viewmodels.TypeViewModel;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -65,20 +68,17 @@ public class MainActivity extends AppCompatActivity {
         
         fabChatbot = findViewById(R.id.fabChatbot);
 
-        if (fabChatbot != null) {
-            fabChatbot.setOnClickListener(v -> {
-                if (isNetworkConnected()) {
-                    ChatbotFragment chatbotFragment = new ChatbotFragment();
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.flHomeContainer, chatbotFragment)
-                            .addToBackStack("ChatbotFragment")
-                            .commit();
-                } else {
-                    // Thông báo khi không có mạng
-                    showToast("Vui lòng kiểm tra kết nối mạng để sử dụng chatbot.");
-                }
-            });
-        }
+        fabChatbot.setOnClickListener(v -> {
+            if (isNetworkConnected()) {
+                ChatbotFragment chatbotFragment = new ChatbotFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.flHomeContainer, chatbotFragment)
+                        .addToBackStack("ChatbotFragment")
+                        .commit();
+            } else {
+                showToast("Vui lòng kiểm tra kết nối Wi-Fi hoặc dữ liệu di động để sử dụng chatbot.");
+            }
+        });
 
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.flHomeContainer);
@@ -269,7 +269,21 @@ public class MainActivity extends AppCompatActivity {
     // Kiểm tra có mạng hay không
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnected();
+        if (cm != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Network activeNetwork = cm.getActiveNetwork();
+                if (activeNetwork != null) {
+                    NetworkCapabilities capabilities = cm.getNetworkCapabilities(activeNetwork);
+                    return capabilities != null &&
+                            (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                                    || capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR));
+                }
+            } else {
+                NetworkInfo activeNetworkInfo = cm.getActiveNetworkInfo();
+                return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+            }
+        }
+        return false;
     }
 
     // Hàm hiển thị thông báo
