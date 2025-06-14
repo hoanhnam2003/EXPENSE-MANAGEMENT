@@ -1,4 +1,3 @@
-
 package com.namha.expensemanagement.ui.fragments;
 
 import android.graphics.Color;

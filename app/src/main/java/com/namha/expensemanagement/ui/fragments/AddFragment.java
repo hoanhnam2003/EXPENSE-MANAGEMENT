@@ -91,7 +91,7 @@ public class AddFragment extends Fragment {
                 binding.spinnerCatalog.setAdapter(spinnerCategoryAdapter);
 
             } else {
-                Log.e("AddFragment", "categories is null");
+                Log.e("AddFragment", "categories đang bị null");
             }
         });
 
@@ -115,7 +115,7 @@ public class AddFragment extends Fragment {
                 binding.spinnerType.setAdapter(spinnerTypeAdapter);
 
             } else {
-                Log.e("AddFragment", "types is null");
+                Log.e("AddFragment", "types đang bị null");
             }
         });
 
@@ -145,7 +145,7 @@ public class AddFragment extends Fragment {
                     Toast.makeText(getContext(), "Vui lòng chọn danh mục để xóa", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Log.e("AddFragment", "spinnerCatalog is null");
+                Log.e("AddFragment", "spinnerCatalog đang bị null");
                 Toast.makeText(getContext(), "Vui lòng chọn danh mục để xóa", Toast.LENGTH_SHORT).show();
             }
         });
@@ -165,7 +165,6 @@ public class AddFragment extends Fragment {
             // Chuyển đổi cleanedAmountText thành số
             double amount = Double.parseDouble(cleanedAmountText);
             // check vượt triệu tỷ
-
             double checkamount = 1_000_000_000_000_000L;
 
             // **Kiểm tra nếu vượt quá 1 triệu tỷ**
@@ -252,12 +251,12 @@ public class AddFragment extends Fragment {
     }
 
     // Phương thức định dạng số tiền với dấu phẩy phân tách hàng nghìn
-        private String formatCurrency(double amount) {
-            DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
-            symbols.setGroupingSeparator(',');
-            DecimalFormat formatter = new DecimalFormat("#,###", symbols);
-            return formatter.format(amount);
-        }
+    private String formatCurrency(double amount) {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+        symbols.setGroupingSeparator(',');
+        DecimalFormat formatter = new DecimalFormat("#,###", symbols);
+        return formatter.format(amount);
+    }
 
     // Hàm observeOnce để quan sát LiveData một lần
     public static <T> void observeOnce(LiveData<T> liveData, LifecycleOwner owner, Observer<T> observer) {
@@ -270,7 +269,7 @@ public class AddFragment extends Fragment {
                 }
             });
         } else {
-            Log.e("AddFragment", "LiveData is null in observeOnce");
+            Log.e("AddFragment", "LiveData bị null trong hàm observeOnce");
         }
     }
 
@@ -291,7 +290,7 @@ public class AddFragment extends Fragment {
 
                 Log.d("UpdateTotalBalance", "Cập nhật tổng tiền: " + totalBalance);
             } else {
-                Log.e("UpdateTotalBalance", "selectedType bị null");
+                Log.e("UpdateTotalBalance", "selectedType đang bị null");
             }
 
             saveTransaction(amount, typeId, content, date, categoryId, totalBalance, idDailyLimit, idMonthlyLimit);
@@ -349,7 +348,7 @@ public class AddFragment extends Fragment {
                     spinnerCategoryAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
                     binding.spinnerCatalog.setAdapter(spinnerCategoryAdapter);
                 } else {
-                    Log.e("AddFragment", "categoriesList is null, cannot setup spinnerCategoryAdapter");
+                    Log.e("AddFragment", "categoriesList đang bị null, không thể thiết lập spinnerCategoryAdapter.");
                 }
 
                 // Setup spinner for types
@@ -358,13 +357,13 @@ public class AddFragment extends Fragment {
                     spinnerTypeAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
                     binding.spinnerType.setAdapter(spinnerTypeAdapter);
                 } else {
-                    Log.e("AddFragment", "typesList is null, cannot setup spinnerTypeAdapter");
+                    Log.e("AddFragment", "typesList đang bị null, không thể thiết lập spinnerTypeAdapter.");
                 }
             } else {
-                Log.e("AddFragment", "Binding is null, cannot setup spinners");
+                Log.e("AddFragment", "binding đang bị null, không thể thiết lập các spinner.");
             }
         } else {
-            Log.e("AddFragment", "Context is null, cannot setup spinners");
+            Log.e("AddFragment", "\"Context đang bị null, không thể thiết lập các spinner.");
         }
     }
 
@@ -373,7 +372,7 @@ public class AddFragment extends Fragment {
         if (binding.tvTime1 != null) {
             binding.tvTime1.setOnClickListener(v -> showDateTimePicker());
         } else {
-            Log.e("AddFragment", "tvTime1 is null. Check if it is correctly included in the layout.");
+            Log.e("AddFragment", "tvTime1 đang bị null. Hãy kiểm tra xem nó đã được khai báo đúng trong layout chưa.");
         }
     }
 

@@ -13,64 +13,93 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class ChatService {
-    private static final String API_URL = "https://mentoroid-api.geniam.com/client/chatGPT/test"; // URL API để gửi câu hỏi
-    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8"); // Kiểu dữ liệu JSON cho request
-    private final OkHttpClient client = new OkHttpClient(); // Đối tượng OkHttpClient để gửi request HTTP
+    // Key API
+    private static final String API_KEY = "AIzaSyBV0Mj1zRhvsK4GsqIMaHTkZ-QLgNpL9uw";
+    // URL API
+    private static final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
+    // Kiểu dữ liệu gửi đi và nhận về
+    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    // Đối tượng OkHttpClient để thực hiện các yêu cầu HTTP
+    private final OkHttpClient client = new OkHttpClient();
 
-    // Interface để xử lý kết quả phản hồi từ API
+    // Interface để xử lý phản hồi bất đồng bộ
     public interface ChatCallback {
-        void onSuccess(String responseText); // Phương thức callback khi nhận được phản hồi thành công
-        void onError(String errorMessage); // Phương thức callback khi có lỗi xảy ra
+        void onSuccess(String responseText);
+        void onError(String errorMessage);
     }
-
-    // Phương thức gửi tin nhắn đến API
+    // Hàm gửi tin nhắn đến API
     public void sendMessage(String question, ChatCallback callback) {
         try {
-            JSONObject jsonObject = new JSONObject(); // Tạo đối tượng JSON để gửi lên API
-            jsonObject.put("question", question); // Thêm câu hỏi vào JSON
-            jsonObject.put("model", "gpt-4o-2024-05-13"); // Chỉ định model AI sử dụng
+            // Tạo đối tượng chứa văn bản câu hỏi
+            JSONObject textObject = new JSONObject();
+            textObject.put("text", question);
 
-            RequestBody requestBody = RequestBody.create(jsonObject.toString(), JSON); // Chuyển đổi JSON thành request body
+            // Đóng gói vào mảng "parts"
+            JSONObject partObject = new JSONObject();
+            partObject.put("parts", new JSONArray().put(textObject));
+
+            // Đóng gói vào mảng "contents"
+            JSONArray contentsArray = new JSONArray().put(partObject);
+
+            // Tạo body JSON gửi đến API
+            JSONObject body = new JSONObject();
+            body.put("contents", contentsArray);
+
+            // Tạo request HTTP POST với body JSON
+            RequestBody requestBody = RequestBody.create(body.toString(), JSON);
             Request request = new Request.Builder()
-                    .url(API_URL) // Thiết lập URL API
-                    .post(requestBody) // Gửi request dạng POST
-                    .addHeader("Content-Type", "application/json") // Thiết lập header cho request
+                    .url(API_URL)
+                    .post(requestBody)
+                    .addHeader("Content-Type", "application/json")
                     .build();
 
-            // Gửi request bất đồng bộ đến API
+            // Gửi yêu cầu bất đồng bộ
             client.newCall(request).enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-                    callback.onError("Lỗi kết nối: " + e.getMessage()); // Xử lý lỗi kết nối
+                    // Gọi callback khi kết nối thất bại
+                    callback.onError("Lỗi kết nối: " + e.getMessage());
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
-                    if (!response.isSuccessful()) { // Kiểm tra nếu phản hồi không thành công
-                        callback.onError("API lỗi: " + response.code());
+                    // Kiểm tra phản hồi có thành công không
+                    if (!response.isSuccessful()) {
+                        callback.onError("Lỗi API: " + response.code() + " - " + response.message());
                         return;
                     }
-
-                    String responseBody = response.body().string(); // Lấy nội dung phản hồi từ API
+                    // Đọc nội dung phản hồi
+                    String responseBody = response.body().string();
                     try {
-                        JSONObject responseJson = new JSONObject(responseBody); // Chuyển đổi phản hồi thành JSON
-                        if (responseJson.has("data") && responseJson.getJSONObject("data").has("choices")) {
-                            JSONArray choices = responseJson.getJSONObject("data").getJSONArray("choices"); // Lấy danh sách lựa chọn từ API
-                            if (choices.length() > 0) {
-                                String text = choices.getJSONObject(0).getJSONObject("message").getString("content"); // Lấy nội dung phản hồi
-                                callback.onSuccess(text);
-                                return;
+                        JSONObject json = new JSONObject(responseBody);
+                        // Lấy danh sách "candidates" từ JSON
+                        JSONArray candidates = json.optJSONArray("candidates");
+                        if (candidates != null && candidates.length() > 0) {
+                            // Lấy đối tượng "content" đầu tiên
+                            JSONObject message = candidates.getJSONObject(0).optJSONObject("content");
+                            if (message != null) {
+                                // Lấy phần text từ "parts"
+                                JSONArray parts = message.optJSONArray("parts");
+                                if (parts != null && parts.length() > 0) {
+                                    // Gửi phản hồi thành công về callback
+                                    String text = parts.getJSONObject(0).optString("text");
+                                    callback.onSuccess(text);
+                                    return;
+                                }
                             }
                         }
-                        callback.onError("API không trả về dữ liệu hợp lệ!"); // Xử lý khi không có dữ liệu hợp lệ
+                        // Trường hợp không lấy được dữ liệu đúng định dạng
+                        callback.onError("Phản hồi không hợp lệ từ API.");
                     } catch (JSONException e) {
-                        callback.onError("Lỗi phân tích JSON: " + e.getMessage()); // Xử lý lỗi khi phân tích JSON thất bại
+                        // Lỗi khi phân tích JSON
+                        callback.onError("Lỗi phân tích JSON: " + e.getMessage());
                     }
                 }
             });
 
         } catch (JSONException e) {
-            callback.onError("Lỗi tạo JSON: " + e.getMessage()); // Xử lý lỗi khi tạo JSON thất bại
+            // Lỗi khi tạo JSON ban đầu
+            callback.onError("Lỗi tạo JSON: " + e.getMessage());
         }
     }
 }

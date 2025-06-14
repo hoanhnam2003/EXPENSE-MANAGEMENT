@@ -90,7 +90,7 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (binding == null) {
-            Log.e("HomeFragment", "Binding is null in onViewCreated");
+            Log.e("HomeFragment", "Binding bị null trong phương thức onViewCreated.");
             return;
         }
 
@@ -118,7 +118,7 @@ public class HomeFragment extends Fragment {
                         tvBalance.setText(decimalFormat.format(totalBalance) + " VND");
                     } else {
                         tvBalance.setText("0 VND");
-                        Log.e("HomeFragment", "Total balance is null");
+                        Log.e("HomeFragment", "Tổng số dư đang bị null.");
                     }
                 });
                 imEye.setImageResource(R.drawable.icon_eye_24);
@@ -167,7 +167,7 @@ public class HomeFragment extends Fragment {
 
                             tvExpenseValue.setText(decimalFormat.format(sbExpenses.getProgress()) + " VND");
                         } else {
-                            Log.e("HomeFragment", "Last daily limit is null");
+                            Log.e("HomeFragment", "Giới hạn hằng ngày gần nhất đang bị null.");
                         }
                     });
 
@@ -200,11 +200,11 @@ public class HomeFragment extends Fragment {
                         }
                     });
                 } else {
-                    Log.e("HomeFragment", "Last monthly limit setting is null");
+                    Log.e("HomeFragment", "Thiết lập hạn mức hàng tháng gần nhất đang bị null.");
                 }
             });
         } else {
-            Log.e("HomeFragment", "Activity is null, cannot access SharedPreferences");
+            Log.e("HomeFragment", "Activity bị null, không thể truy cập SharedPreferences.");
         }
 
         btnSave.setOnClickListener(v -> {
@@ -226,7 +226,7 @@ public class HomeFragment extends Fragment {
                                 Toast.makeText(getContext(), "Thiết lập thành công", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Log.e("HomeFragment", "Last monthly limit setting is null");
+                            Log.e("HomeFragment", "Cài đặt giới hạn hàng tháng gần nhất bị null.");
                         }
                     });
                 } catch (NumberFormatException e) {

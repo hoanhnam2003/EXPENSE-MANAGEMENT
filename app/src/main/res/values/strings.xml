@@ -37,10 +37,10 @@
     <string name="chi_tien">Chi tiền</string>
     <string name="_10_000">10,000 VND</string>
     <string name="so_tien_da_chi">Số tiền đã chi:</string>
-    <string name="_100_000">100,000 VND</string>
+    <string name="_100_000">0 VND</string>
     <string name="tong_chi">Tổng chi:</string>
     <string name="tong_thu">Tổng thu:</string>
-    <string name="bao_cao_hom_nay">Báo cáo hôm nay (19/02/2025)</string>
+    <string name="bao_cao_hom_nay">Báo cáo hôm nay (00/0/0000)</string>
     <string name="so_tien_con_lai">Số tiền còn lại:</string>
     <string name="thong_ke">Thống kê</string>
     <string name="cai_dat">Cài đặt</string>
@@ -61,7 +61,7 @@
     <string name="xoa_ban_ghi">Xóa bản ghi</string>
     <string name="dong_lai">Đóng lại</string>
     <string name="nhap_tim_kiem">Nhập tìm kiếm theo ngày và loại</string>
-    <string name="baocaothang">Báo cáo tháng này (20/02/2025)</string>
+    <string name="baocaothang">Báo cáo tháng này (00/0/0000)</string>
     <string name="chatbot">ChatBot</string>
     <string name="hide_balance">ẩn hiện số dư</string>
     <string name="item_title">Danh mục:</string>

@@ -156,10 +156,10 @@ public class HistoryFragment extends Fragment {
             if (adapter != null) {
                 adapter.setItems(historyList);
             } else {
-                Log.e("HistoryFragment", "Adapter is null, cannot update history list");
+                Log.e("HistoryFragment", "Adapter bị null, không thể cập nhật danh sách lịch sử");
             }
         } else {
-            Log.e("HistoryFragment", "History list is null");
+            Log.e("HistoryFragment", "Danh sách lịch sử bị null");
         }
     }
 
@@ -172,7 +172,7 @@ public class HistoryFragment extends Fragment {
         if (getChildFragmentManager() != null) {
             dialogFragment.show(getChildFragmentManager(), "PopupChooseMethodFragment");
         } else {
-            Log.e("HistoryFragment", "Child FragmentManager is null");
+            Log.e("HistoryFragment", "Child FragmentManager bị null");
         }
     }
 
@@ -212,7 +212,7 @@ public class HistoryFragment extends Fragment {
                 }
             });
         } else {
-            Log.e("HistoryFragment", "getViewLifecycleOwner is null, cannot observe search results");
+            Log.e("HistoryFragment", "Không thể theo dõi (observe) kết quả tìm kiếm vì getViewLifecycleOwner bị null.");
         }
     }
 
